@@ -1,7 +1,13 @@
 @extends('layouts.app')
 @section('renderBody')
     <div class="container-fluid">
-        <div class="row p-3" data-aos="fade-up">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Thông tin liên hệ</li>
+            </ol>
+        </nav>
+        <div class="row ps-2 pe-2" data-aos="fade-up">
             <div class="col-lg-7">
                 <hr>
                 <div class="single-contact">
@@ -36,7 +42,7 @@
                     <div class="form-group">
                         <textarea id="message" name="message" class="form-control" placeholder="Nhập nội dung *" required></textarea>
                     </div>
-                    <input type="submit" value="Gửi liên hệ của bạn" class="btn btn-primary w-100 ">
+                    <input type="submit" value="Gửi liên hệ của bạn" class="btn w-100 btn-submit-contact">
                 </form>
             </div>
             <div class="col-lg-5">

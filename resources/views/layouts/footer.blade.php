@@ -33,7 +33,7 @@
                                 DỊCH VỤ KHÁCH HÀNG
                                 <i class="fa fa-angle-down d-md-none d-inline-block"></i>
                             </h3>
-                            <ul class="list-menu toggle-mn">
+                            <ul class="list-menu dropdown-footer1 toggle-mn">
 
                                 <li class="li_menu">
                                     <a class="link" href="/" title="Chương trình quà tặng">Chương trình quà
@@ -81,11 +81,11 @@
                             </ul>
                         </div>
                         <div class="col-lg-4">
-                            <h3 class="footer-title title-menu clicked">
+                            <h3 class="footer-title title-menu clicked2">
                                 DANH MỤC SẢN PHẨM
                                 <i class="fa fa-angle-down d-md-none d-inline-block"></i>
                             </h3>
-                            <ul class="list-menu toggle-mn">
+                            <ul class="list-menu dropdown-footer2 toggle-mn">
                                 <li class="li_menu">
                                     <a class="link" href="/" title="Tất cả sản phẩm">Tất cả sản phẩm</a>
                                 </li>
@@ -118,14 +118,14 @@
                                 </li>
                             </ul>
                         </div>
-                        
+
                         <div class="col-lg-4">
                             <h3 class="footer-title title-menu">CẬP NHẬT THÔNG TIN MỚI NHẤT</h3>
                             <div class="form-receive">
                                 <form action="">
                                     <div class="input-receive">
                                         <input type="email" placeholder="Nhập địa chỉ email">
-                                        <button class="btn btn-primary">Đăng ký</button>
+                                        <button class="btn btn-sub">Đăng ký</button>
                                     </div>
                                 </form>
                             </div>
@@ -171,4 +171,21 @@
         <hr class="mb-4">
         <p class="d-flex justify-content-center">Copyright &copy; 2024 Wonder Vista Studio. Powered by Group 3</p>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var dropdownToggle1 = document.querySelector('.clicked');
+            var dropdownToggle2 = document.querySelector('.clicked2');
+            var menuList1 = document.querySelector('.dropdown-footer1');
+            var menuList2 = document.querySelector('.dropdown-footer2');
+
+            dropdownToggle1.addEventListener('click', function() {
+                menuList1.classList.toggle('show');
+            });
+
+            dropdownToggle2.addEventListener('click', function() {
+                menuList2.classList.toggle('show');
+            });
+        });
+    </script>
 </footer>
