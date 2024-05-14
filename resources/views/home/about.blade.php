@@ -1,6 +1,12 @@
 @extends('layouts.app')
 @section('renderBody')
     <div class="container-fluid">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Giới thiệu</li>
+            </ol>
+        </nav>
         <div class="row">
             <div class="col-lg-7 slogan-group" data-aos="fade-up">
                 <div class="d-flex flex-wrap flex-column flex-sm-row">
@@ -14,7 +20,7 @@
                                 <img src="{{ URL('images/about2.png') }}" alt="" width="34%" height="auto">
                             </div>
                             <div style="display: flex">
-                                <img src="{{ URL('images/about1.png') }}" alt="" width="50%"  height="auto">
+                                <img src="{{ URL('images/about1.png') }}" alt="" width="50%" height="auto">
                                 <img src="{{ URL('images/about4.png') }}" alt="" width="50%" height="auto">
                             </div>
                             <hr>
@@ -36,7 +42,8 @@
                         thời
                         trang Việt Nam.
                     </p>
-                    <img src="{{ URL('images/about1.png') }}" alt="" width="100%" height="auto" data-aos="fade-up">
+                    <img src="{{ URL('images/about1.png') }}" alt="" width="100%" height="auto"
+                        data-aos="fade-up">
                 </div>
                 <div data-aos="fade-up">
                     <h2 class="title-about">WHAT WE HAVE</h2>
@@ -49,7 +56,8 @@
                         sự sáng tạo dựa trên những hình tượng nghệ thuật, hay đôi khi là những hình ảnh bình thường trong
                         đời sống. Từ đó tạo ra những sản phẩm mang màu sắc cá tính riêng hoàn toàn khác biệt.
                     </p>
-                    <img src="{{ URL('images/about4.png') }}" alt="" width="100%" height="auto" data-aos="fade-up">
+                    <img src="{{ URL('images/about4.png') }}" alt="" width="100%" height="auto"
+                        data-aos="fade-up">
                 </div>
                 <div data-aos="fade-up">
                     <h4 class="title-about-item">CHẤT LƯỢNG SẢN PHẨM LUÔN ĐƯỢC ƯU TIÊN</h4>
@@ -64,7 +72,8 @@
                         tính
                         nhất.
                     </p>
-                    <img src="{{ URL('images/about2.png') }}" alt="" width="100%" height="auto" data-aos="fade-up">
+                    <img src="{{ URL('images/about2.png') }}" alt="" width="100%" height="auto"
+                        data-aos="fade-up">
                 </div>
                 <div data-aos="fade-up">
                     <h4 class="title-about-item">CHÍNH SÁCH ƯU ĐÃI VÀ QUÀ TẶNG HẤP DẪN</h4>
@@ -76,7 +85,8 @@
                         sách ưu
                         đãi cùng quà tặng tri ân đến những người dùng đã ủng hộ chúng mình trên mỗi sản phẩm được bán ra.
                     </p>
-                    <img src="{{ URL('images/about3.png') }}" alt="" width="100%" height="auto" data-aos="fade-up">
+                    <img src="{{ URL('images/about3.png') }}" alt="" width="100%" height="auto"
+                        data-aos="fade-up">
                 </div>
                 <div data-aos="fade-up">
                     <h4 class="title-about-item">CHĂM SÓC KHÁCH HÀNG TẬN TÂM</h4>
@@ -86,10 +96,12 @@
                         và là
                         “Best Choice” đối với khách hàng đã và đang sử dụng sản phẩm của thương hiệu.
                     </p>
-                    <img src="{{ URL('images/about5.png') }}" alt="" width="100%" height="auto" data-aos="fade-up">
+                    <img src="{{ URL('images/about5.png') }}" alt="" width="100%" height="auto"
+                        data-aos="fade-up">
                 </div>
 
             </div>
+
         </div>
     </div>
 @endsection

@@ -1,12 +1,29 @@
 <div class="container-fluid">
-    <div class="row mt-4">
+    <div class="d-flex justify-content-between align-items-center p-2 mt-2" data-aos="fade-up">
+        <a href="{{ route('products.productsByType', ['tenloai' => 'Quần Jean']) }}" class="title-category">Quần Jeans</a>
+        <a href="{{ route('products.productsByType', ['tenloai' => 'Quần Jean']) }}" class="category-link-all">Xem các sản
+            phẩm khác</a>
+    </div>
+    <div class="row mt-3">
         @foreach ($sanphamJeans as $item)
             <div class="col-6 col-sm-3 col-md-3 d-flex product-list">
                 <div class="product-detail" align="center" data-aos="fade-up" data-aos-duration="800">
-                    <a href="#" class="product-link">
-                        <img src="{{ URL('images/' . $item->HINHANH) }}" alt="{{ $item->TENSANPHAM }}" class="img-product">
+                    <a href="{{ route('product.showDetailProduct', ['masanpham' => $item->MASANPHAM]) }}"
+                        class="product-link">
+                        <img src="{{ URL('images/' . $item->HINHANH) }}" alt="{{ $item->TENSANPHAM }}"
+                            class="img-product">
                         <p class="name-product">{{ $item->TENSANPHAM }}</p>
-                        <div class="price-product">{{ $item->GIA }}</div>
+                        @php
+                            $save_price = $item->GIA * (20 / 100);
+                            $discout = $item->GIA - $save_price;
+
+                        @endphp
+                        <div class="d-flex align-items-center justify-content-center">
+                            <span class="price-product me-2">{{ $discout }}</span>
+                            <span class="me-2" style="font-size: 13px"><del
+                                    class="price-old">{{ $item->GIA }}</del></span>
+                            <span class="discout-label" style="font-size: 13px">-20%</span>
+                        </div>
                     </a>
                 </div>
             </div>
