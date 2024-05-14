@@ -32,10 +32,12 @@
                     <button class="border-0 ic-search" type="submit"><i class="fas fa-search"></i></button>
                 </form>
 
-                <a href="#" class="me-4">
-                    <i class="far fa-user"> Vương Trần</i>
+                <a href="/login/login" class="me-4">
+                    <i class="far fa-user">
+                        
+                    </i>
                 </a>
-                <a href="/">
+                <a href="/cart/index">
                     <i class="fas fa-shopping-basket"> <span class="count-item-cart">1</span></i>
                 </a>
             </div>

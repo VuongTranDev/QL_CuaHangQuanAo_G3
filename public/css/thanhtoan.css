@@ -1,0 +1,260 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+a{
+    text-decoration: none;
+}
+.wrap{
+    margin-top: 50px;
+}
+.logo{
+    
+}
+.img-logo{
+    width: 65px;
+    height: 60px;
+}
+.group-link-page{
+    margin-top: 10px;
+}
+.link-page{
+    display: flex;
+}
+.text-link{
+    color: #4d4d4d;
+    font-weight: 500;
+    height: 24px;
+}
+.input-75{
+    width: 75%;
+    margin-bottom: 10px;
+}
+.list-cart{
+    padding: 10px;
+    background-color: #ebebeb;
+}
+.cart_des {
+    width: 75%;
+}
+.cart_des a {
+    font-size: 16px;
+    font-weight: 500;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.remove-wrap {
+    font-size: 16px;
+}
+.cart_content {
+    position: relative;
+    flex: 1;
+}
+.cart_qty-pri {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+.qty_pri-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.quantity-area {
+    float: left;
+    border: 1px solid #e1e1e1;
+    display: flex;
+    margin-right: 15px;
+}
+.quantity-area .qty-btn {
+    border: none;
+    background: #fff;
+    float: left;
+    cursor: pointer;
+    font-weight: 600;
+    outline: none;
+    height: 40px;
+    width: 40px;
+    text-align: center;
+    border-radius: 0;
+    font-size: 20px;
+    color: black;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: unset;
+}
+.quantity-area .quantity-selector {
+    border: none;
+    background-color: #ebebeb;
+    font-weight: 600;
+    height: 40px;
+    text-align: center;
+    width: 40px;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+    float: left;
+    -webkit-appearance: none;
+    font-size: 15px;
+    color: black;
+    padding: 0;
+}
+.quantity-area .qty-btn {
+    border: none;
+    background-color: #ebebeb;
+    float: left;
+    cursor: pointer;
+    font-weight: 600;
+    outline: none;
+    height: 40px;
+    width: 40px;
+    text-align: center;
+    border-radius: 0;
+    font-size: 20px;
+    color: black;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: unset;
+}
+.sidebar-checkout {
+    position: sticky;
+    top: 15px;
+}
+.sidebar-checkout .order_title h4 {
+    font-size: 21px;
+    font-weight: 600;
+    line-height: normal;
+}
+.sidebar-checkout .order_total {
+    padding: 0px 0px;
+    border-left: none;
+    border-right: none;
+}
+.sidebar-checkout .order_total p {
+    margin: 0;
+    font-size: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+.sidebar-checkout .checkout-buttons {
+    margin-bottom: 15px;
+}
+.sidebar-checkout .checkout-buttons label {
+    display: block;
+    margin-bottom: 15px;
+    font-weight: 600;
+    font-size: 21px;
+}
+.sidebar-checkout .checkout-buttons textarea {
+    width: 100%;
+    resize: none;
+    height: 60px;
+}
+.form-control {
+    margin-bottom: 10px;
+}
+.sidebar-checkout .order_action .btncart-checkout {
+    display: block;
+    padding: 10px 15px;
+    border-radius: 3px;
+    background: #000000;
+    color: #fff;
+    margin-bottom: 15px;
+    border: none;
+    outline: none;
+    width: 100%;
+}
+.text-center {
+    text-align: center !important;
+}
+.item-remove{
+    margin-right: 10px;
+}
+.item-price{
+    margin-right: 10px;
+}
+img {
+    max-width: 100%;
+    vertical-align: middle;
+}
+.item-img {
+    max-width: 120px;
+    margin-right: 12px;
+}
+.item-info{
+    display: flex;
+}
+.item-title {
+    display: flex;
+    justify-content: space-between;
+}
+.wrap-right{
+    border-left: 1px solid #aeaeae;
+}
+.price-total{
+    display: flex;
+}
+.group-hoadon, .price-total{
+    display: flex;
+    justify-content: space-between;
+}
+.left-text{
+    text-align: left;
+}
+.right-value{
+    display: inline-block;
+    text-align: right;
+}
+.group-van-chuyen{
+    padding: 10px;
+}
+.group-phuong-thuc-thanh-toan{
+    padding: 10px;
+}
+.item-phuong-thuc-thanh-toan{
+    padding: 20px;
+    border: 1px solid grey;
+}
+.no-border-top{
+    border-top: none;
+}
+.label-check{
+    cursor: pointer;
+}
+.none-content{
+    display: none;
+    white-space: pre-line;
+    padding: 1.5em;
+    text-align: center;
+}
+.img-label{
+    margin-right: 15px;
+}
+.group-link-thanh-toan{
+    padding: 10px;
+}
+.btn-thanh-toan{
+    border-radius: 4px;
+    font-weight: 500;
+    padding: 1.4em 1.7em;
+    box-sizing: border-box;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    position: relative;
+    background: #338dbc;
+    color: white;
+}
+.fix-profile{
+    margin: 30px;
+}
