@@ -14,7 +14,12 @@
                 </form>                         
                 
                 <a href="#" class="me-4">
-                    <i class="far fa-user user-login"> Vương Trần</i>
+                    <i class="far fa-user"> <?php 
+						$name = Session::get('ten') ;		
+						if($name)
+						{	
+						echo $name ;}	
+					?></i>
                 </a>
                 <a href="/">
                     <i class="fas fa-shopping-basket cart-item"> <span class="count-item-cart">1</span></i>

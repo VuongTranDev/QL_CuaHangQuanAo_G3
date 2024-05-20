@@ -61,7 +61,7 @@ class AdminController extends Controller
                 ->where('khachhang.MATKUSER',$result->MAUSER)
                 ->first();
            
-                if( $data->TENKH == NULL)
+                if( $data->TENKH == "")
                     Session::put('ten',"Chưa có tên") ;
                 Session::put('ten',$data->TENKH) ;
                 return Redirect:: to('/') ;
