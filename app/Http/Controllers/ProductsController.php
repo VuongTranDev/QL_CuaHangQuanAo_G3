@@ -171,4 +171,11 @@ class ProductsController extends Controller
           }
           return view('products.search', compact('search_product', 'count_product', 'search_query'));
      }
+     public function themVaoGioHang(Request $request){
+          
+          $masanpham = $request->masanpham;
+          $this->showDetailProduct($masanpham);
+
+          
+     }
 }

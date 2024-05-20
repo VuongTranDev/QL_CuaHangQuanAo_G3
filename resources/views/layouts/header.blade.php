@@ -16,7 +16,7 @@
                 <a href="#" class="me-4">
                     <i class="far fa-user"> Vương Trần</i>
                 </a>
-                <a href="/">
+                <a href="/cart/index">
                     <i class="fas fa-shopping-basket"> <span class="count-item-cart">1</span></i>
                 </a>
             </div>
