@@ -35,7 +35,7 @@
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            var prices = document.querySelectorAll(".total-price, .money");
+            var prices = document.querySelectorAll(".total-price, .money, .total-price-sale, .total-price-cart");
 
             prices.forEach(function(price) {
                 var number = parseInt(price.innerHTML);
@@ -47,31 +47,7 @@
                 price.innerHTML = formattedPrice + "₫";
             });
         });
-        document.addEventListener("DOMContentLoaded", function() {
-            const minusBtns = document.querySelectorAll('.btn-left-quantity');
-            const plusBtns = document.querySelectorAll('.btn-right-quantity');
-            const quantityInputs = document.querySelectorAll('.quantity-mini');
-
-            minusBtns.forEach(function(minusBtn) {
-                minusBtn.addEventListener('click', function() {
-                    let quantityInput = this.nextElementSibling;
-                    let value = parseInt(quantityInput.value);
-                    if (value > 1) {
-                        value--;
-                        quantityInput.value = value;
-                    }
-                });
-            });
-
-            plusBtns.forEach(function(plusBtn) {
-                plusBtn.addEventListener('click', function() {
-                    let quantityInput = this.previousElementSibling;
-                    let value = parseInt(quantityInput.value);
-                    value++;
-                    quantityInput.value = value;
-                });
-            });
-        });
+        
     </script>
 </body>
 

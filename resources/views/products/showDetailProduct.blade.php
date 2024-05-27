@@ -59,58 +59,65 @@
             </div>
 
             <div class="col-lg-6 ps-1 ps-lg-3" data-aos="fade-up">
-                @foreach ($sanpham as $item)
-                    <h3 class="mb-3" style="font-size: 27px; font-weight: 600;">{{ $item->TENSANPHAM }}</h3>
-                    @php
-                        $save_price = $item->GIA * (20 / 100);
-                        $discout = $item->GIA - $save_price;
+                <form action="{{ route('muahang') }}" method="POST">
+                    @csrf
+                    @foreach ($sanpham as $item)
+                        <h3 class="mb-3" style="font-size: 27px; font-weight: 600;">{{ $item->TENSANPHAM }}</h3>
+                        @php
+                            $save_price = $item->GIA * (20 / 100);
+                            $discout = $item->GIA - $save_price;
+                        @endphp
+                        <div class="d-flex align-items-center">
+                            <span class="price-detail-product me-3">{{ $discout }}</span>
+                            <input type="hidden" name="discout" value="{{ $discout }}">
+                            <span class="me-4"><del class="price-old">{{ $item->GIA }}</del></span>
+                            <input type="hidden" name="price_old" value="{{ $item->GIA }}">
+                            <span class="discout-label">-20%</span>
+                            <input type="hidden" name="discount_label" value="-20%">
+                        </div>
+                        <div>
+                            <p style="font-size: 14px;" class="mt-2">( Tiết kiệm <span
+                                    class="price-old">{{ $save_price }}</span> )</p>
+                        </div>
+                    @endforeach
 
-                    @endphp
-                    <div class="d-flex align-items-center">
-                        <span class="price-detail-product me-3">{{ $discout }}</span>
-                        <span class="me-4"><del class="price-old">{{ $item->GIA }}</del></span>
-                        <span class="discout-label">-20%</span>
-                    </div>
-                    <div>
-                        <p style="font-size: 14px;" class="mt-2">( Tiết kiệm <span
-                                class="price-old">{{ $save_price }}</span> )</p>
-                    </div>
-                @endforeach
-
-                <div class="mb-3 mt-3">
-                    <div class="title-size mb-2">
-                        <p style="font-weight: 600; font-size: 19px;">Kích thước</p>
-                        <a href="#" id="showSizeGuide" class="me-4 text-dark">Hướng dẫn chọn size</a>
-                    </div>
-
-                    <div>
-                        @foreach ($size as $item)
-                            <label class="size-btn">
-                                <input type="radio" name="size" value="{{ $item->SIZESP }}">
-                                {{ $item->SIZESP }}
-                            </label>
-                        @endforeach
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <div class="form-button-detail mb-3 mt-3 w-100">
-                        <div class="quantity-input me-3">
-                            <button class="quantity-btn minus-btn" type="button">-</button>
-                            <input class="quantity" value="1" min="1">
-                            <button class="quantity-btn plus-btn" type="button">+</button>
+                    <div class="mb-3 mt-3">
+                        <div class="title-size mb-2">
+                            <p style="font-weight: 600; font-size: 19px;">Kích thước</p>
+                            <a href="#" id="showSizeGuide" class="me-4 text-dark">Hướng dẫn chọn size</a>
                         </div>
 
-                        <div class="button_actions mb-0 w-100">
-                            <button type="submit" class="btn btn_add_cart btn-cart add_to_cart product-combo is-full">Thêm
-                                vào giỏ
-                                hàng</button>
+                        <div>
+                            @foreach ($size as $item)
+                                <label class="size-btn">
+                                    <input type="radio" name="size" value="{{ $item->SIZESP }}">
+                                    {{ $item->SIZESP }}
+                                </label>
+                            @endforeach
                         </div>
                     </div>
-                    <div class="button_actions">
-                        <button type="submit" class="btn btn-buynow">Mua ngay</button>
+                    <div class="mb-4">
+                        <div class="form-button-detail mb-3 mt-3 w-100">
+                            <div class="quantity-input me-3">
+                                <button class="quantity-btn minus-btn" type="button">-</button>
+                                <input class="quantity" name="quantity" value="1" min="1">
+                                <button class="quantity-btn plus-btn" type="button">+</button>
+                            </div>
+
+                            <div class="button_actions mb-0 w-100">
+                                <button name="themvaogiohang" type="submit"
+                                    class="btn btn_add_cart btn-cart add_to_cart product-combo is-full">Thêm vào giỏ
+                                    hàng</button>
+                            </div>
+                        </div>
+                        <div class="button_actions">
+                            <button name="muangay" type="submit" class="btn btn-buynow">Mua ngay</button>
+                        </div>
                     </div>
-                </div>
+                </form>
+
+
+
 
                 @include('products.moTa')
                 @include('danhgias.showDanhGia')
@@ -207,6 +214,16 @@
                         slidesToShow: 2
                     }
                 }]
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('form').addEventListener('submit', function(event) {
+                if (!document.querySelector('input[name="size"]:checked')) {
+                    event.preventDefault();
+                    alert('Vui lòng chọn kích thước');
+                }
             });
         });
     </script>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\ProductsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
 {
@@ -18,7 +19,14 @@ class HomeController extends Controller
         $sanphamQuan = DB::table('sanpham')->where('MALOAI', 'LQ')->inRandomOrder()->limit(4)->get();
         $sanphamSoMi = DB::table('sanpham')->where('MALOAI', 'LASM')->limit(4)->get();
 
-        return view('index', compact('sanphamJeans', 'sanphamAoThun', 'sanphamSweater', 'sanphamHoodie', 'sanphamQuan', 'sanphamSoMi'));
+        $makh = Session::get('makh');
+
+        $cart = DB::select("SELECT SANPHAM.MASANPHAM, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
+        FROM GIOHANG 
+        INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+        WHERE MAKH = ?", [$makh]);
+        $sogiohang = count($cart);
+        return view('index', compact('sanphamJeans', 'sanphamAoThun', 'sanphamSweater', 'sanphamHoodie', 'sanphamQuan', 'sanphamSoMi', 'sogiohang'));
     }
 
     public function about()

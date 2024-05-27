@@ -6,19 +6,16 @@ use App\Http\Controllers\HoaDonController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductsController;
-<<<<<<< HEAD
 use App\Http\Controllers\MailController;
 use App\Mail\XacNhanDonHang;
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Mail;
 
-=======
 use App\Http\Controllers\BrandController;
 
 use App\Http\Controllers\DetailsProductController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryProductController;
->>>>>>> origin
 
 Route::get("/", [
     HomeController::class,
@@ -226,3 +223,14 @@ Route::post('/updateDetailProduct{ID}',
     DetailsProductController::class,
     "updateDetailProduct"
 ]);
+
+// Giỏ hàng
+Route::post('/cart/index', [
+    ProductsController::class,
+    "ThemVaoGioHang"
+])->name('muahang');
+Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('removeFromCart');
+Route::post('/update-cart-quantity', [CartController::class, 'updateCartQuantity'])->name('updateCartQuantity');
+Route::post('/process-selected-items', [CartController::class, 'processSelectedItems'])->name('processSelectedItems');
+Route::post('/delete-item', [CartController::class, 'deleteItem'])->name('delete.item');
+    

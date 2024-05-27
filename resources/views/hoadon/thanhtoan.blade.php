@@ -24,7 +24,7 @@
 <body>
     <div class="container-xl wrap">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-7">
                 <div class="logo">
                     <img src="../../images/icon.png" alt="logo" class="img-logo" />
                 </div>
@@ -157,7 +157,7 @@
                 <p class="" style="text-align: center">Powered by HaiHuocStore</p>
             </div>
 
-            <div class="col-md-4 wrap-right">
+            <div class="col-md-5 wrap-right">
                 <div class="list-cart" style="">
                     <h4>Số lượng sản phẩm: {{ $sogiohang }}</h4>
                     @foreach ($cart as $item)
@@ -174,6 +174,9 @@
                                             <div class="cart_des">
                                                 <a href="#">{{ $item->TENSANPHAM }}</a>
                                             </div>
+                                            <div class="item-qua">
+                                                <p>Số lượng: {{ $item->SOLUONG }}</p>
+                                            </div>
                                         </div>
                                         <div class="cart_qty-pri">
                                             <div class="item-qty">
@@ -189,7 +192,7 @@
                                                     <span class="item-option">
                                                         <span class="item-price">
                                                             <span
-                                                                class="money">{{ $item->GIA * $item->SOLUONG }}₫</span>
+                                                                class="money">{{ $item->THANHTIEN }}₫</span>
                                                         </span>
                                                     </span>
                                                 </div>
@@ -199,13 +202,12 @@
                                 </div>
                             </div>
                         </div>
-                        <?php $TongTien += $item->THANHTIEN; ?>
                     @endforeach
                 </div>
                 <hr>
                 <div class="group-hoadon">
                     <p class="left-text">Tạm tính:</p>
-                    <p class="right-value">{{ $item->GIA * $item->SOLUONG }}</p>
+                    <p class="right-value">{{ $tongtienSP }}</p>
                 </div>
                 <div class="group-hoadon">
                     <p class="left-text">Phí vận chuyển: </p>
@@ -214,7 +216,7 @@
                 <hr>
                 <div class="price-total" data-tong-cong="{{ $item->GIA * $item->SOLUONG }}">
                     <p class="left-text">Tổng cộng: </p>
-                    <p class="right-value tong-tong-value" id="tong-cong">{{ $TongTien + 20000 }}</p>
+                    <p class="right-value tong-tong-value" id="tong-cong">{{ $tongtienSP + 20000 }}</p>
                 </div>
             </div>
         </div>

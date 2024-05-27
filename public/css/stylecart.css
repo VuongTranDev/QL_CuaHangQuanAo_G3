@@ -187,3 +187,10 @@ img {
     padding: 10px;
     background-color: #ebebeb;
 }
+.check-item{
+    width: 20px;
+    margin-right: 10px;
+}
+.item-wrap{
+    margin-bottom: 30px;
+}
