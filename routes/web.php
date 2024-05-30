@@ -71,6 +71,13 @@ Route::post('/thongKeSanLuong',[
     AdminController::class,
     "thongKeSanLuong"
 ]) ;
+
+Route::get('/quanLyKH',
+[
+    AdminController::class,
+    "quanLyKH"
+]);
+
 // CategoryProduct
 
 Route::get('/addCategoryProduct', [
@@ -121,6 +128,11 @@ Route::get('/deleteBrand/{ID}', [
     "deleteBrand"
 ]);
 
+Route::get ('/addCountry',[
+    BrandController::class,
+    "addCountry"
+]) ;
+
 // DetailPRoduc -- ADMIN
 Route::get('/addDetailProduct',
 [
@@ -148,4 +160,26 @@ Route::post('/updateDetailProduct{ID}',
 [
     DetailsProductController::class,
     "updateDetailProduct"
+]); 
+Route::get('/phanHoiKH',
+[
+    DetailsProductController::class,
+    "phanHoiKH"
 ]);
+
+Route::post('/updateComment',
+[
+    DetailsProductController::class,
+    "updateComment"
+]);
+
+Route::post('/replyComment',
+[
+    DetailsProductController::class,
+    "replyComment"
+]);
+
+
+
+
+

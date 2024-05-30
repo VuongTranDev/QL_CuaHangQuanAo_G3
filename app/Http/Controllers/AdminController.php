@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session ;
@@ -119,66 +119,59 @@ class AdminController extends Controller
             return Redirect::to ('admin_login') ;
         }
     }
-    public function logout()
+    public function logout(Request $request)
     {   
-        $this->AuthLogin() ;
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+      
         return Redirect::to('admin_login'); ;
     }
 
     public function thongKeDS()
     {
+        $this->AuthLogin() ;
         return view ('admin.thongkeDS') ;
     }
 
-    // public function thongKeSanLuong(Request $request)
-    // {
-    //     $data = $request->all() ;
-    //     $fromdate = $data['from_date'] ;
-    //     $todate = $data['to_date'] ;
-    //     $get = DB::table('hoadon')->whereBetween('NGAYDATHANG',[$fromdate, $todate])->orderBy('NGAYDATHANG','ASC')->get() ;
-       
-    //     foreach($get as $key => $val)
-    //     {
-    //         $charData[] = array(
-    //             'thoiGian' => $val->NGAYDATHANG,
-    //             'soLuong' =>$val->SOLUONG,
-    //             'tongTien' =>$val->TONGTIEN
-    //         ) ;
-    //     }
-    //     echo $data = json_encode($charData) ;
-    // }
+   
 
+    public function thongKeSanLuong(Request $request)
+    {
+        try {
+            $data = $request->all();
+            $fromdate = $data['from_date'];
+            $todate = $data['to_date'];
 
-public function thongKeSanLuong(Request $request)
-{
-    try {
-        $data = $request->all();
-        $fromdate = $data['from_date'];
-        $todate = $data['to_date'];
+            // Lấy dữ liệu từ bảng 'hoadon'
+            $get = DB::table('hoadon')
+                ->whereBetween('NGAYDATHANG', [$fromdate, $todate])
+                ->orderBy('NGAYDATHANG', 'ASC')
+                ->get();
 
-        // Lấy dữ liệu từ bảng 'hoadon'
-        $get = DB::table('hoadon')
-            ->whereBetween('NGAYDATHANG', [$fromdate, $todate])
-            ->orderBy('NGAYDATHANG', 'ASC')
-            ->get();
+            $charData = [];
 
-        $charData = [];
+            foreach ($get as $key => $val) {
+                $charData[] = array(
+                    'thoiGian' => $val->NGAYDATHANG,
+                    'soLuong' => $val->SOLUONG,
+                    'tongTien' => $val->TONGTIEN
+                );
+            }
 
-        foreach ($get as $key => $val) {
-            $charData[] = array(
-                'thoiGian' => $val->NGAYDATHANG,
-                'soLuong' => $val->SOLUONG,
-                'tongTien' => $val->TONGTIEN
-            );
+            // Trả về phản hồi JSON
+            return response()->json($charData);
+            
+        } catch (\Exception $e) {
+            // Bắt lỗi và trả về phản hồi JSON
+            return response()->json(['error' => $e->getMessage()], 500);
         }
-
-        // Trả về phản hồi JSON
-        return response()->json($charData);
-
-    } catch (\Exception $e) {
-        // Bắt lỗi và trả về phản hồi JSON
-        return response()->json(['error' => $e->getMessage()], 500);
     }
-}
-
+    
+    public function quanLyKH()
+    {
+        $data = DB::SELECT('SELECT * FROM khachhang') ;
+        return view('admin.quanLyKH',compact('data'));
+    }
 }

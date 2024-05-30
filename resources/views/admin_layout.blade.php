@@ -25,6 +25,7 @@
 <script src="{{ asset('../js/jquery2.0.3.min.js')}}"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+
 </head>
 <body>
 <section id="container">
@@ -66,8 +67,6 @@
                 <li><a href="{{ URL::to('logout') }}"><i class="fa fa-key"></i> Đăng xuất</a></li>
             </ul>
         </li>
-        <!-- user login dropdown end -->
-       
     </ul>
     <!--search & user info end-->
 </div>
@@ -95,7 +94,7 @@
                     </a>
                     <ul class="sub">
 						<li><a href="{{ URL::to('/addCategoryProduct') }}">Loại sản phẩm</a></li>
-						<li><a href="{{ URL::to('/addbrands') }}">Thông tin sản phẩm</a></li>
+						<li><a href="{{ URL::to('/addbrands') }}">Thương hiệu</a></li>
                     </ul>
                 </li>
 				<li class="sub-menu">
@@ -108,14 +107,26 @@
 						<li><a href="{{ URL::to('/allDetailProduct') }}">Liệt kê sản phẩm</a></li>
                     </ul>
                 </li>
-				<li>
-                    <a href="{{ URL::to('/thongKeDS') }}">	
+                <li>
+                    <a href="{{ URL::to('/quanLyKH') }}">	
                         <i class="fa fa-book"></i>
-                        <span>Đăng nhập người dùng</span>
+                        <span>Quản lý Khách Hàng</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ URL::to('/admin_login') }}">	
+                    <a href="{{ URL::to('/phanHoiKH') }}">	
+                        <i class="fa fa-book"></i>
+                        <span>Phản Hồi Khách Hàng</span>
+                    </a>
+                </li>
+				<li>
+                    <a href="{{ URL::to('/thongKeDS') }}">	
+                        <i class="fa fa-book"></i>
+                        <span>Thống kê doanh thu</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ URL::to('/') }}">	
                         <i class="fa fa-user"></i>
                         <span>Đăng nhập người dùng</span>
                     </a>
@@ -137,11 +148,78 @@
 <script src="{{ asset('../js/scripts.js')}}"></script>
 <script src="{{ asset('../js/jquery.slimscroll.js')}}"></script>
 <script src="{{ asset('../js/jquery.nicescroll.js')}}"></script>
-<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="{{ asset('../js/flot-chart/excanvas.min.js')}}"></script><![endif]-->
+<!--[if lte IE 8]><script language="javascript" type="text/javasc
+    ript" src="{{ asset('../js/flot-chart/excanvas.min.js')}}"></script><![endif]-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{{ asset('../js/jquery.scrollTo.js')}}"></script>
 <!-- morris JavaScript -->	
 
+<script type="text/javascript">
 
+$(document).ready(function() {
+    $('.comment_status_btn').click(function() {
+        var commentId = $(this).data('id');
+        var button = $(this);
+        $.ajax({
+            url: '{{ url("/updateComment") }}',
+            method: 'POST',
+            data: {
+                comment_id: commentId,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                if (response.success) {
+                    if (button.val() == "Duyệt") {
+                        button.val("Bỏ duyệt").removeClass("btn-primary").addClass("btn-danger");
+                    } else {
+                        button.val("Duyệt").removeClass("btn-danger").addClass("btn-primary");
+                    }
+                } else {
+                    alert("Cập nhật tình trạng thất bại!");
+                }
+            
+            },
+            error: function(xhr, status, error) {
+                console.error('Đã xảy ra lỗi: ' + error);
+            }
+        });
+    });
+   
+});
+
+
+</script>
+
+<script>
+    $(document).ready(function() {
+     $('.btn-reply-comment').click(function() {
+        var comment = $('.reply_comment').val();
+        var commentMDG = $(this).data('madg');
+        var button = $(this);
+     
+        $.ajax({
+            url: '{{ url("/replyComment") }}',
+            method: 'POST',
+            data: {
+                comment_dg: commentMDG,
+                reply_content: comment,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                if (response.success) {
+                    alert("Đã trả lời thành công!");
+                    location.reload(); 
+                   
+                }
+            },
+            error: function(xhr, status, error) {
+                alert("Trả lời thất bại!");
+                console.error('Đã xảy ra lỗi: ' + error);
+            }
+        });
+    });
+}) ;
+</script>
 <script type="text/javascript">
 
 	$(function(){
@@ -160,18 +238,6 @@
    });
  </script>
 <script>
-		$(document).ready(function() {
-			var chart = new Morris.Bar({
-			element: 'chart',
-			lineColors:['#819C79','#fc8710','#FF6541'],
-			parseTime: false, // Đây là một thuộc tính của biểu đồ Morris Bar Chart
-			xkey: 'thoiGian',
-			ykeys: ['soLuong','tongTien'],
-			labels: ['Số Lượng','Tổng Tiền']
-		});
-
-
-		//BOX BUTTON SHOW AND CLOSE
 	   jQuery('.small-graph-box').hover(function() {
 		  jQuery(this).find('.box-button').fadeIn('fast');
 	   }, function() {
@@ -182,9 +248,6 @@
 		  return false;
 	   });
 	   
-	    
-	   
-	});
 	</script>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
@@ -200,26 +263,38 @@
 	  </script>
 
   <script type="text/javascript">
-  $(document).ready(function(){
+  $(document).ready(function() {
+    $('#btn').click(function() {
+        var _token = $('input[name="_token"]').val();
+        var from_date = $('#datepicker').val();
+        var to_date = $('#datepicker2').val();
+        
+        $.ajax({
+            url: "{{url('/thongKeSanLuong')}}",
+            method: "POST",
+            dataType: "JSON",
+            data: {from_date: from_date, to_date: to_date, _token: _token},
+            success: function(data) {
+                console.log(data);
 
-	  $('#btn').click(function(){
-		  var _token = $('input[name="_token"]').val() ;
-		  var from_date = $('#datepicker').val() ;
-		  var to_date = $('#datepicker2').val() ;
-	  
-		  $.ajax({
-			  url:"{{url('/thongKeSanLuong')}}",
-			  method:"POST" ,
-			  dataType : "JSON" ,
-			  data:{from_date:from_date,to_date:to_date,_token:_token},
-			  success:function(data)
-			  {
-				console.log(data);
-				 chart.setData(data) ;
-			  }
-		  }) ;
-	  }) ;
-  });
+                // Xóa biểu đồ cũ
+                $('#chart').empty();
+
+                // Khởi tạo lại biểu đồ với dữ liệu mới
+                new Morris.Bar({
+                    element: 'chart',
+                    lineColors: ['#819C79', '#fc8710', '#FF6541'],
+                    parseTime: false,
+                    xkey: 'thoiGian',
+                    ykeys: ['soLuong', 'tongTien'],
+                    labels: ['Số Lượng', 'Tổng Tiền'],
+                    data: data
+                });
+            }
+        });
+    });
+});
+
   </script>
 
   <script type="text/javascript">

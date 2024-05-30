@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session ;
 use Illuminate\Support\Facades\Redirect ;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
 class DetailsProductController extends Controller
 {  
     public function AuthLogin()
@@ -110,7 +111,6 @@ class DetailsProductController extends Controller
                     $motaData = [
                         'MOTA' => $mota
                     ];
-                
                     $motaID = $request->mota_id[$index]; 
                    
                     DB::table('motasanpham')->where('ID', $motaID)->update($motaData);
@@ -123,10 +123,80 @@ class DetailsProductController extends Controller
             return Redirect::to('addDetailProduct');
         }
     }
+    public function phanHoiKH()
+    {
+        $this->AuthLogin() ;
+        $data =  DB::select('SELECT danhgia.MADANHGIA,danhgia.ID,danhgia.TINHTRANG,TENSANPHAM,SOSAO,TENKH,danhgia.NOIDUNG FROM danhgia INNER JOIN khachhang on danhgia.MAKH = khachhang.makh
+                                                            INNER JOIN chitiethoadon on chitiethoadon.MACHITIETDONHANG = danhgia.MACTHD
+                                                            INNER JOIN sanpham on sanpham.MASANPHAM = chitiethoadon.MASP
+                                                            ');
+        $data1 = DB::select('SELECT * FROM PHANHOI');
+       
+        return view('detailproduct.phanHoi',compact('data','data1'));
+    }
+    public function updateComment(Request $request)
+    {
+        
+        $commentId = $request->input('comment_id');
+        $comment = DB::table('danhgia')->where('ID', $commentId)->first();
+        if($comment)
+        {
+            $newStatus = ($comment->TINHTRANG== 0) ? 1 : 0 ;
+            DB::table('danhgia')->where('ID', $commentId)->update(['TINHTRANG' => $newStatus]);
+            return response()->json(['success' => true]);
+        }
+        return response()->json(['success' => false]);
+    }
+
+    public function replyComment(Request $request)
+    {
+        
+        try {
+        
+            $commentMDG = $request->input('comment_dg');
+            $replyContent = $request->input('reply_content');
+            // && 
+            // Kiểm tra các giá trị đầu vào
+            if (empty($commentMDG) && empty($replyContent)) {
+                return response()->json(['success' => false, 'message' => 'Invalid input']);
+            }
+    
+            // Lấy comment từ bảng 'danhgia'
+            $comment = DB::select("SELECT * FROM danhgia WHERE MADANHGIA =  '$commentMDG' ");
+    
+            // Kiểm tra giá trị của $comment
+            if (!$comment) {
+                return response()->json(['success' => false, 'message' => 'Comment not found']);
+            }
+    
+            $maxMaPH = DB::table('phanhoi')->max('MAPHANHOI');
+            if ($maxMaPH) {
+                $nextMaPH = 'PH' . str_pad((intval(substr($maxMaPH, 2)) + 1), 3, '0', STR_PAD_LEFT);
+            } else {
+                $nextMaPH = 'PH001';
+            }
+    
+            // Chèn phản hồi vào bảng 'phanhoi'
+            DB::table('phanhoi')->insert([
+                'MADANHGIA' => $commentMDG,
+                'MAPHANHOI' => $nextMaPH,
+                'NOIDUNG' => $replyContent
+            ]);
+    
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            Log::error('Error in replyComment: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Internal Server Error']);
+        }
+    }
+    
+
     
     // public function deleteDetailProDuct($ID)
     // { 
     //     DB::table('nhanhieu')->where('ID', $ID)->delete();
     //     return $this->addDetailProDuct();
     // }
+
+
 }

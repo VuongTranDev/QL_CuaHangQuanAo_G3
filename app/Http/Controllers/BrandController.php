@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session ;
 use Illuminate\Support\Facades\Redirect ;
 use Illuminate\Http\Request;
@@ -33,25 +34,34 @@ class BrandController extends Controller
     public function saveBrand(Request $request)
     {
         try {
-            $data = array();
-            $data['MANH'] = $request->maTH;
-            $data['TENNH'] = $request->tenTH;       
-            $data['QUOCGIA'] = $request->quocgia;       
+            // Fetch data from the API
+            $response = Http::get('https://restcountries.com/v3.1/all');
+            
+            // Check if the response is successful
+            if ($response->ok()) {
+                $countries = $response->json();
+            } else {
+                return response()->json(['error' => 'Failed to retrieve data from the API.'], $response->status());
+            }
+
+            // Prepare data for insertion
+            $data = [
+                'MANH' => $request->maTH,
+                'TENNH' => $request->tenTH,
+                'QUOCGIA' => $request->quocgia
+            ];
+            
+            // Insert data into the database
             DB::table('nhanhieu')->insert($data);
 
-            Session::put('message','Thêm thành công!!!');
-            return Redirect::to('addbrands') ;
+            // Set success message
+            Session::put('message', 'Thêm thành công!!!');
+            return Redirect::to('addbrands');
         } catch (\Exception $e) {
-            
-            Session::put('message','Hãy xem lại mã loại hoặc tên sản phẩm!!!');
+            // Handle exceptions and set error message
+            Session::put('message', 'Hãy xem lại mã loại hoặc tên sản phẩm!!!');
             return Redirect::to('addbrands');
         }
-    }
-    public function editBrand($ID)
-    {
-        $this->AuthLogin();
-        $editTH = DB::table('nhanhieu')->where('ID',$ID)->get();
-        return view('brand.editbrand', compact('editTH'));
     }
 
     public function updateBrand(Request $request,$ID)
@@ -76,5 +86,8 @@ class BrandController extends Controller
         DB::table('nhanhieu')->where('ID', $ID)->delete();
         return $this->addBrand();
     }
+
+ 
+
    
 }
