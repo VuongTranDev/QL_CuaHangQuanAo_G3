@@ -50,7 +50,38 @@ Route::get('/allProducts', [
     "allProducts"
 ]);
 
-<<<<<<< HEAD
+
+Route::get('/products/{masanpham}', [
+    ProductsController::class, 
+    'showDetailProduct'
+])->name('product.showDetailProduct');
+
+Route::get('/products/productsByType/{tenloai}', [
+    ProductsController::class, 
+    'productsByType' 
+])->name('products.productsByType');
+
+Route::post('/danhgias/themDanhGia', [
+    DanhGiaController::class,
+    'themDanhGIa'
+])->name('danhgias.themDanhGia');
+
+Route::get('/danhgias/showAllComment', [
+    DanhGiaController::class,
+    'showAllComment'
+]);
+
+Route::get('/danhgias/filterByRating', [
+    DanhGiaController::class,
+    'filterByRating'
+]);
+
+Route::get('/danhgias/showDanhGia', [
+    DanhGiaController::class, 
+    'showDanhGia'
+]);
+
+
 Route::get('/admin_login',[
     AdminController::class,
     "index"
@@ -195,7 +226,6 @@ Route::post('/replyComment',
 
 
 
-=======
 Route::get('/products/{masanpham}', [
     ProductsController::class, 
     'showDetailProduct'
@@ -225,4 +255,4 @@ Route::get('/danhgias/showDanhGia', [
     DanhGiaController::class, 
     'showDanhGia'
 ]);
->>>>>>> main
+
