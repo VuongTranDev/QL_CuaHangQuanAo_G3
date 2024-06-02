@@ -500,6 +500,6 @@ Route::post('/process-selected-items', [CartController::class, 'processSelectedI
 Route::post('/delete-item', [CartController::class, 'deleteItem'])->name('delete.item');
 
 // địa chỉ
-Route::post('/update-address', [MailController::class, 'sendEmail'])->name('update.address');
+Route::post('/updateaddress', [MailController::class, 'sendEmail'])->name('update.address');
 
     
