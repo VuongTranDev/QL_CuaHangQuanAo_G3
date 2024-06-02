@@ -22,18 +22,18 @@
 <body>
     <br>
     <br>
-	<?php 
-	$message = Session::get('message') ;
-	if($message)
-	  {
-		echo "<span style='color: red;margin-left:30px; font-weight: bold;'>$message</span>";
-		Session::put('message',null); 
-	  }
-	?>
+	
     <div class="cont">
         <div class="form sign-in">
             <h2>Xin chào</h2>
-           
+            <?php 
+            $message = Session::get('message') ;
+            if($message)
+              {
+                echo "<span style='color: red;margin-left:30px; font-weight: bold;margin-left:180px'>$message</span>";
+                Session::put('message',null); 
+              }
+            ?>
             <form id="loginForm" action="{{ URL::to("/admin_TK") }}" method="post">
 				{{ csrf_field() }}
                 <label>
