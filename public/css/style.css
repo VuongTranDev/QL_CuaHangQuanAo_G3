@@ -146,6 +146,10 @@ header {
     background-color: #000;
 }
 
+.nav-search-mobile {
+    display: none;
+}
+
 .dropdown-toggle-btn::after {
     display: none;
 }
@@ -179,13 +183,17 @@ header {
     margin-left: 5px;
 }
 
-.search-container {
+.search-container, .search-container2 {
     position: relative;
     display: flex;
     align-items: center;
 }
 
-.search {
+.search-container2 {
+    display: none;
+}
+
+.search, .search2 {
     width: 0;
     opacity: 0;
     visibility: hidden;
@@ -197,7 +205,7 @@ header {
     border-radius: 100px;
 }
 
-.search.expanded {
+.search.expanded, .search2.expanded {
     width: 400px;
     opacity: 1;
     visibility: visible;
@@ -1286,6 +1294,23 @@ section::after {
         font-size: 14px;
     }
 
+    .nav-header-local ul li {
+        justify-content: right;
+    }
+
+    .nav-header-local ul {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .search-container {
+        display: none;
+    }
+
+    .search-container2 {
+        display: flex;
+    }
+
     .dropdown-item {
         font-size: 13px;
     }
@@ -1480,4 +1505,30 @@ section::after {
     }
 
     /* detail product */
+
+    #add-address-form, #update-address-form {
+        width: 90%;
+        height: 55%;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    #close-box-address, #close-box-update-address {
+        left: 90%;
+        top: 22%;
+    }
+
+    .navbar-nav .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: -55px;
+    }
+
+    .dropdown.show .dropdown-menu-user {
+        display: block;
+    }
+
+    .nav-search-mobile {
+        display: block;
+    }
 }

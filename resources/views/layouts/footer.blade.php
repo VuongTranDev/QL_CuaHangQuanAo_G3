@@ -7,13 +7,13 @@
                         <img src="{{ URL('images/icon.png') }}" class="mb-3" alt="logo shop" width="60" height="50">
                     </a>
                     <div class="single-contact">
-                        <i class="fa fa-map-marker-alt"></i>
+                        <i class="fa fa-home"></i>
                         <div class="content">Địa chỉ:
                             <span>140 Lê Trọng Tấn, Tây Thạnh, Tân Phú, TP.HCM</span>
                         </div>
                     </div>
                     <div class="single-contact">
-                        <i class="fa fa-mobile-alt"></i>
+                        <i class="fa fa-phone"></i>
                         <div class="content">
                             Số điện thoại: 0123456789</a>
                         </div>

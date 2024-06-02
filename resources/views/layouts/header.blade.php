@@ -1,17 +1,15 @@
 <header>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-            <div class="collapse navbar-collapse d-flex">
+            <div class="collapse navbar-collapse d-flex nav-header-local">
                 <img src="../../images/icon.png" class="me-1" alt="" width="30px" height="25px">
                 <a class="navbar-brand" href="/">Wonder Vista Fashion</a>
                 <ul class="navbar-nav me-auto justify-content-end">
                     <li class="nav-item">
                         <div class="search-container">
-                            <div class="search-container">
-                                <input type="text" id="searchInput" class="form-control search" placeholder="Search">
-                                <button class="border-0 ic-search" type="button" id="searchButton"><i
-                                        class="fas fa-search"></i></button>
-                            </div>
+                            <input type="text" id="searchInput" class="form-control search" placeholder="Search">
+                            <button class="border-0 ic-search" type="button" id="searchButton"><i
+                                    class="fas fa-search"></i></button>
                         </div>
                     </li>
 
@@ -20,6 +18,7 @@
                             <i class="fas fa-shopping-basket cart-item"> <span class="count-item-cart">1</span></i>
                         </a>
                     </li>
+
                     <li class="nav-item">
                         <div class="dropdown">
                             @if (Session::get('makh') == null)
@@ -34,9 +33,7 @@
                                     </i>
                                 </a>
                             @else
-                                <a href="#" type="button" id="userDropdown" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-
+                                <a href="#" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="far fa-user">
                                         <?php
                                         $name = Session::get('ten');
@@ -53,66 +50,8 @@
                                 </div>
                             @endif
                         </div>
-                    </li>
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            handleSearchForm();
-
-                            searchInput.addEventListener('keydown', function(e) {
-                                if (e.key === 'Enter') {
-                                    submitSearch();
-                                }
-                            });
-                        });
-
-                        function handleSearchForm() {
-                            const searchInput = document.querySelector('.search');
-                            const searchIcon = document.querySelector('.ic-search');
-
-                            searchIcon.addEventListener('click', function(e) {
-                                if (!searchInput.classList.contains('expanded')) {
-                                    e.preventDefault(); // Prevent form submission on first click
-                                    searchInput.classList.add('expanded');
-                                    searchInput.focus();
-                                }
-                            });
-
-                            searchInput.addEventListener('blur', function() {
-                                if (searchInput.value === '') {
-                                    searchInput.classList.remove('expanded');
-                                }
-                            });
-                        }
-
-                        function submitSearch() {
-                            var searchQuery = $('#searchInput').val();
-                            $.ajax({
-                                url: "{{ route('products.search') }}",
-                                type: "GET",
-                                data: {
-                                    search_query: searchQuery
-                                },
-                                success: function(response) {
-                                    // Xử lý dữ liệu trả về
-                                    var newUrl = "{{ route('products.search') }}" + '?search_query=' + encodeURIComponent(
-                                        searchQuery);
-                                    window.history.pushState({
-                                        path: newUrl
-                                    }, '', newUrl);
-                                    window.location.reload();
-                                },
-                                error: function(xhr) {
-                                    // Xử lý lỗi
-                                    console.log(xhr.responseText);
-                                }
-                            });
-                        }
-                    </script>
+                    </li>                    
                 </ul>
-
-
-
-
             </div>
         </div>
     </nav>
@@ -178,8 +117,125 @@
                 <li class="nav-item flex-fill">
                     <a href="/about" class="nav-link">ABOUT US</a>
                 </li>
-                </ul>
+                <li class="nav-item flex-fill nav-search-mobile">
+                    <div class="search-container2">
+                        <input type="text" id="searchInput2" class="form-control search2" placeholder="Search">
+                        <button class="border-0 ic-search" type="button" id="searchButton2">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </li>
+
             </div>
         </div>
     </nav>
 </header>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        handleSearchForm();
+        handleSearchForm2();
+
+        const searchInput2 = document.getElementById('searchInput2');
+        searchInput2.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                
+                submitSearch2();
+            }
+        });
+
+        const searchInput = document.getElementById('searchInput');
+        searchInput2.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                submitSearch();
+            }
+        });
+    });
+
+    function handleSearchForm() {
+        const searchInput = document.querySelector('.search');
+        const searchIcon = document.querySelector('.ic-search');
+
+        searchIcon.addEventListener('click', function(e) {
+            if (!searchInput.classList.contains('expanded')) {
+                e.preventDefault();
+                searchInput.classList.add('expanded');
+                searchInput.focus();
+            }
+        });
+
+        searchInput.addEventListener('blur', function() {
+            if (searchInput.value === '') {
+                searchInput.classList.remove('expanded');
+            }
+        });
+    }
+
+    function submitSearch() {
+        var searchQuery = $('#searchInput').val();
+        $.ajax({
+            url: "{{ route('products.search') }}",
+            type: "GET",
+            data: {
+                search_query: searchQuery
+            },
+            success: function(response) {
+                // Xử lý dữ liệu trả về
+                var newUrl = "{{ route('products.search') }}" + '?search_query=' + encodeURIComponent(
+                    searchQuery);
+                window.history.pushState({
+                    path: newUrl
+                }, '', newUrl);
+                window.location.reload();
+            },
+            error: function(xhr) {
+                // Xử lý lỗi
+                console.log(xhr.responseText);
+            }
+        });
+    }
+
+    function handleSearchForm2() {
+        const searchInput2 = document.getElementById('searchInput2');
+        const searchIcon2 = document.getElementById('searchButton2');
+
+        searchIcon2.addEventListener('click', function(e) {
+            if (!searchInput2.classList.contains('expanded')) {
+                e.preventDefault();
+                searchInput2.classList.add('expanded');
+                searchInput2.focus();
+            }
+        });
+
+        searchInput2.addEventListener('blur', function() {
+            if (searchInput2.value === '') {
+                searchInput2.classList.remove('expanded');
+            }
+        });
+    }
+
+    function submitSearch2() {
+        var searchQuery2 = $('#searchInput2').val();
+        $.ajax({
+            url: "{{ route('products.search') }}",
+            type: "GET",
+            data: {
+                search_query: searchQuery2
+            },
+            success: function(response) {
+                // Xử lý dữ liệu trả về
+                var newUrl = "{{ route('products.search') }}" + '?search_query=' + encodeURIComponent(
+                    searchQuery2);
+                window.history.pushState({
+                    path: newUrl
+                }, '', newUrl);
+                window.location.reload();
+            },
+            error: function(xhr) {
+                // Xử lý lỗi
+                console.log(xhr.responseText);
+            }
+        });
+    }
+</script>
