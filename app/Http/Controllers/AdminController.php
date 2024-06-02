@@ -6,9 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session ;
-use Illuminate\Support\Facades\Redirect ;
-session_start() ;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
+
+session_start();
 class AdminController extends Controller
 {
 
@@ -17,9 +18,9 @@ class AdminController extends Controller
         $admin_id = Session::get('admin_id') ;
         if($admin_id)
         {
-            return Redirect::to('admin_content') ;
+            return Redirect::to('admin.admin_content') ;
         }
-        return Redirect::to('admin_login')->send() ;
+        return Redirect::to('admin_login')->send();
     }
     public function index()
     {
@@ -27,10 +28,10 @@ class AdminController extends Controller
     }
     public function adminlayout()
     {
-        $this->AuthLogin() ;
+        $this->AuthLogin();
         return view('admin.admin_content');
     }
-   
+
     public function login(Request $request)
     {
         Session::put('previous_url', url()->previous());
@@ -38,43 +39,32 @@ class AdminController extends Controller
         $login_TK = $request->login_tenTK;
         $login_MK = ($request->login_mk);
         $result = DB::table('taikhoanuser')->where('TENTK', $login_TK)->where('MATKHAU', $login_MK)->first();
-        if($result)
-        {
-           
-            if ($result->PHANQUYEN =="ADMIN") {
-              
+        if ($result) {
+
+            if ($result->PHANQUYEN == "ADMIN") {
+
                 $data = DB::table('taikhoanuser')
                 ->join('thongtinadmin', 'taikhoanuser.MAUSER', '=', 'thongtinadmin.MATKUSER')
                 ->where('thongtinadmin.MATKUSER',$result->MAUSER)
                 ->first();
                 if($data)
                 {
-                    Session::put('ten',$data->TENKH) ;
-                    Session::put('sdt',$data->SODIENTHOAI) ;
-                    Session::put('admin_id',$data->SODIENTHOAI) ;
+                    Session::put('ten',$data->TENAD) ;
+                    Session::put('sdt',$data->SODIENTHOAIAD) ;
+                    Session::put('admin_id',$data->SODIENTHOAIAD) ;
                     return Redirect::to('admin_content') ;
                 }
-            }
-            else if($result->PHANQUYEN =="Khách Hàng")
-            {
-              
+            } else if ($result->PHANQUYEN == "Khách Hàng") {
+
                 $data = DB::table('taikhoanuser')
                 ->join('khachhang', 'taikhoanuser.MAUSER', '=', 'khachhang.MATKUSER')
                 ->where('khachhang.MATKUSER',$result->MAUSER)
                 ->first();
-
-
            
                 if( $data->TENKH == "")
-                {
                     Session::put('ten',"Chưa có tên") ;
-                }
-                else {
-                    Session::put('ten',$data->TENTK) ;
-                }
-                Session::put('makh', $data->MAKH);
-                    
-                return Redirect::to('/') ;
+                Session::put('ten',$data->TENKH) ;
+                return Redirect:: to('/') ;
             }
         }
         else
@@ -82,7 +72,7 @@ class AdminController extends Controller
             Session::put('message',"Đăng nhập không thành công") ;
             return view('admin_login');
         }
-    }   
+    }
 
     public function register(Request $request)
     {
@@ -101,38 +91,34 @@ class AdminController extends Controller
         } else {
             $nextMaKH = 'KH001';
         }
-       
+
         $result = DB::table('taikhoanuser')->insert([
-            'MAUSER'=>$nextMatkuser,
+            'MAUSER' => $nextMatkuser,
             'TENTK' => $login_TK,
             'MATKHAU' =>  $login_MK,
             'PHANQUYEN' => $quyen,
         ]);
 
         $result1 = DB::table('khachhang')->insert([
-            'MAKH' =>$nextMaKH,
+            'MAKH' => $nextMaKH,
             'TENKH' => "",
-            'EMAIL' =>"" ,
-            'DIACHI' =>"",
-            'SODIENTHOAI'=>"",
-            'MATKUSER' =>$nextMatkuser,
+            'EMAIL' => "",
+            'DIACHI' => "",
+            'SODIENTHOAI' => "",
+            'MATKUSER' => $nextMatkuser,
 
         ]);
-        if($result && $result1)
-        {
-            Session::put('message','Đăng kí tài khoản thành công');
-            return Redirect::to ('admin_login') ;
-        }
-        else
-        {
-            Session::put('message','Đăng kí tài khoản không thành công');
-            return Redirect::to ('admin_login') ;
+        if ($result && $result1) {
+            Session::put('message', 'Đăng kí tài khoản thành công');
+            return Redirect::to('admin_login');
+        } else {
+            Session::put('message', 'Đăng kí tài khoản không thành công');
+            return Redirect::to('admin_login');
         }
     }
     public function logout()
     {   
         $this->AuthLogin() ;
-        Session::flush();
         return Redirect::to('admin_login'); ;
     }
 
@@ -143,11 +129,27 @@ class AdminController extends Controller
 
     public function thongKeDS()
     {
-        $this->AuthLogin() ;
         return view ('admin.thongkeDS') ;
     }
 
-   
+    // public function thongKeSanLuong(Request $request)
+    // {
+    //     $data = $request->all() ;
+    //     $fromdate = $data['from_date'] ;
+    //     $todate = $data['to_date'] ;
+    //     $get = DB::table('hoadon')->whereBetween('NGAYDATHANG',[$fromdate, $todate])->orderBy('NGAYDATHANG','ASC')->get() ;
+       
+    //     foreach($get as $key => $val)
+    //     {
+    //         $charData[] = array(
+    //             'thoiGian' => $val->NGAYDATHANG,
+    //             'soLuong' =>$val->SOLUONG,
+    //             'tongTien' =>$val->TONGTIEN
+    //         ) ;
+    //     }
+    //     echo $data = json_encode($charData) ;
+    // }
+
 
     public function thongKeSanLuong(Request $request)
     {
@@ -172,89 +174,13 @@ class AdminController extends Controller
                 );
             }
 
-            // Trả về phản hồi JSON
-            return response()->json($charData);
-            
-        } catch (\Exception $e) {
-            // Bắt lỗi và trả về phản hồi JSON
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-    }
-    
-    public function quanLyKH()
-    {
-        $data = DB::SELECT('SELECT * FROM khachhang ,taikhoanuser where MAUSER = khachhang.MATKUSER and PHANQUYEN = "Khách Hàng" AND TENKH != "" ');
-       
-        $data1 = DB::SELECT('SELECT * FROM taikhoanuser ,thongtinadmin where MAUSER = thongtinadmin.MATKUSER and PHANQUYEN = "ADMIN"  ') ;
- 
-        return view('admin.quanLyKH',compact('data','data1'));
-    }
+        // Trả về phản hồi JSON
+        return response()->json($charData);
 
-    public function editTTKH($ID)
-    {
-        $editSP = DB::table('taikhoanuser')->where('MAUSER', $ID)->first();
-        
-        if ($editSP->PHANQUYEN == "ADMIN") {
-            $data = DB::SELECT('SELECT * FROM taikhoanuser, thongtinadmin WHERE ? = MAUSER AND MAUSER = MATKUSER', [$ID]);
-        } else {
-            $data = DB::SELECT('SELECT * FROM taikhoanuser, khachhang WHERE ? = MAUSER AND MAUSER = MATKUSER', [$ID]);
-        }
-        return view('admin.editTTKH', compact('data'));
+    } catch (\Exception $e) {
+        // Bắt lỗi và trả về phản hồi JSON
+        return response()->json(['error' => $e->getMessage()], 500);
     }
-    public function updateTTKH(Request $request , $ID)
-    {
-        $data = array() ;
-        $data['TENKH'] = $request->tenKH;
-        $data['EMAIL'] = $request->emailKH;
-        $data['DIACHI'] = $request->diachiKH;
-        $data['SODIENTHOAI'] = $request->sodienthoaiKH;
-        $role = $request->loaiQuyen;
-       
-        if($role == "ADMIN")
-        {
+}
 
-            $find = DB::table('thongtinadmin')->where('MATKUSER', $ID)->first();
-        
-            if($find)
-            {
-                
-                DB::table('thongtinadmin')->where('MATKUSER', $ID)->update($data);
-            }
-            else
-            {
-                DB::table ('taikhoanuser')->where('MAUSER',$ID)->update(['PHANQUYEN' => $role]);
-                $data['MATKUSER'] = $ID; 
-                DB::table('thongtinadmin')->insert($data);
-            }
-          
-        }
-        else if($role == "Khách Hàng")
-        {
-            
-            DB::table ('taikhoanuser')->where('MAUSER',$ID)->update(['PHANQUYEN' => $role]);
-            $findad = DB::table('thongtinadmin')->where('MATKUSER', $ID)->first();
-            if($findad)
-            {
-                DB::table('thongtinadmin')->where('MATKUSER', $ID)->delete();
-            }
-            $find = DB::table('khachhang')->where('MATKUSER', $ID)->first();
-            if($find)
-            {
-                DB::table('khachhang')->where('MATKUSER', $ID)->update($data);
-            }   
-            else
-            {
-                $data['MATKUSER'] = $ID; 
-                DB::table('khachhang')->insert($data);
-            }
-            
-        }
-        return redirect('quanLyKH');
-    }
-    public function deleteTTKH($ID)
-    {
-        DB::table('taikhoanuser')->where('MAUSER', $ID)->update(['PHANQUYEN' => ""]);
-        
-        return Redirect::to('quanLyKH');
-    }
 }

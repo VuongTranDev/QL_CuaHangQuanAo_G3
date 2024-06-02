@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="/node_modules/slick-carousel/slick/slick.css">
     <link rel="stylesheet" href="/node_modules/slick-carousel/slick/slick-theme.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <link href="{{ asset('../css/font-awesome.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">

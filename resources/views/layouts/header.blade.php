@@ -52,6 +52,32 @@
                         </div>
                     </li>                    
                 </ul>
+                <form class="form-search-group" role="search"
+                    action="{{ route('products.search', ['search_query' => request()->input('search_query')]) }}"
+                    method="GET">
+                    <input class="form-control form-search" name="search_query" placeholder="Search"
+                        aria-label="Search">
+                    <button class="border-0 ic-search" type="submit"><i class="fas fa-search"></i></button>
+                </form>
+
+                <a href="#" class="me-4">
+                    <i class="far fa-user"> <?php
+                    $name = Session::get('ten');
+                    if ($name) {
+                        echo $name;
+                    }
+                    ?></i>
+                </a>
+                <a href="/cart/index">
+                    <i class="fas fa-shopping-basket"> <span class="count-item-cart">
+                            <?php
+                            $sogiohang = Session::get('sogiohang');
+                            if ($sogiohang) {
+                                echo $sogiohang;
+                            }
+                            ?>
+                        </span></i>
+                </a>
             </div>
         </div>
     </nav>

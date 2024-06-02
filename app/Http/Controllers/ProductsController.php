@@ -7,12 +7,14 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\LoaiSanPham;
+use Illuminate\Support\Facades\Session;
 
 class ProductsController extends Controller
 {
      public function index()
      {
           $sanpham = DB::select('SELECT * FROM sanpham');
+
           return view('products.index', compact('sanpham'));
      }
 
@@ -41,6 +43,7 @@ class ProductsController extends Controller
 
      public function showDetailProduct($masanpham)
      {
+          session(['session_masp' => $masanpham]);
           $hinhanh = DB::table('hinhanh')->where('MASANPHAM', $masanpham)->get();
           $mota = DB::table('motasanpham')->where('MASANPHAM', $masanpham)->get();
           $size = DB::table('size')->where('MASANPHAM', $masanpham)->get();
@@ -169,5 +172,120 @@ class ProductsController extends Controller
                }
           }
           return view('products.search', compact('search_product', 'count_product', 'search_query'));
+     }
+     public function getNextMAGH()
+     {
+          $lastMAGH = DB::table('GIOHANG')->select('MAGH')
+               ->orderBy('MAGH', 'desc')
+               ->first();
+
+          if ($lastMAGH) {
+               $lastMAGH = $lastMAGH->MAGH;
+               $numericPart = (int)substr($lastMAGH, 2);
+
+               $nextNumericPart = $numericPart + 1;
+
+               $nextMAGH = 'GH' . str_pad($nextNumericPart, 3, '0', STR_PAD_LEFT);
+          } else {
+               $nextMAGH = 'GH001';
+          }
+
+          return $nextMAGH;
+     }
+
+
+     public function ThemVaoGioHang(Request $request)
+     {
+          $makh = Session::get('makh');
+          if (!$makh) {
+               Session::put('message', "Đăng nhập không thành công");
+               return view('admin_login');
+          }
+          $themvaogiohang = $request->has('themvaogiohang');
+          $muangay = $request->has('muangay');
+          $masanpham = session('session_masp');
+
+          $size = $request->input('size');
+          $quantity = $request->input('quantity');
+          $discout = $request->input('discout');
+          $priceOld = $request->input('price_old');
+          $discountLabel = $request->input('discount_label');
+
+          $totalPrice = $discout * $quantity;
+
+          $existingProduct = DB::table('GIOHANG')
+               ->where('MAKH', $makh)
+               ->where('MASP', $masanpham)
+               ->where('SIZE', $size)
+               ->first();
+
+          if ($existingProduct) {
+               $newQuantity = $existingProduct->SOLUONG + $quantity;
+               $newTotalPrice = $newQuantity * $discout;
+
+               DB::table('GIOHANG')
+                    ->where('MAGH', $existingProduct->MAGH)
+                    ->update([
+                         'SOLUONG' => $newQuantity,
+                         'THANHTIEN' => $newTotalPrice
+                    ]);
+          } else {
+               $newMAGH = $this->getNextMAGH();
+
+               DB::table('GIOHANG')->insert([
+                    'MAGH' => $newMAGH,
+                    'MAKH' => $makh,
+                    'MASP' => $masanpham,
+                    'SOLUONG' => $quantity,
+                    'SIZE' => $size,
+                    'THANHTIEN' => $totalPrice
+               ]);
+          }
+
+
+          if ($masanpham) {
+               if ($request->has('muangay')) {
+
+                    DB::update("UPDATE GIOHANG SET CHONTHANHTOAN = 1 WHERE MAKH = ? AND MASP = ? AND SIZE = ?", [$makh, $masanpham, $size]);
+                    $cart = DB::select("SELECT GIOHANG.MASP, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
+                    FROM GIOHANG 
+                    INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+                    WHERE MAKH = ? AND CHONTHANHTOAN = 1", [$makh]);
+                    $tongtien = 0;
+                    $tongtienSP = 0;
+                    foreach ($cart as $item) {
+                         $save_price = $item->GIA * (20 / 100);
+                         $discout = $item->GIA - $save_price;
+                         $tongtienSP += $discout * $item->SOLUONG;
+                         $tongtien += $tongtienSP;
+                    }
+
+                    $tienGiam = 0;
+                    $sogiohang = count($cart);
+                    $diaChi = DB::select("SELECT * FROM DIACHI WHERE MAKH = ?", [$makh]);
+                    $profile = DB::select("SELECT TENKH, SODIENTHOAI, DIACHI FROM KHACHHANG WHERE MAKH = ?", [$makh]);
+                    return view('hoadon.thanhtoan', compact('cart', 'sogiohang', 'profile', 'tongtien', 'tongtienSP', 'diaChi'));
+               } else {
+                    $cart = DB::select("SELECT GIOHANG.MASP, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN, GIOHANG.SIZE
+                        FROM GIOHANG 
+                        INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+                        WHERE MAKH = ? AND CHONTHANHTOAN = 0", [$makh]);
+
+                    $tongtien = 0;
+                    $tongtienSP = 0;
+                    foreach ($cart as $item) {
+                         $save_price = $item->GIA * (20 / 100);
+                         $discout = $item->GIA - $save_price;
+                         $tongtienSP += $discout * $item->SOLUONG;
+                         $tongtien += $tongtienSP;
+                    }
+
+                    $tienGiam = 0;
+                    $sogiohang = count($cart);
+                    return view('cart.index', compact('cart', 'sogiohang', 'tongtienSP', 'tongtien', 'tienGiam'));
+               }
+          } else {
+               return back();
+          }
      }
 }
