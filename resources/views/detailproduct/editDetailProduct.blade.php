@@ -28,13 +28,22 @@
                             <label for="exampleInputEmail1">Tên sản phẩm</label>
                             <input style="width:" type="text" name="tenSP" value="{{ $key->TENSANPHAM }}" class="form-control" id="exampleInputEmail1">
                         </div>
-                        <div class="form-group">
+                        {{-- <div class="form-group">
+                            <i class="fa fa-plus-square plus-icon"></i>
                             <label for="exampleInputEmail1">Mô tả</label>
+                            <div class="input-group-append">
+                            </div>
                             @foreach($mota as $index => $pr) 
-                                <input style="margin-top: 10px" type="text" name="mota[]" value="{{ $pr->MOTA }}" class="form-control" id="exampleInputEmail1">
-                                <input type="hidden" name="mota_id[]" value="{{ $pr->ID }}">
+                                <div class="input-group mb-3">
+                                    <input style="margin-top: 10px" type="text" name="mota[]" value="{{ $pr->MOTA }}" class="form-control" id="exampleInputEmail1">
+                                    
+                                    <input type="hidden" name="mota_id[]" value="{{ $pr->ID }}">
+                                </div>
                             @endforeach
-                        </div>
+                            <div class="hidden-inputs" style="display:none">
+                                <!-- Input mới sẽ được thêm vào đây -->
+                            </div>
+                        </div> --}}
                         
                         <div class="form-group">
                             <label for="exampleInputEmail1">Giá </label>
@@ -86,4 +95,5 @@
             </div>
         </section>
     </div>
+    
     @endsection

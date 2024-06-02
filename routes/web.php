@@ -73,6 +73,7 @@ Route::get('/allProducts', [
     "allProducts"
 ]);
 
+
 Route::get('/products/{masanpham}', [
     ProductsController::class,
     'showDetailProduct'
@@ -108,7 +109,7 @@ Route::get('/danhgias/showDanhGia', [
     'showDanhGia'
 ]);
 
-Route::get('/admin_login', [
+Route::get('/admin_login',[
     AdminController::class,
     "index"
 ]);
@@ -145,6 +146,31 @@ Route::post('/thongKeSanLuong', [
     AdminController::class,
     "thongKeSanLuong"
 ]);
+
+
+Route::get('/quanLyKH',
+[
+    AdminController::class,
+    "quanLyKH"
+]);
+Route::post('/updateTTKH{ID}',
+[
+    AdminController::class,
+    "updateTTKH"
+]);
+
+Route::get('/editTTKH/{ID}',
+[
+    AdminController::class,
+    "editTTKH"
+]);
+
+Route::get('/deleteTTKH/{ID}',
+[
+    AdminController::class,
+    "deleteTTKH"
+]);
+
 // CategoryProduct
 
 Route::get('/addCategoryProduct', [
@@ -173,10 +199,7 @@ Route::get('/deleteCategoryProduct/{ID}', [
 
 //Brand Controller
 
-Route::get('/addbrands', [
-    BrandController::class,
-    "addBrand"
-]);
+
 Route::post('/saveBrand', [
     BrandController::class,
     "SaveBrand"
@@ -194,6 +217,11 @@ Route::get('/deleteBrand/{ID}', [
     BrandController::class,
     "deleteBrand"
 ]);
+Route::get('/addbrands', [
+    BrandController::class,
+    "addBrand"
+]);
+
 
 // DetailPRoduc -- ADMIN
 Route::get(
@@ -258,4 +286,65 @@ Route::delete('/deleteAddress/{id}', [
     HomeController::class,
     'deleteAddress'
 ])->name('home.deleteAddress');
+Route::post('/updateDetailProduct{ID}',
+[
+    DetailsProductController::class,
+    "updateDetailProduct"
+]); 
+Route::get('/deleteDetailProduct/{ID}',
+[
+    DetailsProductController::class,
+    "deleteDetailProDuct"
+]); 
+Route::get('/phanHoiKH',
+[
+    DetailsProductController::class,
+    "phanHoiKH"
+]);
+
+Route::post('/updateComment',
+[
+    DetailsProductController::class,
+    "updateComment"
+]);
+
+Route::post('/replyComment',
+[
+    DetailsProductController::class,
+    "replyComment"
+]);
+
+
+
+
+
+Route::get('/products/{masanpham}', [
+    ProductsController::class, 
+    'showDetailProduct'
+])->name('product.showDetailProduct');
+
+Route::get('/products/productsByType/{tenloai}', [
+    ProductsController::class, 
+    'productsByType' 
+])->name('products.productsByType');
+
+Route::post('/danhgias/themDanhGia', [
+    DanhGiaController::class,
+    'themDanhGIa'
+])->name('danhgias.themDanhGia');
+
+Route::get('/danhgias/showAllComment', [
+    DanhGiaController::class,
+    'showAllComment'
+]);
+
+Route::get('/danhgias/filterByRating', [
+    DanhGiaController::class,
+    'filterByRating'
+]);
+
+Route::get('/danhgias/showDanhGia', [
+    DanhGiaController::class, 
+    'showDanhGia'
+]);
 

@@ -22,10 +22,12 @@
             <p>Đến ngày<input type="text" id ="datepicker2" class="form-control"></p>
         </div>
     </form>
-    <div class="cold-md-12">
+    <div class="col-md-12">
         <div id = "chart" style="height: 250px;">
         </div>
     </div>
+
+    <div></div>
 </div>
 </div>
 
