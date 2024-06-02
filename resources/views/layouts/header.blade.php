@@ -146,7 +146,7 @@
         });
 
         const searchInput = document.getElementById('searchInput');
-        searchInput2.addEventListener('keydown', function(e) {
+        searchInput.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 submitSearch();
             }
