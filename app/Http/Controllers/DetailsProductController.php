@@ -63,11 +63,11 @@ class DetailsProductController extends Controller
         return view('detailproduct.addDetailProduct', compact('product', 'brand'));
     }
     public function allDetailProDuct()
-    {
-        $this->AuthLogin();
-        $allsp = DB::table('sanpham')->get();
-        return view('detailproDuct.allDetailProDuct', compact('allsp'));
-    }
+{
+    $this->AuthLogin();
+    $allsp = DB::table('sanpham')->paginate(10); // Thay số 10 bằng số lượng mục bạn muốn hiển thị trên mỗi trang
+    return view('detailproDuct.allDetailProDuct', compact('allsp'));
+}
     public function editDetailProDuct($ID)
     {
         $this->AuthLogin();
@@ -97,9 +97,18 @@ class DetailsProductController extends Controller
             $data['CHATLIEU'] = $request->chatlieuSP;
             $data['MANH'] = $request->tenNH;
             $data['MALOAI'] = $request->tenLSP;
-            
-           
-    
+            $file = $request->file('hinhanh');
+   
+            // Kiểm tra xem có tệp hình ảnh được gửi không
+            $filename = null;
+            if ($file )
+             {  
+                // upload file
+                $filename = rand(0.99).'.'. $file->getClientOriginalName();
+                // Di chuyển tệp hình ảnh vào thư mục public/images với tên gốcss
+                $file->move('public/images', $filename);
+            }
+            $data['HINHANH'] = $request->hinhanh;
             // Cập nhật bảng sanpham
             DB::table('sanpham')->where('ID', $ID)->update($data);
             // Lấy ID của sản phẩm
@@ -111,6 +120,7 @@ class DetailsProductController extends Controller
                     $motaData = [
                         'MOTA' => $mota
                     ];
+                    dd($motaData) ;
                     $motaID = $request->mota_id[$index]; 
                    
                     DB::table('motasanpham')->where('ID', $motaID)->update($motaData);
@@ -119,7 +129,7 @@ class DetailsProductController extends Controller
             Session::put('message', 'Cập nhật thành công!!!');
             return Redirect::to('allDetailProduct');
         } catch (\Exception $e) {
-            Session::put('message', 'Hãy xem lại mã loại hoặc tên sản phẩm!!!');
+            Session::put('message', 'Cập nhật không thành công!!!');
             return Redirect::to('addDetailProduct');
         }
     }
@@ -192,11 +202,18 @@ class DetailsProductController extends Controller
     
 
     
-    // public function deleteDetailProDuct($ID)
-    // { 
-    //     DB::table('nhanhieu')->where('ID', $ID)->delete();
-    //     return $this->addDetailProDuct();
-    // }
+    public function deleteDetailProDuct($ID)
+    { 
+        try {
+        DB::table('sanpham')->where('ID', $ID)->delete();
+        return $this->allDetailProDuct();
+        Session::put('message', 'Đã xoá thành công');
+        return Redirect::to('allDetailProduct');
+    } catch (\Exception $e) {
+        Session::put('message', 'Xoá thất bại! Hãy kiểm tra lại');
+        return Redirect::to('addDetailProduct');
+    }
+    }
 
 
 }

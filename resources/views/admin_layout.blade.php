@@ -45,12 +45,12 @@
     <!--search & user info start-->
     <ul class="nav pull-right top-menu">
         <li>
-            <input type="text" class="form-control search" placeholder=" Search">
+            {{-- <input type="text" class="form-control search" placeholder=" Search"> --}}
         </li>
         <!-- user login dropdown start-->
         <li class="dropdown">
             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                <img alt="" src="{{ asset('../images/2.png') }}">
+             {{-- <img alt="" src="{{ asset('../images/2.png') }}"> --}}
                 <span class="username">
 					<?php 
 						$name = Session::get('ten') ;		
@@ -99,7 +99,7 @@
                 </li>
 				<li class="sub-menu">
                     <a href="javascript:;">
-                        <i class="fa fa-book"></i>
+                        <i class="fa fa-credit-card"></i>
                         <span>Chi tiết sản phẩm</span>
                     </a>
                     <ul class="sub">
@@ -109,19 +109,19 @@
                 </li>
                 <li>
                     <a href="{{ URL::to('/quanLyKH') }}">	
-                        <i class="fa fa-book"></i>
+                        <i class="fa  fa-users"></i>
                         <span>Quản lý Khách Hàng</span>
                     </a>
                 </li>
                 <li>
                     <a href="{{ URL::to('/phanHoiKH') }}">	
-                        <i class="fa fa-book"></i>
+                        <i class="fa  fa-comments-o"></i>
                         <span>Phản Hồi Khách Hàng</span>
                     </a>
                 </li>
 				<li>
                     <a href="{{ URL::to('/thongKeDS') }}">	
-                        <i class="fa fa-book"></i>
+                        <i class="fa fa-bar-chart"></i>
                         <span>Thống kê doanh thu</span>
                     </a>
                 </li>
@@ -314,5 +314,23 @@ $(document).ready(function() {
         });
     });
   </script>
+
+
+ 
+<script>
+    $(document).ready(function(){
+        var count = 0; // Biến đếm số lượng input đã hiển thị
+
+        // Xử lý sự kiện click vào dấu cộng
+        $('.plus-icon').click(function(){
+            count++; // Tăng biến đếm
+            var newInput = '<div class="input-group mb-3">' +
+                                '<input style="margin-top: 10px" type="text" name="mota[]" class="form-control" id="exampleInputEmail1">' +
+                           '</div>';
+            $('.hidden-inputs').append(newInput); // Thêm input mới vào trong div ẩn
+            $('.hidden-inputs').show(); // Hiển thị div chứa input mới
+        });
+    });
+</script>
 </body>
 </html>

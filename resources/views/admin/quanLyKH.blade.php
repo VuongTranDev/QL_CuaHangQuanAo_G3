@@ -19,18 +19,34 @@
                   <th>Địa Chỉ</th>
                   <th>Email</th>
                   <th>Số điện thoại</th>
+                  <th>Quyền truy cập</th>
                   <th style="width:30px;"></th>
                 </tr>
               </thead>
               <tbody>
                @foreach ($data as $sp)
                 <tr> 
-                  <td> <a href="{{url::to('ThongTinKH/').$sp->iD}}"></a>{{ $sp->TENKH }} </td>
+                  <td> <a href="#"></a>{{ $sp->TENKH }} </td>
                   <td>{{ $sp->DIACHI }}</td>
+                  <td>{{ $sp->EMAIL }}</td>
                   <td>{{ $sp->SODIENTHOAI }}</td>
+                  <td>{{ $sp->PHANQUYEN }}</td>
+                  <td>        
+                    <a  href="{{ URL::to('editTTKH/'.$sp->MAUSER)}}" ui-toggle-class=""><i class="fa fa-pencil-square-o text-success text-active"></i></a>
+                    <a onclick="return confirm('Bạn chắc chắn xoá nó chứ ?')" href="{{ URL::to('deleteTTKH/'.$sp->MATKUSER)}}" ui-toggle-class=""><i class="fa fa-times text-danger text"></i></a>
+                  </td>
+                </tr>
+              @endforeach
+              @foreach ($data1 as $sp)
+                <tr> 
+                  <td> <a href="#"></a>{{ $sp->TENKH }} </td>
+                  <td>{{ $sp->DIACHI }}</td>
+                  <td>{{ $sp->EMAIL }}</td>
+                  <td>{{ $sp->SODIENTHOAI }}</td>
+                  <td>{{ $sp->PHANQUYEN }}</td>
                   <td>
-                    <a  href="{{ URL::to('editCategoryProduct/'.$sp->ID) }}" ui-toggle-class=""><i class="fa fa-pencil-square-o text-success text-active"></i></a>
-                    <a onclick="return confirm('Bạn chắc chắn xoá nó chứ ?')" href="{{ URL::to('deleteCategoryProduct/'.$sp->ID) }}" ui-toggle-class=""><i class="fa fa-times text-danger text"></i></a>
+                    <a  href="{{ URL::to('editTTKH/'.$sp->MATKUSER)}}" ui-toggle-class=""><i class="fa fa-pencil-square-o text-success text-active"></i></a>
+                    <a onclick="return confirm('Bạn chắc chắn xoá nó chứ ?')" href="{{ URL::to('deleteTTKH/'.$sp->MATKUSER)}}" ui-toggle-class=""><i class="fa fa-times text-danger text"></i></a>
                   </td>
                 </tr>
               @endforeach
@@ -38,18 +54,7 @@
             </table>
           </div>
           <footer class="panel-footer">
-            <div class="row">
-              {{-- <div class="col-sm-7 text-right text-center-xs">                
-                <ul class="pagination pagination-sm m-t-none m-b-none">
-                  <li><a href=""><i class="fa fa-chevron-left"></i></a></li>
-                  <li><a href="">1</a></li>
-                  <li><a href="">2</a></li>
-                  <li><a href="">3</a></li>
-                  <li><a href="">4</a></li>
-                  <li><a href=""><i class="fa fa-chevron-right"></i></a></li>
-                </ul>
-              </div> --}}
-            </div>
+            
           </footer>
         </div>
       </div>      

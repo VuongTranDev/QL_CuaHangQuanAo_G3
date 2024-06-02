@@ -47,9 +47,9 @@ class AdminController extends Controller
                 ->first();
                 if($data)
                 {
-                    Session::put('ten',$data->TENAD) ;
-                    Session::put('sdt',$data->SODIENTHOAIAD) ;
-                    Session::put('admin_id',$data->SODIENTHOAIAD) ;
+                    Session::put('ten',$data->TENKH) ;
+                    Session::put('sdt',$data->SODIENTHOAI) ;
+                    Session::put('admin_id',$data->SODIENTHOAI) ;
                     return Redirect::to('admin_content') ;
                 }
             }
@@ -119,15 +119,15 @@ class AdminController extends Controller
             return Redirect::to ('admin_login') ;
         }
     }
-    public function logout(Request $request)
-    {   
-        $request->session()->invalidate();
+        public function logout(Request $request)
+        {   
+            $request->session()->invalidate();
 
-        $request->session()->regenerateToken();
+            $request->session()->regenerateToken();
 
-      
-        return Redirect::to('admin_login'); ;
-    }
+        
+            return Redirect::to('admin_login'); ;
+        }
 
     public function thongKeDS()
     {
@@ -171,7 +171,78 @@ class AdminController extends Controller
     
     public function quanLyKH()
     {
-        $data = DB::SELECT('SELECT * FROM khachhang') ;
-        return view('admin.quanLyKH',compact('data'));
+        $data = DB::SELECT('SELECT * FROM khachhang ,taikhoanuser where MAUSER = khachhang.MATKUSER and PHANQUYEN = "Khách Hàng" AND TENKH != "" ');
+       
+        $data1 = DB::SELECT('SELECT * FROM taikhoanuser ,thongtinadmin where MAUSER = thongtinadmin.MATKUSER and PHANQUYEN = "ADMIN"  ') ;
+ 
+        return view('admin.quanLyKH',compact('data','data1'));
+    }
+
+    public function editTTKH($ID)
+    {
+        $editSP = DB::table('taikhoanuser')->where('MAUSER', $ID)->first();
+        
+        if ($editSP->PHANQUYEN == "ADMIN") {
+            $data = DB::SELECT('SELECT * FROM taikhoanuser, thongtinadmin WHERE ? = MAUSER AND MAUSER = MATKUSER', [$ID]);
+        } else {
+            $data = DB::SELECT('SELECT * FROM taikhoanuser, khachhang WHERE ? = MAUSER AND MAUSER = MATKUSER', [$ID]);
+        }
+        return view('admin.editTTKH', compact('data'));
+    }
+    public function updateTTKH(Request $request , $ID)
+    {
+        $data = array() ;
+        $data['TENKH'] = $request->tenKH;
+        $data['EMAIL'] = $request->emailKH;
+        $data['DIACHI'] = $request->diachiKH;
+        $data['SODIENTHOAI'] = $request->sodienthoaiKH;
+        $role = $request->loaiQuyen;
+       
+        if($role == "ADMIN")
+        {
+
+            $find = DB::table('thongtinadmin')->where('MATKUSER', $ID)->first();
+        
+            if($find)
+            {
+                
+                DB::table('thongtinadmin')->where('MATKUSER', $ID)->update($data);
+            }
+            else
+            {
+                DB::table ('taikhoanuser')->where('MAUSER',$ID)->update(['PHANQUYEN' => $role]);
+                $data['MATKUSER'] = $ID; 
+                DB::table('thongtinadmin')->insert($data);
+            }
+          
+        }
+        else if($role == "Khách Hàng")
+        {
+            
+            DB::table ('taikhoanuser')->where('MAUSER',$ID)->update(['PHANQUYEN' => $role]);
+            $findad = DB::table('thongtinadmin')->where('MATKUSER', $ID)->first();
+            if($findad)
+            {
+                DB::table('thongtinadmin')->where('MATKUSER', $ID)->delete();
+            }
+            $find = DB::table('khachhang')->where('MATKUSER', $ID)->first();
+            if($find)
+            {
+                DB::table('khachhang')->where('MATKUSER', $ID)->update($data);
+            }   
+            else
+            {
+                $data['MATKUSER'] = $ID; 
+                DB::table('khachhang')->insert($data);
+            }
+            
+        }
+        return redirect('quanLyKH');
+    }
+    public function deleteTTKH($ID)
+    {
+        DB::table('taikhoanuser')->where('MAUSER', $ID)->update(['PHANQUYEN' => ""]);
+        
+        return Redirect::to('quanLyKH');
     }
 }

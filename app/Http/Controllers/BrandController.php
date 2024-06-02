@@ -19,38 +19,18 @@ class BrandController extends Controller
         }
         return Redirect::to('admin_login')->send() ;
     }
-    public function addBrand()
-    {
-        $this->AuthLogin();
-        $allsp = DB::table('nhanhieu')->get();
-        foreach ($allsp as $sp) {
-            $tongSL = DB::table('sanpham')
-                ->where('sanpham.MANH', $sp->MANH)
-                ->count();
-            $sp->SOLUONG = $tongSL; 
-        }
-        return view('brand.addbrands', compact('allsp'));
-    }
+   
     public function saveBrand(Request $request)
     {
         try {
-            // Fetch data from the API
-            $response = Http::get('https://restcountries.com/v3.1/all');
-            
-            // Check if the response is successful
-            if ($response->ok()) {
-                $countries = $response->json();
-            } else {
-                return response()->json(['error' => 'Failed to retrieve data from the API.'], $response->status());
-            }
-
+         
             // Prepare data for insertion
             $data = [
                 'MANH' => $request->maTH,
                 'TENNH' => $request->tenTH,
-                'QUOCGIA' => $request->quocgia
+                'QUOCGIA' => $request->tenQG,
             ];
-            
+           
             // Insert data into the database
             DB::table('nhanhieu')->insert($data);
 
@@ -64,13 +44,40 @@ class BrandController extends Controller
         }
     }
 
+    public function addBrand()
+    {
+        $this->AuthLogin();
+
+        // Lấy danh sách các quốc gia từ API
+        $response = Http::timeout(30)->get('https://countriesnow.space/api/v0.1/countries');
+
+        if ($response->successful()) {
+            $countries = $response->json()['data'];
+        } else {
+            $countries = []; // Nếu API lỗi, đặt mảng rỗng
+        }
+
+        // Lấy thông tin các nhãn hiệu và số lượng sản phẩm
+        $allsp = DB::table('nhanhieu')->get();
+        foreach ($allsp as $sp) {
+            $tongSL = DB::table('sanpham')
+                ->where('sanpham.MANH', $sp->MANH)
+                ->count();
+            $sp->SOLUONG = $tongSL; 
+        }
+
+        // Trả về view và truyền dữ liệu
+        return view('brand.addbrands', compact('allsp', 'countries'));
+    }
+
     public function updateBrand(Request $request,$ID)
     {
         try {
+            
             $data = array();
             $data['MANH'] = $request->maTH;
             $data['TENNH'] = $request->tenTH;       
-            $data['QUOCGIA'] = $request->quocgia;       
+            $data['QUOCGIA'] = $request->tenQG;       
             DB::table('nhanhieu')->where('ID',$ID)->update($data) ;
             Session::put('message','Cập nhật thành công!!!');
             return Redirect::to('addbrands') ;
@@ -88,6 +95,20 @@ class BrandController extends Controller
     }
 
  
+    public function editBrand($ID)
+    {
+        $this->AuthLogin();
+          // Lấy danh sách các quốc gia từ API
+          $response = Http::timeout(30)->get('https://countriesnow.space/api/v0.1/countries');
 
+          if ($response->successful()) {
+              $countries = $response->json()['data'];
+          } else {
+              $countries = []; // Nếu API lỗi, đặt mảng rỗng
+          }
+  
+        $editTH = DB::table('nhanhieu')->where('ID',$ID)->get();
+        return view('brand.editbrand', compact('editTH','countries'));
+    }
    
 }

@@ -120,6 +120,23 @@ Route::get('/quanLyKH',
     AdminController::class,
     "quanLyKH"
 ]);
+Route::post('/updateTTKH{ID}',
+[
+    AdminController::class,
+    "updateTTKH"
+]);
+
+Route::get('/editTTKH/{ID}',
+[
+    AdminController::class,
+    "editTTKH"
+]);
+
+Route::get('/deleteTTKH/{ID}',
+[
+    AdminController::class,
+    "deleteTTKH"
+]);
 
 // CategoryProduct
 
@@ -149,10 +166,7 @@ Route::get('/deleteCategoryProduct/{ID}', [
 
 //Brand Controller
 
-Route::get('/addbrands', [
-    BrandController::class,
-    "addBrand"
-]);
+
 Route::post('/saveBrand', [
     BrandController::class,
     "SaveBrand"
@@ -170,11 +184,11 @@ Route::get('/deleteBrand/{ID}', [
     BrandController::class,
     "deleteBrand"
 ]);
-
-Route::get ('/addCountry',[
+Route::get('/addbrands', [
     BrandController::class,
-    "addCountry"
-]) ;
+    "addBrand"
+]);
+
 
 // DetailPRoduc -- ADMIN
 Route::get('/addDetailProduct',
@@ -203,6 +217,11 @@ Route::post('/updateDetailProduct{ID}',
 [
     DetailsProductController::class,
     "updateDetailProduct"
+]); 
+Route::get('/deleteDetailProduct/{ID}',
+[
+    DetailsProductController::class,
+    "deleteDetailProDuct"
 ]); 
 Route::get('/phanHoiKH',
 [

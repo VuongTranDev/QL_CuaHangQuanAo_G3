@@ -30,9 +30,13 @@
                             <label for="quocgia">Quốc gia</label>
                             <select name="tenQG" class="form-control" id="quocgia">
                                 <option value="">Chọn quốc gia</option>                           
-                               @foreach($countr as $country)
-                                    <option value="">{{ $country['name']['common'] }}</option>
-                                @endforeach 
+                                @if(isset($countries) && !empty($countries))
+                                @foreach($countries as $country)
+                                <option value="{{ $country['country'] }}">{{ $country['country'] }}</option>
+                                @endforeach
+                            @else
+                                <li>Không có dữ liệu quốc gia</li>
+                            @endif
                             </select>
                         </div>
                         <button type="submit" name="themTH" class="btn btn-info">Thêm thương hiệu</button>  
