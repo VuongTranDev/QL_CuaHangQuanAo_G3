@@ -14,8 +14,15 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="/admin_login" class="me-3">
-                            <i class="fas fa-shopping-basket cart-item"> <span class="count-item-cart">1</span></i>
+                        <a href="/cart/index">
+                            <i class="fas fa-shopping-basket"> <span class="count-item-cart">
+                                    <?php
+                                    $sogiohang = Session::get('sogiohang');
+                                    if ($sogiohang) {
+                                        echo $sogiohang;
+                                    }
+                                    ?>
+                                </span></i>
                         </a>
                     </li>
 
@@ -33,7 +40,8 @@
                                     </i>
                                 </a>
                             @else
-                                <a href="#" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a href="#" type="button" id="userDropdown" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
                                     <i class="far fa-user">
                                         <?php
                                         $name = Session::get('ten');
@@ -50,34 +58,8 @@
                                 </div>
                             @endif
                         </div>
-                    </li>                    
+                    </li>
                 </ul>
-                <form class="form-search-group" role="search"
-                    action="{{ route('products.search', ['search_query' => request()->input('search_query')]) }}"
-                    method="GET">
-                    <input class="form-control form-search" name="search_query" placeholder="Search"
-                        aria-label="Search">
-                    <button class="border-0 ic-search" type="submit"><i class="fas fa-search"></i></button>
-                </form>
-
-                <a href="#" class="me-4">
-                    <i class="far fa-user"> <?php
-                    $name = Session::get('ten');
-                    if ($name) {
-                        echo $name;
-                    }
-                    ?></i>
-                </a>
-                <a href="/cart/index">
-                    <i class="fas fa-shopping-basket"> <span class="count-item-cart">
-                            <?php
-                            $sogiohang = Session::get('sogiohang');
-                            if ($sogiohang) {
-                                echo $sogiohang;
-                            }
-                            ?>
-                        </span></i>
-                </a>
             </div>
         </div>
     </nav>
@@ -158,7 +140,6 @@
 </header>
 
 <script>
-
     document.addEventListener('DOMContentLoaded', function() {
         handleSearchForm();
         handleSearchForm2();
@@ -166,7 +147,7 @@
         const searchInput2 = document.getElementById('searchInput2');
         searchInput2.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
-                
+
                 submitSearch2();
             }
         });
