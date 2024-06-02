@@ -18,22 +18,26 @@ class ProductsController extends Controller
 
      public function allProducts()
      {
-          $sanpham = DB::select('SELECT * FROM sanpham');
+          $query = DB::table('sanpham');
 
           if (isset($_GET['sort_by'])) {
                $sort_by = $_GET['sort_by'];
                if ($sort_by == 'giam_dan') {
-                    $sanpham = DB::table('sanpham')->orderBy('GIA', 'desc')->get();
+                    $query->orderBy('GIA', 'desc');
                } else if ($sort_by == 'tang_dan') {
-                    $sanpham = DB::table('sanpham')->orderBy('GIA', 'asc')->get();
+                    $query->orderBy('GIA', 'asc');
                } else if ($sort_by == 'kytu_za') {
-                    $sanpham = DB::table('sanpham')->orderBy('TENSANPHAM', 'desc')->get();
+                    $query->orderBy('TENSANPHAM', 'desc');
                } else {
-                    $sanpham = DB::table('sanpham')->orderBy('TENSANPHAM', 'asc')->get();
+                    $query->orderBy('TENSANPHAM', 'asc');
                }
           }
+
+          $sanpham = $query->paginate(12);
+
           return view('products.allProducts', compact('sanpham'));
      }
+
 
      public function showDetailProduct($masanpham)
      {
@@ -48,7 +52,7 @@ class ProductsController extends Controller
                ->join('loaisanpham', 'sanpham.MALOAI', '=', 'loaisanpham.MALOAI')
                ->where('sanpham.MASANPHAM', $masanpham)
                ->value('loaisanpham.TENLOAI');
-          // dd($sanphamdaco);
+
           $sanphamcungloai = [];
           if ($sanphamdaco) {
                $loaisanpham = DB::select("SELECT * FROM loaisanpham WHERE MALOAI = ?", [$sanphamdaco->MALOAI]);
@@ -61,16 +65,11 @@ class ProductsController extends Controller
 
           $linkDanhMuc = $this->productsByType($tenloai);
 
-          // $danhgia = DB::table('danhgia')->get();
-
-          // $layTen = DB::table('danhgia')
-          //      ->join('khachhang', 'danhgia.MAKH', '=', 'khachhang.MAKH')
-          //      ->select('khachhang.TENKH')
-          //      ->get();
-
           $danhgia = DB::table('danhgia')
                ->join('khachhang', 'danhgia.MAKH', '=', 'khachhang.MAKH')
-               ->select('khachhang.TENKH', 'danhgia.SOSAO', 'danhgia.NOIDUNG')
+               ->select('khachhang.TENKH', 'danhgia.SOSAO', 'danhgia.NOIDUNG', 'danhgia.MAKH', 'danhgia.ID')
+               ->orderBy('MADANHGIA', 'desc')
+               ->limit(5)
                ->get();
 
           $countDanhGia = $danhgia->count();

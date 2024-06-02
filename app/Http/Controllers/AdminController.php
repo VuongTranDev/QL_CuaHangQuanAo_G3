@@ -17,7 +17,7 @@ class AdminController extends Controller
         $admin_id = Session::get('admin_id') ;
         if($admin_id)
         {
-            return Redirect::to('admin.admin_content') ;
+            return Redirect::to('admin_content') ;
         }
         return Redirect::to('admin_login')->send() ;
     }
@@ -33,6 +33,8 @@ class AdminController extends Controller
    
     public function login(Request $request)
     {
+        Session::put('previous_url', url()->previous());
+        
         $login_TK = $request->login_tenTK;
         $login_MK = ($request->login_mk);
         $result = DB::table('taikhoanuser')->where('TENTK', $login_TK)->where('MATKHAU', $login_MK)->first();
@@ -60,11 +62,19 @@ class AdminController extends Controller
                 ->join('khachhang', 'taikhoanuser.MAUSER', '=', 'khachhang.MATKUSER')
                 ->where('khachhang.MATKUSER',$result->MAUSER)
                 ->first();
+
+
            
                 if( $data->TENKH == "")
+                {
                     Session::put('ten',"Chưa có tên") ;
-                Session::put('ten',$data->TENKH) ;
-                return Redirect:: to('/') ;
+                }
+                else {
+                    Session::put('ten',$data->TENTK) ;
+                }
+                Session::put('makh', $data->MAKH);
+                    
+                return Redirect::to('/') ;
             }
         }
         else
@@ -122,7 +132,13 @@ class AdminController extends Controller
     public function logout()
     {   
         $this->AuthLogin() ;
+        Session::flush();
         return Redirect::to('admin_login'); ;
+    }
+
+    public function logoutUser() {
+        Session::flush();
+        return Redirect::back();
     }
 
     public function thongKeDS()

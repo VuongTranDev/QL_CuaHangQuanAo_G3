@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="/node_modules/slick-carousel/slick/slick-theme.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
+    <link href="{{ asset('../css/font-awesome.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+
     <link rel="stylesheet" href="../../css/style.css">
 </head>
 
@@ -62,13 +65,14 @@
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script src="/node_modules/slick-carousel/slick/slick.min.js"></script>
 <link rel="stylesheet" href="../../js/javascript.js">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     AOS.init();
     document.addEventListener('DOMContentLoaded', function() {
         var backToTopButton = document.getElementById('backToTop');
 
         window.addEventListener('scroll', function() {
-            if (window.scrollY > 300) { 
+            if (window.scrollY > 300) {
                 backToTopButton.classList.add('show');
             } else {
                 backToTopButton.classList.remove('show');

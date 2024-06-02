@@ -9,12 +9,15 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\DetailsProductController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryProductController;
+use App\Http\Controllers\LocationController;
+
+use Illuminate\Support\Facades\Session;
 
 Route::get("/", [
     HomeController::class,
     "index"
 ]);
-    
+
 Route::get("/about", [
     HomeController::class,
     "about"
@@ -24,6 +27,26 @@ Route::get("/contact", [
     HomeController::class,
     "contact"
 ]);
+
+Route::get("/profile", [
+    HomeController::class,
+    "profile"
+]);
+
+Route::put('/profile', [
+    HomeController::class,
+    'updateProfile'
+])->name('profile.updateProfile');
+
+Route::get('/address', [
+    HomeController::class,
+    'showAddress'
+]);
+
+Route::post('/address', [
+    HomeController::class,
+    'addAddress'
+])->name('home.addAddress');
 
 Route::get("/products", [
     ProductsController::class,
@@ -51,19 +74,24 @@ Route::get('/allProducts', [
 ]);
 
 Route::get('/products/{masanpham}', [
-    ProductsController::class, 
+    ProductsController::class,
     'showDetailProduct'
 ])->name('product.showDetailProduct');
 
 Route::get('/products/productsByType/{tenloai}', [
-    ProductsController::class, 
-    'productsByType' 
+    ProductsController::class,
+    'productsByType'
 ])->name('products.productsByType');
 
 Route::post('/danhgias/themDanhGia', [
     DanhGiaController::class,
     'themDanhGIa'
 ])->name('danhgias.themDanhGia');
+
+Route::delete('/xoaDanhGia/{id}', [
+    DanhGiaController::class,
+    'xoaDanhGia'
+])->name('comments.xoaDanhGia');
 
 Route::get('/danhgias/showAllComment', [
     DanhGiaController::class,
@@ -76,42 +104,47 @@ Route::get('/danhgias/filterByRating', [
 ]);
 
 Route::get('/danhgias/showDanhGia', [
-    DanhGiaController::class, 
+    DanhGiaController::class,
     'showDanhGia'
 ]);
 
-Route::get('/admin_login',[
+Route::get('/admin_login', [
     AdminController::class,
     "index"
-]) ;
-Route::get('/admin_content',[
+]);
+Route::get('/admin_content', [
     AdminController::class,
     "adminlayout"
-]) ;
+]);
 
 
-Route::post('/admin_TK',[
+Route::post('/admin_TK', [
     AdminController::class,
     "login"
-]) ;
+]);
 
 
-Route::post('/DangKiTK',[
+Route::post('/DangKiTK', [
     AdminController::class,
     "register"
-]) ;
-Route::get('/logout',[
+]);
+Route::get('/logout', [
     AdminController::class,
-    "logout"
-]) ;
-Route::get('/thongKeDS',[
+    "logout",
+]);
+
+Route::get('/logoutUser', [
+    AdminController::class,
+    "logoutUser"
+]);
+Route::get('/thongKeDS', [
     AdminController::class,
     "thongKeDS"
-]) ;
-Route::post('/thongKeSanLuong',[
+]);
+Route::post('/thongKeSanLuong', [
     AdminController::class,
     "thongKeSanLuong"
-]) ;
+]);
 // CategoryProduct
 
 Route::get('/addCategoryProduct', [
@@ -163,30 +196,66 @@ Route::get('/deleteBrand/{ID}', [
 ]);
 
 // DetailPRoduc -- ADMIN
-Route::get('/addDetailProduct',
-[
-    DetailsProductController::class,
-    "addDetailProduct"
+Route::get(
+    '/addDetailProduct',
+    [
+        DetailsProductController::class,
+        "addDetailProduct"
+    ]
+);
+
+Route::post(
+    '/saveDetailProduct',
+    [
+        DetailsProductController::class,
+        "saveDetailProduct"
+    ]
+);
+Route::get(
+    '/allDetailProduct',
+    [
+        DetailsProductController::class,
+        "allDetailProDuct"
+    ]
+);
+
+Route::get(
+    '/editDetailProduct/{ID}',
+    [
+        DetailsProductController::class,
+        "editDetailProDuct"
+    ]
+);
+Route::post(
+    '/updateDetailProduct{ID}',
+    [
+        DetailsProductController::class,
+        "updateDetailProduct"
+    ]
+);
+
+
+Route::get('/api/provinces', [
+    LocationController::class, 
+    'getProvinces'
 ]);
 
-Route::post('/saveDetailProduct',
-[
-    DetailsProductController::class,
-    "saveDetailProduct"
-]);
-Route::get('/allDetailProduct',
-[
-    DetailsProductController::class,
-    "allDetailProDuct"
+Route::get('/api/districts/{provinceId}', [
+    LocationController::class, 
+    'getDistricts'
 ]);
 
-Route::get('/editDetailProduct/{ID}',
-[
-    DetailsProductController::class,
-    "editDetailProDuct"
+Route::get('/api/wards/{districtId}', [
+    LocationController::class, 'getWards'
 ]);
-Route::post('/updateDetailProduct{ID}',
-[
-    DetailsProductController::class,
-    "updateDetailProduct"
-]);
+
+Route::post('/update-address', [
+    HomeController::class, 
+    'updateAddress'
+])->name('home.updateAddress');
+
+Route::delete('/deleteAddress/{id}', [
+    HomeController::class,
+    'deleteAddress'
+])->name('home.deleteAddress');
+

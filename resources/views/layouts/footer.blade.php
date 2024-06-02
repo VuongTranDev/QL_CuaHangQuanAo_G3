@@ -180,11 +180,11 @@
             var menuList2 = document.querySelector('.dropdown-footer2');
 
             dropdownToggle1.addEventListener('click', function() {
-                menuList1.classList.toggle('show');
+                menuList1.classList.toggle('show1');
             });
 
             dropdownToggle2.addEventListener('click', function() {
-                menuList2.classList.toggle('show');
+                menuList2.classList.toggle('show1');
             });
         });
     </script>

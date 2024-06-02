@@ -38,23 +38,140 @@
                                 <p>{{ $dg->NOIDUNG }}</p>
                             </div>
 
-                            <div class="dropleft" role="group">
-                                <button type="button"
-                                    class="btn btn-secondary dropdown-toggle-split bg-transparent border-0"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v text-dark"></i>
-                                </button>
+                            @php
+                                $currentUserMAKH = Session::get('makh');
+                            @endphp
 
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="#">Xoá</a>
-                                    <a class="dropdown-item" href="#">Sửa</a>
+                            @if ($dg->MAKH == $currentUserMAKH)
+                                <!-- Dropdown for delete and edit -->
+                                <div class="dropleft" role="group">
+                                    <button type="button"
+                                        class="btn btn-secondary dropdown-toggle-split bg-transparent border-0"
+                                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v text-dark" style="font-size: 10px"></i>
+                                    </button>
+
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item delete-comment" href="#"
+                                            data-id="{{ $dg->ID }}"><i class="fa fa-times text-danger text me-2"></i>
+                                            Xoá</a>
+                                    </div>
                                 </div>
-                            </div>
+                            @else
+                                <!-- Dropdown for report -->
+                                <div class="dropleft" role="group">
+                                    <button type="button"
+                                        class="btn btn-secondary dropdown-toggle-split bg-transparent border-0"
+                                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v text-dark" style="font-size: 10px"></i>
+                                    </button>
+
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="#">Báo cáo</a>
+                                    </div>
+                                </div>
+                            @endif
 
                         </div>
                     @endforeach
                 </div>
             </div>
+
+            <div class="btn-container">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item {{ $danhgia->currentPage() == 1 ? 'disabled' : '' }}">
+                            <a class="page-link" href="{{ $danhgia->previousPageUrl() }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                        @for ($i = 1; $i <= $danhgia->lastPage(); $i++)
+                            <li class="page-item {{ $danhgia->currentPage() == $i ? 'active' : '' }}">
+                                <a class="page-link" href="{{ $danhgia->url($i) }}">{{ $i }}</a>
+                            </li>
+                        @endfor
+                        <li class="page-item {{ $danhgia->currentPage() == $danhgia->lastPage() ? 'disabled' : '' }}">
+                            <a class="page-link" href="{{ $danhgia->nextPageUrl() }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
         </div>
     </div>
+
+    <script>
+        $(document).on('click', '.delete-comment', function(e) {
+            e.preventDefault();
+            var commentId = $(this).data('id');
+
+            Swal.fire({
+                title: 'Bạn có chắc chắn xoá bình luận này chứ?',
+                text: "Bạn sẽ không thể hoàn tác hành động này!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Vâng, xóa nó!',
+                cancelButtonText: 'Hủy bỏ'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/xoaDanhGia/' + commentId,
+                        type: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire(
+                                    'Xóa thành công!',
+                                    'Đánh giá đã được xóa.',
+                                    'success'
+                                ).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Lỗi!',
+                                    'Đã xảy ra lỗi khi xóa đánh giá.',
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function(xhr) {
+                            Swal.fire(
+                                'Lỗi!',
+                                'Đã xảy ra lỗi khi xóa đánh giá.',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        });
+
+
+        $(document).ready(function() {
+            $('.pagination .page-item.previous').click(function(e) {
+                e.preventDefault();
+                var previousUrl = $(this).find('a').attr('href');
+                if (previousUrl) {
+                    window.location.href = previousUrl;
+                }
+            });
+
+            $('.pagination .page-item.next').click(function(e) {
+                e.preventDefault();
+                var nextUrl = $(this).find('a').attr('href');
+                if (nextUrl) {
+                    window.location.href = nextUrl;
+                }
+            });
+        });
+    </script>
 @endsection

@@ -3,7 +3,7 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build", 
+        "build": "vite build",
         "copy-modules": "xcopy node_modules public\\node_modules /E /I /Y"
     },
     "devDependencies": {
@@ -13,6 +13,7 @@
     },
     "dependencies": {
         "bootstrap": "^5.3.3",
+        "hanhchinhvn": "^1.6.0",
         "slick-carousel": "^1.8.1"
-    }  
+    }
 }

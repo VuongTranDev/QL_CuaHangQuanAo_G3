@@ -114,15 +114,18 @@
 
                 @include('products.moTa')
                 @include('danhgias.showDanhGia')
-                @include('danhgias.themDanhGia')
 
             </div>
         </div>
 
+        @include('danhgias.themDanhGia')
+
         <div class="box-select-size">
-            <button id="closeBox">X</button>
-            <img id="sizeGuideImage" src="" alt="Hướng dẫn chọn size" class="img-select-size">
-            <input type="hidden" id="tenLoaiValue" value="{{ $tenloai }}">
+            <div class="group-size">
+                <button id="closeBox">X</button>
+                <img id="sizeGuideImage" src="" alt="Hướng dẫn chọn size" class="img-select-size">
+                <input type="hidden" id="tenLoaiValue" value="{{ $tenloai }}">
+            </div>
         </div>
 
         <h2 class="mb-3 ms-3 mt-4" style="font-weight: 600" data-aos="fade-up">Có thể bạn sẽ thích</h2>

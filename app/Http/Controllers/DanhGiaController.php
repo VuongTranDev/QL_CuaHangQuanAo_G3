@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
 
 class DanhGiaController extends Controller
 {
@@ -17,20 +18,34 @@ class DanhGiaController extends Controller
 
     public function themDanhGia(Request $request)
     {
-        $maKH = $request->input('MAKH');
-        $maDG = $this->createMADANHGIA();
-        // $maCTHD = $request->input('MACTHD');
-        $noiDung = $request->input('NOIDUNG');
-        $soSao = $request->input('SOSAO');
+        if (Session::get('makh') == null) {
+            return Redirect('/admin_login');
+        } else {
+            $maKH = Session::get('makh');
+            $maDG = $this->createMADANHGIA();
+            // $maCTHD = $request->input('MACTHD');
+            $noiDung = $request->input('NOIDUNG');
+            $soSao = $request->input('SOSAO');
 
-        DB::table('danhgia')->insert([
-            'MAKH' => $maKH,
-            'MADANHGIA' => $maDG,
-            // 'MACTHD' => $maCTHD,
-            'NOIDUNG' => $noiDung,
-            'SOSAO' => $soSao
-        ]);
-        return Redirect()->back();
+            DB::table('danhgia')->insert([
+                'MAKH' => $maKH,
+                'MADANHGIA' => $maDG,
+                // 'MACTHD' => $maCTHD,
+                'NOIDUNG' => $noiDung,
+                'SOSAO' => $soSao
+            ]);
+            return Redirect()->back();
+        }
+    }
+
+    public function xoaDanhGia($id)
+    {
+        try {
+            DB::table('danhgia')->where('id', $id)->delete();
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()]);
+        }
     }
 
     public function createMADANHGIA()
@@ -51,10 +66,10 @@ class DanhGiaController extends Controller
     {
         $danhgia = DB::table('danhgia')
             ->join('khachhang', 'danhgia.MAKH', '=', 'khachhang.MAKH')
-            ->select('khachhang.TENKH', 'danhgia.SOSAO', 'danhgia.NOIDUNG')
-            ->get();
+            ->select('khachhang.TENKH', 'danhgia.SOSAO', 'danhgia.NOIDUNG', 'danhgia.MAKH', 'danhgia.ID')
+            ->paginate(10);
 
-        $countDanhGia = $danhgia->count();
+        $countDanhGia = $danhgia->total();
         $countDanhGia5s = DB::table('danhgia')->where('SOSAO', 5)->count();
         $countDanhGia4s = DB::table('danhgia')->where('SOSAO', 4)->count();
         $countDanhGia3s = DB::table('danhgia')->where('SOSAO', 3)->count();
@@ -85,10 +100,10 @@ class DanhGiaController extends Controller
 
     public function filterByRating($rating = null)
     {
-        if($rating === null) {
+        if ($rating === null) {
             $rating = request()->query('rating');
         }
-        
+
         if ($rating == 0) {
             $danhgia = DB::table('danhgia')
                 ->join('khachhang', 'danhgia.MAKH', '=', 'khachhang.MAKH')

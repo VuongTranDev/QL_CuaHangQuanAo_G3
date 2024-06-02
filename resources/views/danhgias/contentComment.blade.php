@@ -25,17 +25,87 @@
             <p>{{ $dg->NOIDUNG }}</p>
         </div>
 
-        <div class="dropleft" role="group">
-            <button type="button" class="btn btn-secondary dropdown-toggle-split bg-transparent border-0"
-                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-ellipsis-v text-dark"></i>
-            </button>
+        @php
+            $currentUserMAKH = Session::get('makh');
+        @endphp
 
-            <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Xoá</a>
-                <a class="dropdown-item" href="#">Sửa</a>
+        @if ($dg->MAKH == $currentUserMAKH)
+            <div class="dropleft" role="group">
+                <button type="button" class="btn btn-secondary dropdown-toggle-split bg-transparent border-0"
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-ellipsis-v text-dark" style="font-size: 10px"></i>
+                </button>
+
+                <div class="dropdown-menu">
+                    <a class="dropdown-item delete-comment" href="#" data-id="{{ $dg->ID }}"><i
+                            class="fa fa-times text-danger text me-2"></i>
+                        Xoá</a>
+                </div>
             </div>
-        </div>
+        @else
+            <div class="dropleft" role="group">
+                <button type="button" class="btn btn-secondary dropdown-toggle-split bg-transparent border-0"
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-ellipsis-v text-dark"></i>
+                </button>
+
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">Báo cáo</a>
+                </div>
+            </div>
+        @endif
+
 
     </div>
 @endforeach
+<script>
+    $(document).on('click', '.delete-comment', function(e) {
+        e.preventDefault();
+        var commentId = $(this).data('id');
+
+        Swal.fire({
+            title: 'Bạn có chắc chắn xoá bình luận này chứ?',
+            text: "Bạn sẽ không thể hoàn tác hành động này!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Vâng, xóa nó!',
+            cancelButtonText: 'Hủy bỏ'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/xoaDanhGia/' + commentId,
+                    type: 'DELETE',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire(
+                                'Xóa thành công!',
+                                'Đánh giá đã được xóa.',
+                                'success'
+                            ).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire(
+                                'Lỗi!',
+                                'Đã xảy ra lỗi khi xóa đánh giá.',
+                                'error'
+                            );
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.fire(
+                            'Lỗi!',
+                            'Đã xảy ra lỗi khi xóa đánh giá.',
+                            'error'
+                        );
+                    }
+                });
+            }
+        });
+    });
+</script>

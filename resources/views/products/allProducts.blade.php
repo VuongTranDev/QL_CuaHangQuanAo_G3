@@ -50,6 +50,30 @@
                     </div>
                 </div>
             @endforeach
+
+            <div class="btn-container">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item {{ $sanpham->currentPage() == 1 ? 'disabled' : '' }}">
+                            <a class="page-link" href="{{ $sanpham->previousPageUrl() }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                        @for ($i = 1; $i <= $sanpham->lastPage(); $i++)
+                            <li class="page-item {{ $sanpham->currentPage() == $i ? 'active' : '' }}">
+                                <a class="page-link" href="{{ $sanpham->url($i) }}">{{ $i }}</a>
+                            </li>
+                        @endfor
+                        <li class="page-item {{ $sanpham->currentPage() == $sanpham->lastPage() ? 'disabled' : '' }}">
+                            <a class="page-link" href="{{ $sanpham->nextPageUrl() }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
         </div>
     </div>
     <script>
@@ -72,14 +96,22 @@
 
         $(document).ready(function() {
             $('#sort').on('change', function() {
-                var url = $(this).val();
+                var url = updateUrlParameter($(this).val(), 'page', 1);
                 if (url) {
-                    window.location = url;
+                    window.location.href = url;
                 }
                 return false;
             });
         });
 
+        // Function to update URL parameters
+        function updateUrlParameter(url, param, value) {
+            var pattern = new RegExp('\\b(' + param + '=).*?(&|$)');
+            if (url.match(pattern)) {
+                return url.replace(pattern, '$1' + value + '$2');
+            }
+            return url + (url.indexOf('?') > 0 ? '&' : '?') + param + '=' + value;
+        }
         var selectElement = document.getElementById('sort');
 
         selectElement.addEventListener('change', function() {
