@@ -22,15 +22,27 @@ class CartController extends Controller
         $cart = DB::select("SELECT GIOHANG.MASP, SANPHAM.MASANPHAM, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN, GIOHANG.SIZE
           FROM GIOHANG 
           INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
-          WHERE MAKH = ?", [$makh]);
+          WHERE MAKH = ? AND CHONTHANHTOAN = 0", [$makh]);
         $sogiohang = count($cart);
+        $cartUpdate = DB::select("SELECT GIOHANG.MASP, SANPHAM.MASANPHAM, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN, GIOHANG.SIZE
+          FROM GIOHANG 
+          INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+          WHERE MAKH = ? AND CHONTHANHTOAN = 1", [$makh]);
+
 
 
         $tongtienSP = 0;
         $tongtien = 0;
 
+
+        foreach ($cartUpdate as $item) {
+            DB::update("UPDATE GIOHANG SET CHONTHANHTOAN = 0 WHERE MAKH = ? AND MASP = ? AND SIZE = ?", [$makh, $item->MASP, $item->SIZE]);
+        }
+
         foreach ($cart as $item) {
-            $tongtienSP += $item->THANHTIEN * $item->SOLUONG;
+            $save_price = $item->GIA * (20 / 100);
+            $discout = $item->GIA - $save_price;
+            $tongtienSP += $discout * $item->SOLUONG;
             $tongtien += $tongtienSP;
         }
 
@@ -50,11 +62,16 @@ class CartController extends Controller
     }
     public function removeFromCart(Request $request)
     {
+        $makh = Session::get('makh');
+        if (!$makh) {
+            Session::put('message', "Đăng nhập không thành công");
+            return view('admin_login');
+        }
         $masp = $request->input('masp');
         $size = $request->input('size');
 
         DB::table('GIOHANG')
-            ->where('MAKH', 'KH001')
+            ->where('MAKH', $makh)
             ->where('MASP', $masp)
             ->where('SIZE', $size)
             ->delete();
@@ -73,22 +90,45 @@ class CartController extends Controller
             return view('admin_login');
         }
 
+
+        $sanpham = DB::select("SELECT * FROM SANPHAM WHERE MASANPHAM = ? ", [$masanpham]);
+
+        $donGia = $sanpham[0]->GIA;
+        $giamGia = 20 / 100;
+        $thanhTien = $soluong * ($donGia - ($donGia * $giamGia));
+
         DB::table('GIOHANG')
             ->where('MAKH', $makh)
             ->where('MASP', $masanpham)
             ->where('SIZE', $size)
             ->update(['SOLUONG' => $soluong]);
+        DB::table('GIOHANG')
+            ->where('MAKH', $makh)
+            ->where('MASP', $masanpham)
+            ->where('SIZE', $size)
+            ->update(['THANHTIEN' => $thanhTien]);
 
         $cart = DB::select("SELECT GIOHANG.MASP, SANPHAM.MASANPHAM, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN, GIOHANG.SIZE
             FROM GIOHANG 
             INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
-            WHERE MAKH = ?", [$makh]);
+            WHERE MAKH = ? AND CHONTHANHTOAN = 0", [$makh]);
+        $cartUpdatePrice = DB::select("SELECT GIOHANG.MASP, SANPHAM.MASANPHAM, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN, GIOHANG.SIZE
+        FROM GIOHANG 
+        INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+        WHERE MAKH = ? AND CHONTHANHTOAN = 0 AND GIOHANG.MASP = ? AND GIOHANG.SIZE = ?", [$makh], [$masanpham], [$size]);
+
+        $tongTienSPUpdate = 0;
+        $soLuong = 0;
+        foreach ($cartUpdatePrice as $item) {
+            $tongTienSPUpdate = $item->GIA * $item->SOLUONG;
+            $soLuong = $item->soLuong;
+        }
 
         $tongtienSP = 0;
         $tongtien = 0;
 
         foreach ($cart as $item) {
-            $tongtienSP += $item->THANHTIEN * $item->SOLUONG;
+            $tongtienSP += $item->GIA * $item->SOLUONG;
             $tongtien += $tongtienSP;
         }
 
@@ -97,7 +137,9 @@ class CartController extends Controller
         return response()->json([
             'tongtienSP' => $tongtienSP,
             'tongtien' => $tongtien,
-            'tienGiam' => $tienGiam
+            'tienGiam' => $tienGiam,
+            'tongTienSPUpdate' => $tongTienSPUpdate,
+            'soLuong' => $soLuong
         ]);
     }
     // public function processSelectedItems(Request $request)
@@ -134,6 +176,7 @@ class CartController extends Controller
     // }
     public function processSelectedItems(Request $request)
     {
+
         $makh = Session::get('makh');
         if (!$makh) {
             Session::put('message', "Đăng nhập không thành công");
@@ -146,7 +189,7 @@ class CartController extends Controller
         }
 
         $cart = [];
-
+        $chonthanhtoan = 0;
         foreach ($selectedItems as $item) {
             list($masanpham, $size) = explode('|', $item);
 
@@ -156,6 +199,7 @@ class CartController extends Controller
                 ->where('GIOHANG.MAKH', $makh)
                 ->where('GIOHANG.MASP', $masanpham)
                 ->where('GIOHANG.SIZE', $size)
+                ->where('CHONTHANHTOAN', $chonthanhtoan)
                 ->get();
 
             $cart = array_merge($cart, $cartItems->toArray());
@@ -170,14 +214,16 @@ class CartController extends Controller
         $tongtien = 0;
         $tongtienSP = 0;
         foreach ($cart as $item) {
-            $tongtienSP += $item->THANHTIEN * $item->SOLUONG;
+            $save_price = $item->GIA * (20 / 100);
+            $discout = $item->GIA - $save_price;
+            $tongtienSP += $discout * $item->SOLUONG;
             $tongtien += $tongtienSP;
         }
 
         $profile = DB::select("SELECT TENKH, SODIENTHOAI, DIACHI FROM KHACHHANG WHERE MAKH = ?", [$makh]);
 
-
-        return view('hoadon.thanhtoan', compact('cart', 'sogiohang', 'profile', 'tongtien', 'tongtienSP'));
+        $diaChi = DB::select("SELECT * FROM DIACHI WHERE MAKH = ?", [$makh]);
+        return view('hoadon.thanhtoan', compact('cart', 'sogiohang', 'profile', 'tongtien', 'tongtienSP', 'diaChi'));
     }
     public function deleteItem(Request $request)
     {

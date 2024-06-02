@@ -27,9 +27,11 @@
                 <a href="/cart/index">
                     <i class="fas fa-shopping-basket"> <span class="count-item-cart">
                             <?php
-                            
+                            $sogiohang = Session::get('sogiohang');
+                            if ($sogiohang) {
+                                echo $sogiohang;
+                            }
                             ?>
-
                         </span></i>
                 </a>
             </div>

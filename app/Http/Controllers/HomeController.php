@@ -26,6 +26,8 @@ class HomeController extends Controller
         INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
         WHERE MAKH = ?", [$makh]);
         $sogiohang = count($cart);
+
+        Session::put('sogiohang', $sogiohang);
         return view('index', compact('sanphamJeans', 'sanphamAoThun', 'sanphamSweater', 'sanphamHoodie', 'sanphamQuan', 'sanphamSoMi', 'sogiohang'));
     }
 

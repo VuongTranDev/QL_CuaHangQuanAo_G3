@@ -59,7 +59,7 @@
             </div>
 
             <div class="col-lg-6 ps-1 ps-lg-3" data-aos="fade-up">
-                <form action="{{ route('muahang') }}" method="POST">
+                <form action="{{ route('muahang') }}" method="POST" onsubmit="return checkSelectedSize()">
                     @csrf
                     @foreach ($sanpham as $item)
                         <h3 class="mb-3" style="font-size: 27px; font-weight: 600;">{{ $item->TENSANPHAM }}</h3>
@@ -90,7 +90,8 @@
                         <div>
                             @foreach ($size as $item)
                                 <label class="size-btn">
-                                    <input type="radio" name="size" value="{{ $item->SIZESP }}">
+                                    <input type="radio" name="size" value="{{ $item->SIZESP }}"
+                                        onclick="checkSelectedSize(this)">
                                     {{ $item->SIZESP }}
                                 </label>
                             @endforeach
@@ -226,5 +227,26 @@
                 }
             });
         });
+    </script>
+    <script>
+        function checkSelectedSize() {
+            var radios = document.getElementsByName('size');
+            var selectedSize = false;
+            for (var i = 0; i < radios.length; i++) {
+                if (radios[i].checked) {
+                    selectedSize = true;
+                    break;
+                }
+            }
+            if (!selectedSize) {
+                Swal.fire({
+                    title: 'Vui lòng chọn size!',
+                    icon: 'error',
+                    timer: 10000,
+                })
+                return false;
+            }
+            return true;
+        }
     </script>
 @endsection

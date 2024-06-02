@@ -237,6 +237,9 @@ img {
     padding: 1.5em;
     text-align: center;
 }
+.none-image{
+    display: none;
+}
 .img-label{
     margin-right: 15px;
 }

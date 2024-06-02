@@ -105,9 +105,9 @@
                                                                             style="color:#636363;border:1px solid #e5e5e5;padding:12px;text-align:left;vertical-align:middle;font-family:'Helvetica Neue',Helvetica,Roboto,Arial,sans-serif;word-wrap:break-word">
                                                                             {{ $item->TENSANPHAM }}
                                                                         </td>
-                                                                        <td
+                                                                        <td class="price"
                                                                             style="color:#636363;border:1px solid #e5e5e5;padding:12px;text-align:left;vertical-align:middle;font-family:'Helvetica Neue',Helvetica,Roboto,Arial,sans-serif">
-                                                                            {{ $item->GIA }}
+                                                                            {{ $item->GIA }} &nbsp;₫
                                                                         </td>
                                                                         <td
                                                                             style="color:#636363;border:1px solid #e5e5e5;padding:12px;text-align:left;vertical-align:middle;font-family:'Helvetica Neue',Helvetica,Roboto,Arial,sans-serif">
@@ -115,21 +115,22 @@
                                                                         </td>
                                                                         <td
                                                                             style="color:#636363;border:1px solid #e5e5e5;padding:12px;text-align:left;vertical-align:middle;font-family:'Helvetica Neue',Helvetica,Roboto,Arial,sans-serif">
-                                                                            {{ $item->HINHANH }}
+                                                                            <img src="http://127.0.0.1:8000/images/{{ $item->HINHANH }}"
+                                                                                alt="{{ $item->TENSANPHAM }}">
                                                                         </td>
                                                                         <td
                                                                             style="color:#636363;border:1px solid #e5e5e5;padding:12px;text-align:left;vertical-align:middle;font-family:'Helvetica Neue',Helvetica,Roboto,Arial,sans-serif">
                                                                             {{ $item->SOLUONG }}
                                                                         </td>
-                                                                        <td
+                                                                        <td class="thanh-tien"
                                                                             style="color:#636363;border:1px solid #e5e5e5;padding:12px;text-align:left;vertical-align:middle;font-family:'Helvetica Neue',Helvetica,Roboto,Arial,sans-serif">
-                                                                            {{ $item->THANHTIEN }}
+                                                                            {{ $item->THANHTIEN }} &nbsp;₫
                                                                         </td>
                                                                         <td
                                                                             style="color:#636363;border:1px solid #e5e5e5;padding:12px;text-align:left;vertical-align:middle;font-family:'Helvetica Neue',Helvetica,Roboto,Arial,sans-serif">
                                                                             {{ $item->SIZE }}
                                                                         </td>
-                                                                        
+
                                                                     </tr>
                                                                     <?php $TongTien += $item->THANHTIEN; ?>
                                                                 @endforeach
@@ -140,7 +141,7 @@
                                                                         style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left">
                                                                         <span>Phí vận chuyển:</span>
                                                                     </td>
-                                                                    <td
+                                                                    <td class="phi-van-chuyen"
                                                                         style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left">
                                                                         {{ $emailParams->phiVanChuyen }}&nbsp;₫
 
@@ -151,13 +152,23 @@
                                                                         style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left">
                                                                         <span>Tổng tiền:</span>
                                                                     </td>
-                                                                    <td
+                                                                    <td class="tong-tien"
                                                                         style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left">
                                                                         {{ $emailParams->tongtien }}&nbsp;₫
 
                                                                     </td>
                                                                 </tr>
-                                                                
+                                                                <tr>
+                                                                    <td colspan="6"
+                                                                        style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left">
+                                                                        <span>Địa Chỉ:</span>
+                                                                    </td>
+                                                                    <td
+                                                                        style="color:#636363;border:1px solid #e5e5e5;vertical-align:middle;padding:12px;text-align:left">
+                                                                        {{ $emailParams->diaChi }}
+
+                                                                    </td>
+                                                                </tr>
                                                             </tfoot>
                                                         </table>
                                                     </div>
@@ -178,5 +189,20 @@
     </table>
 </body>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var prices = document.querySelectorAll(".price, .thanh-tien, .tong-tien, .phi-van-chuyen");
+
+        prices.forEach(function(price) {
+            var number = parseFloat(price.innerHTML);
+
+            var formattedPrice = number.toLocaleString();
+
+
+            price.innerHTML = formattedPrice + "₫";
+            console.log(formattedPrice);
+        });
+    });
+</script>
 
 </html>

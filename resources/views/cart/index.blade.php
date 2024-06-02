@@ -21,13 +21,13 @@
                                         <input type="checkbox" name="selected_items[]"
                                                 value="{{ $item->MASP }}|{{ $item->SIZE }}" style="margin-right: 20px; width: 20px">
                                         <div class="item-img">
-                                            <a href="/"><img src="{{ URL('images/' . $item->HINHANH) }}"
+                                            <a href="http://127.0.0.1:8000/products/{{ $item->MASP }}"><img src="{{ URL('images/' . $item->HINHANH) }}"
                                                     alt="{{ $item->TENSANPHAM }}"></a>
                                         </div>
                                         <div class="cart_content">
                                             <div class="item-title">
                                                 <div class="cart_des">
-                                                    <a href="">{{ $item->TENSANPHAM }}</a>
+                                                    <a href="http://127.0.0.1:8000/products/{{ $item->MASP }}">{{ $item->TENSANPHAM }}</a>
                                                 </div>
                                                 <div class="item-remove">
                                                     <span class="remove-wrap">
@@ -63,7 +63,9 @@
                                                         <span class="item-option">
                                                             <span class="item-price">
                                                                 <span
-                                                                    class="money">{{ $item->GIA * $item->SOLUONG - ($item->GIA * (20 / 100)) }}₫</span>
+                                                                    class="money">{{ 
+                                                                    ($item->GIA  - ($item->GIA * (20 / 100))) * $item->SOLUONG 
+                                                                    }}₫</span>
                                                             </span>
                                                         </span>
                                                     </div>
@@ -111,7 +113,7 @@
                                 <button class="btncart-checkout text-center" type="submit">THANH TOÁN TẤT CẢ GIỎ HÀNG</button>
                             </form>
                             <p class="link-continue text-center">
-                                <a href="#">
+                                <a href="/">
                                     <i class="fa fa-reply"></i> Tiếp tục mua hàng
                                 </a>
                             </p>
@@ -191,11 +193,12 @@
                     },
                     success: function(response) {
                         input.val(newQuantity);
-                        $('.total-price').text(response.tongtien + '₫');
+                        $('.total-price').text(response.tongtienSP + '₫');
                         $('.total-price-cart').text(response.tongtienSP +
                             '₫');
                         $('.total-price-sale').text(response.tienGiam + '₫');
-                        $('.money').text(response.tongtienSP + '₫');
+                        $('.money').text(response.tongTienSPUpdate + '₫');
+                        $('.quantity-selector').val(response.soLuong);
                         var prices = document.querySelectorAll(
                             ".total-price, .total-price-cart, .total-price-sale, .money");
 
@@ -213,6 +216,7 @@
                         console.log(xhr.responseText);
                     }
                 });
+                location.reload();
             }
         });
     </script>

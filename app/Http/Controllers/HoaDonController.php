@@ -20,13 +20,15 @@ class HoaDonController extends Controller
             Session::put('message', "Đăng nhập không thành công");
             return view('admin_login');
         }
-        $cart = DB::select("SELECT SANPHAM.MASANPHAM, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
+        
+
+        
+
+        $cart = DB::select("SELECT GIOHANG.MASP, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
         FROM GIOHANG 
         INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
         WHERE MAKH = ?", [$makh]);
         $profile = DB::select("SELECT TENKH, SODIENTHOAI, DIACHI FROM KHACHHANG WHERE MAKH = ?", [$makh]);
-
-
 
         $sogiohang = count($cart);
         $tongtien = 0;
@@ -35,11 +37,14 @@ class HoaDonController extends Controller
             $tongtienSP += $item->THANHTIEN * $item->SOLUONG;
             $tongtien += $tongtienSP;
        }
+       $diaChi = DB::select("SELECT * FROM DIACHI WHERE MAKH = ?", [$makh]);
+
 
         $profile = DB::select("SELECT TENKH, SODIENTHOAI, DIACHI FROM KHACHHANG WHERE MAKH = ?", [$makh]);
 
-        return view('hoadon.thanhtoan', compact('cart', 'sogiohang', 'profile', 'tongtien', 'tongtienSP'));
+        return view('hoadon.thanhtoan', compact('cart', 'sogiohang', 'profile', 'tongtien', 'tongtienSP', 'diaChi'));
     }
+    
     public function hoanTatDonHang(Request $request)
     {
         $tenKhachHang = Session::get('ten');
