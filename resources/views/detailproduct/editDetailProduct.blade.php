@@ -28,7 +28,7 @@
                             <label for="exampleInputEmail1">Tên sản phẩm</label>
                             <input style="width:" type="text" name="tenSP" value="{{ $key->TENSANPHAM }}" class="form-control" id="exampleInputEmail1">
                         </div>
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <i class="fa fa-plus-square plus-icon"></i>
                             <label for="exampleInputEmail1">Mô tả</label>
                             <div class="input-group-append">
@@ -43,7 +43,7 @@
                             <div class="hidden-inputs" style="display:none">
                                 <!-- Input mới sẽ được thêm vào đây -->
                             </div>
-                        </div>
+                        </div> --}}
                         
                         <div class="form-group">
                             <label for="exampleInputEmail1">Giá </label>
