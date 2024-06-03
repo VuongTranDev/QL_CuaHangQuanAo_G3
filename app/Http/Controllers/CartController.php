@@ -246,13 +246,22 @@ class CartController extends Controller
             return response()->json(['success' => false]);
         }
     }
-    public function showHoaDon()
+    public function showHoaDon(Request $request)
     {
         $makh = Session::get('makh');
-        $cart = DB::select("SELECT GIOHANG.MASP, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
+        if ($request->has('checkout_btn')) {
+            $cart = DB::select("SELECT GIOHANG.MASP, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
         FROM GIOHANG 
         INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
         WHERE MAKH = ? AND CHONTHANHTOAN = 0", [$makh]);
+        }
+        else{
+            $cart = DB::select("SELECT GIOHANG.MASP, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
+            FROM GIOHANG 
+            INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+            WHERE MAKH = ? AND CHONTHANHTOAN = 1", [$makh]);
+        }
+        
 
         $tongtien = 0;
         $tongtienSP = 0;

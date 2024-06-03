@@ -113,7 +113,7 @@
                         </div>
                         <div class="order_action">
                             <form action="/hoadon/thanhtoan" method="GET">
-                                <button class="btncart-checkout text-center" type="submit">THANH TOÁN TẤT CẢ GIỎ
+                                <button name="checkout_btn" class="btncart-checkout text-center" type="submit">THANH TOÁN TẤT CẢ GIỎ
                                     HÀNG</button>
                             </form>
                             <p class="link-continue text-center">
