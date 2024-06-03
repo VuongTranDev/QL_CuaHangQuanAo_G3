@@ -113,7 +113,8 @@
                         </div>
                         <div class="order_action">
                             <form action="/hoadon/thanhtoan" method="GET">
-                                <button name="checkout_btn" class="btncart-checkout text-center" type="submit">THANH TOÁN TẤT CẢ GIỎ
+                                <button name="checkout_btn" class="btncart-checkout text-center" type="submit">THANH TOÁN
+                                    TẤT CẢ GIỎ
                                     HÀNG</button>
                             </form>
                             <p class="link-continue text-center">
@@ -226,23 +227,24 @@
     </script>
     <script>
         $(document).ready(function() {
-            var checkedItems = $('.check-item:checked').map(function() {
-                return this.value;
-            }).get();
-
-            $.ajax({
-                url: '{{ route('processSelectedItems') }}',
-                method: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    selectedItems: checkedItems
-                },
-                success: function(response) {
-                    console.log(response);
-                },
-                error: function(xhr) {
-                    console.log(xhr.responseText);
-                }
+            $('#btn-chon-thanh-toan').on('click', function(event) {
+                var checkedItems = $('.check-item:checked').map(function() {
+                    return this.value;
+                }).get();
+                $.ajax({
+                    url: '{{ route('processSelectedItems') }}',
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        selected_items: checkedItems
+                    },
+                    success: function(response) {
+                        console.log(response);
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.responseText);
+                    }
+                });
             });
         });
     </script>
