@@ -226,7 +226,6 @@
             document.querySelector('form').addEventListener('submit', function(event) {
                 if (!document.querySelector('input[name="size"]:checked')) {
                     event.preventDefault();
-                    alert('Vui lòng chọn kích thước');
                 }
             });
         });
@@ -250,6 +249,110 @@
                 return false;
             }
             return true;
+        }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            handleSearchForm();
+            handleSearchForm2();
+
+            const searchInput2 = document.getElementById('searchInput2');
+            searchInput2.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+
+                    submitSearch2();
+                }
+            });
+
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    submitSearch();
+                }
+            });
+        });
+
+        function handleSearchForm() {
+            const searchInput = document.querySelector('.search');
+            const searchIcon = document.querySelector('.ic-search');
+
+            searchIcon.addEventListener('click', function(e) {
+                if (!searchInput.classList.contains('expanded')) {
+                    e.preventDefault();
+                    searchInput.classList.add('expanded');
+                    searchInput.focus();
+                }
+            });
+
+            searchInput.addEventListener('blur', function() {
+                if (searchInput.value === '') {
+                    searchInput.classList.remove('expanded');
+                }
+            });
+        }
+
+        function submitSearch() {
+            var searchQuery = $('#searchInput').val();
+            $.ajax({
+                url: "{{ route('products.search') }}",
+                type: "GET",
+                data: {
+                    search_query: searchQuery
+                },
+                success: function(response) {
+                    var newUrl = "{{ route('products.search') }}" + '?search_query=' + encodeURIComponent(
+                        searchQuery);
+                    window.history.pushState({
+                        path: newUrl
+                    }, '', newUrl);
+                    window.location.reload();
+                },
+                error: function(xhr) {
+                    console.log(xhr.responseText);
+                }
+            });
+        }
+
+        function handleSearchForm2() {
+            const searchInput2 = document.getElementById('searchInput2');
+            const searchIcon2 = document.getElementById('searchButton2');
+
+            searchIcon2.addEventListener('click', function(e) {
+                if (!searchInput2.classList.contains('expanded')) {
+                    e.preventDefault();
+                    searchInput2.classList.add('expanded');
+                    searchInput2.focus();
+                }
+            });
+
+            searchInput2.addEventListener('blur', function() {
+                if (searchInput2.value === '') {
+                    searchInput2.classList.remove('expanded');
+                }
+            });
+        }
+
+        function submitSearch2() {
+            var searchQuery2 = $('#searchInput2').val();
+            $.ajax({
+                url: "{{ route('products.search') }}",
+                type: "GET",
+                data: {
+                    search_query: searchQuery2
+                },
+                success: function(response) {
+                    var newUrl = "{{ route('products.search') }}" + '?search_query=' + encodeURIComponent(
+                        searchQuery2);
+                    window.history.pushState({
+                        path: newUrl
+                    }, '', newUrl);
+                    window.location.reload();
+                },
+                error: function(xhr) {
+                    console.log(xhr.responseText);
+                }
+            });
         }
     </script>
 @endsection

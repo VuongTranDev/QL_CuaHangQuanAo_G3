@@ -65,11 +65,15 @@ class AdminController extends Controller
                 ->first();
            
                 if( $data->TENKH == "")
+                {
                     Session::put('ten',"Chưa có tên") ;
+<<<<<<< HEAD
                 Session::put('ten',$data->TENKH) ;
                 if( $data->TENKH == "")
                 {
                     Session::put('ten',"Chưa có tên") ;
+=======
+>>>>>>> main
                 }
                 else {
                     Session::put('ten',$data->TENTK) ;
@@ -77,8 +81,11 @@ class AdminController extends Controller
                 Session::put('makh', $data->MAKH);
                     
                 return Redirect::to('/') ;
+<<<<<<< HEAD
 
                 return Redirect:: to('/') ;
+=======
+>>>>>>> main
             }
         }
         else

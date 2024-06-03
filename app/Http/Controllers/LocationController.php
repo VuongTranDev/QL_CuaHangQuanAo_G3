@@ -10,7 +10,7 @@ class LocationController extends Controller
 {
     public function getProvinces()
     {
-        $filePath = base_path('node_modules/hanhchinhvn/dist/tinh_tp.json');
+        $filePath = base_path('public/node_modules/hanhchinhvn/dist/tinh_tp.json');
 
         if (!file_exists($filePath)) {
             return response()->json(['error' => 'File not found'], 404);
@@ -24,7 +24,7 @@ class LocationController extends Controller
 
     public function getDistricts($provinceId)
     {
-        $filePath = base_path('node_modules/hanhchinhvn/dist/quan_huyen.json');
+        $filePath = base_path('public/node_modules/hanhchinhvn/dist/quan_huyen.json');
 
         if (!file_exists($filePath)) {
             return response()->json(['error' => 'File not found'], 404);
@@ -42,7 +42,7 @@ class LocationController extends Controller
 
     public function getWards($districtId)
     {
-        $filePath = base_path('node_modules/hanhchinhvn/dist/xa_phuong.json');
+        $filePath = base_path('public/node_modules/hanhchinhvn/dist/xa_phuong.json');
 
         if (!file_exists($filePath)) {
             return response()->json(['error' => 'File not found'], 404);

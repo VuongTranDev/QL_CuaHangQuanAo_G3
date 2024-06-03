@@ -30,7 +30,7 @@ class CartController extends Controller
           WHERE MAKH = ? AND CHONTHANHTOAN = 1", [$makh]);
 
 
-
+        Session::put('sogiohang', $sogiohang);
         $tongtienSP = 0;
         $tongtien = 0;
 
@@ -184,9 +184,9 @@ class CartController extends Controller
         }
         $selectedItems = $request->input('selected_items', []);
 
-        if (empty($selectedItems)) {
-            return response()->json(['message' => 'Bạn chưa chọn sản phẩm nào để thanh toán.'], 400);
-        }
+        // if (empty($selectedItems)) {
+        //     return response()->json(['success' => false]);
+        // }
 
         $cart = [];
         $chonthanhtoan = 0;
@@ -245,5 +245,52 @@ class CartController extends Controller
         } else {
             return response()->json(['success' => false]);
         }
+    }
+    public function showHoaDon()
+    {
+        $makh = Session::get('makh');
+        $cart = DB::select("SELECT GIOHANG.MASP, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
+        FROM GIOHANG 
+        INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+        WHERE MAKH = ? AND CHONTHANHTOAN = 0", [$makh]);
+
+        $tongtien = 0;
+        $tongtienSP = 0;
+        foreach ($cart as $item) {
+            $save_price = $item->GIA * (20 / 100);
+            $discout = $item->GIA - $save_price;
+            $tongtienSP += $discout * $item->SOLUONG;
+            $tongtien += $tongtienSP;
+        }
+
+        $tienGiam = 0;
+        $sogiohang = count($cart);
+        $diaChi = DB::select("SELECT * FROM DIACHI WHERE MAKH = ?", [$makh]);
+        $profile = DB::select("SELECT TENKH, SODIENTHOAI, DIACHI FROM KHACHHANG WHERE MAKH = ?", [$makh]);
+
+        return view('hoadon.thanhtoan', compact('cart', 'sogiohang', 'profile', 'tongtien', 'tongtienSP', 'diaChi'));
+    }
+
+    public function showCart()
+    {
+        $makh = Session::get('makh');
+        $cart = DB::select("SELECT GIOHANG.MASP, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN, GIOHANG.SIZE
+            FROM GIOHANG 
+            INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+            WHERE MAKH = ? AND CHONTHANHTOAN = 0", [$makh]);
+
+        $tongtien = 0;
+        $tongtienSP = 0;
+        foreach ($cart as $item) {
+            $save_price = $item->GIA * (20 / 100);
+            $discout = $item->GIA - $save_price;
+            $tongtienSP += $discout * $item->SOLUONG;
+            $tongtien += $tongtienSP;
+        }
+
+        $tienGiam = 0;
+        $sogiohang = count($cart);
+
+        return view('cart.index', compact('cart', 'sogiohang', 'tongtienSP', 'tongtien', 'tienGiam'));
     }
 }
