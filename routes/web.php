@@ -160,7 +160,7 @@ Route::get('/resetPassword/{token}', [
     "resetPassword"
 ]);
 
-Route::post('/checkresetPassword/{token}', [
+Route::post('/checkresetPassword', [
     AdminController::class,
     "checkresetPassword"
 ]);

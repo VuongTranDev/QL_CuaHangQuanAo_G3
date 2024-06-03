@@ -65,15 +65,11 @@ class AdminController extends Controller
                 ->first();
            
                 if( $data->TENKH == "")
-                {
                     Session::put('ten',"Chưa có tên") ;
-<<<<<<< HEAD
                 Session::put('ten',$data->TENKH) ;
                 if( $data->TENKH == "")
                 {
                     Session::put('ten',"Chưa có tên") ;
-=======
->>>>>>> main
                 }
                 else {
                     Session::put('ten',$data->TENTK) ;
@@ -81,11 +77,8 @@ class AdminController extends Controller
                 Session::put('makh', $data->MAKH);
                     
                 return Redirect::to('/') ;
-<<<<<<< HEAD
 
                 return Redirect:: to('/') ;
-=======
->>>>>>> main
             }
         }
         else
@@ -112,7 +105,7 @@ class AdminController extends Controller
         }
         $quyen = "Khách Hàng";
         $login_TK = $request->TenTK;
-        $$login_TK = $request->MatKhau;
+        $login_MK = $request->MatKhau;
         if($login_TK == null || $login_TK== null)
         {
             Session::put('message', 'Đăng kí tài khoản không thành công');
@@ -161,46 +154,61 @@ class AdminController extends Controller
        $data = $request->tenEmail ;
        $db = DB::table('taikhoanuser')->where('TENTK',$data)->first() ;
        $token = Str::random(40) ;
-
        $tokenData = [
         'EMAIL'=> $data,
         'TOKEN' => $token,
        ];
-      
+       if($db == null)
+       {
+        Session::put('message', 'Email của bạn không hợp lệ');
+        return view('admin_login');
+       }
        if(UserResetTokens::create($tokenData))
        {
             Mail::to($data)->send(new ForgotPassword($db,$token)) ;
-           return view('admin.resetPassword') ;
-        }
-        return redirect()->back()->with('ok','Send mail unsusscesfully, Please check your mail');
-    }
-
-    public function resetPassword($token,Request $request)
-    {
-        $mk = $request->mk ;
-        $rsmk = $request->resetmk ;
-        $tokenData = UserResetTokens::where('TOKEN',$token)->firstOrFail() ;
-        $email = $tokenData->EMAIL ;
-        
-        if($mk == $rsmk)
-        {
-              DB::table('taikhoanuser')->where('TENTK',$email)->update(['MATKHAU'=>$mk]) ;
-              return Redirect::to('admin_login');
+            Session::put('message', '1 thống báo đã được gửi đến email của bạn nhé');
+            return view('admin_login');
         }
         else
         {
-            Session::put('message', 'Mật khẩu không khớp');
-            return Redirect::to('admin_login');
+            Session::put('message', 'Email của bạn không hợp lệ');
+            return view('admin_login');
         }
-       
+      
     }
+
+        public function resetPassword($token)
+        {   
+            $tokenData = UserResetTokens::where('TOKEN',$token)->firstOrFail() ;
+            return view('admin.resetPassword', ['token' => $token]);
+        }
+
+        public function checkresetPassword(Request $request)
+        {
+            $mk = $request->mk;
+            $rsmk = $request->resetmk;
+            $token = $request->token;
+            
+            $tokenData = UserResetTokens::where('TOKEN',$token)->firstOrFail() ;
+            $email = $tokenData->EMAIL ;
+           
+            if($mk == $rsmk)
+            {
+                DB::table('taikhoanuser')->where('TENTK',$email)->update(['MATKHAU'=>$mk]) ;
+                Session::put('message', 'Thay đổi mật khẩu thành công');
+                return Redirect::to('admin_login');
+
+            }
+            else
+            {
+                Session::put('message', 'Mật khẩu không khớp');
+                return view('admin.resetPassword', ['token' => $token]);
+            }
+        }
     public function thongKeDS()
     {
         return view ('admin.thongkeDS') ;
     }
-
-    
-
     public function thongKeSanLuong(Request $request)
     {
             try {
