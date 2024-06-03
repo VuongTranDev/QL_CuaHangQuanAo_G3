@@ -137,7 +137,7 @@ class DetailsProductController extends Controller
     {
         $this->AuthLogin() ;
         $data =  DB::select('SELECT danhgia.MADANHGIA,danhgia.ID,danhgia.TINHTRANG,TENSANPHAM,SOSAO,TENKH,danhgia.NOIDUNG FROM danhgia INNER JOIN khachhang on danhgia.MAKH = khachhang.makh
-                                                            INNER JOIN chitiethoadon on chitiethoadon.MACHITIETDONHANG = danhgia.MACTHD
+                                                            INNER JOIN chitiethoadon on chitiethoadon.MACHITIETHOADON = danhgia.MACTHD
                                                             INNER JOIN sanpham on sanpham.MASANPHAM = chitiethoadon.MASP
                                                             ');
         $data1 = DB::select('SELECT * FROM PHANHOI');

@@ -145,6 +145,25 @@ Route::get('/logoutUser', [
     AdminController::class,
     "logoutUser"
 ]);
+Route::get('/checkforgotPassword', [
+    AdminController::class,
+    "checkforgotPassword"
+]);
+
+Route::post('/forgotPassword', [
+    AdminController::class,
+    "forgotPassword"
+]);
+
+Route::get('/resetPassword/{token}', [
+    AdminController::class,
+    "resetPassword"
+]);
+
+Route::post('/checkresetPassword/{token}', [
+    AdminController::class,
+    "checkresetPassword"
+]);
 Route::get('/thongKeDS', [
     AdminController::class,
     "thongKeDS"
@@ -163,7 +182,7 @@ Route::get('/quanLyKH',
 Route::post('/updateTTKH{ID}',
 [
     AdminController::class,
-    "updateTTKH"
+    "   "
 ]);
 
 Route::get('/editTTKH/{ID}',

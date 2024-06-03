@@ -37,15 +37,15 @@
             <form id="loginForm" action="{{ URL::to("/admin_TK") }}" method="post">
 				{{ csrf_field() }}
                 <label>
-                    <span>Tài khoản</span>
-                    <input type="username" id="username" name="login_tenTK"/>
+                    <span>Nhập mật khẩu mới</span>
+                    <input type="username" id="username" name="mk"/>
                 </label>
                 <label>
-                    <span>Mật khẩu</span>
-                    <input type="password" id="password" name="login_mk"/>
+                    <span>Xác nhận mật khẩu</span>
+                    <input type="password" id="password" name="resetmk"/>
                 </label>
                 <a href="{{ URL::to ('checkforgotPassword') }}"> <p class="forgot-pass">Quên mật khẩu?</p></a>
-                <button type="submit" class="submit" id="dangnhap" name="dangnhap">Đăng nhập</button>
+                <button type="submit" class="submit" id="dangnhap" name="dangnhap">Xác nhận</button>
             </form>
         </div>
         <div class="sub-cont">

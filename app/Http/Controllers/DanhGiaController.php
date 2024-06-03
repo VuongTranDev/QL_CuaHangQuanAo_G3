@@ -12,7 +12,7 @@ class DanhGiaController extends Controller
 {
     public function showDanhGia()
     {
-        $danhgia = DB::table('danhgia')->get();
+        $danhgia = DB::table('danhgia')->where('TINHTRANG',1)->get();
         return view('danhgias.showDanhGia', compact('danhgia'));
     }
 
@@ -26,13 +26,17 @@ class DanhGiaController extends Controller
             // $maCTHD = $request->input('MACTHD');
             $noiDung = $request->input('NOIDUNG');
             $soSao = $request->input('SOSAO');
-
+            if($soSao < 4)
+                $tinhtrang = 0;
+            else
+                $tinhtrang = 1 ;
             DB::table('danhgia')->insert([
                 'MAKH' => $maKH,
                 'MADANHGIA' => $maDG,
                 // 'MACTHD' => $maCTHD,
                 'NOIDUNG' => $noiDung,
-                'SOSAO' => $soSao
+                'SOSAO' => $soSao,
+                'TINHTRANG' => $tinhtrang,
             ]);
             return Redirect()->back();
         }
