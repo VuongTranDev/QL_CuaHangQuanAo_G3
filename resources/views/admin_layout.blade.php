@@ -46,11 +46,13 @@
     <ul class="nav pull-right top-menu">
         <li>
             {{-- <input type="text" class="form-control search" placeholder=" Search"> --}}
+            
         </li>
         <!-- user login dropdown start-->
         <li class="dropdown">
             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
              {{-- <img alt="" src="{{ asset('../images/2.png') }}"> --}}
+             
                 <span class="username">
 					<?php 
 						$name = Session::get('ten') ;		

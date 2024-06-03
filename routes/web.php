@@ -160,7 +160,7 @@ Route::get('/resetPassword/{token}', [
     "resetPassword"
 ]);
 
-Route::post('/checkresetPassword/{token}', [
+Route::post('/checkresetPassword', [
     AdminController::class,
     "checkresetPassword"
 ]);
@@ -195,6 +195,12 @@ Route::get('/deleteTTKH/{ID}',
 [
     AdminController::class,
     "deleteTTKH"
+]);
+
+Route::post('/resetpassAdmin',
+[
+    AdminController::class,
+    "resetpassAdmin"
 ]);
 
 // CategoryProduct
