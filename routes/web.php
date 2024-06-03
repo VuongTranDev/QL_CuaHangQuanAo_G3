@@ -197,6 +197,12 @@ Route::get('/deleteTTKH/{ID}',
     "deleteTTKH"
 ]);
 
+Route::post('/resetpassAdmin',
+[
+    AdminController::class,
+    "resetpassAdmin"
+]);
+
 // CategoryProduct
 
 Route::get('/addCategoryProduct', [

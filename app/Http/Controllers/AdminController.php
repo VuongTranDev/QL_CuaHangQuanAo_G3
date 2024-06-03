@@ -50,8 +50,11 @@ class AdminController extends Controller
                 ->join('thongtinadmin', 'taikhoanuser.MAUSER', '=', 'thongtinadmin.MATKUSER')
                 ->where('thongtinadmin.MATKUSER',$result->MAUSER)
                 ->first();
+                
                 if($data)
                 {
+                    Session::put('tk',$data->TENTK) ;
+                    Session::put('mk',$data->MATKHAU) ;
                     Session::put('ten',$data->TENKH) ;
                     Session::put('sdt',$data->SODIENTHOAI) ;
                     Session::put('admin_id',$data->ID) ;
@@ -144,6 +147,30 @@ class AdminController extends Controller
     public function logoutUser() {
         Session::flush();
         return Redirect::back();
+    }
+
+   
+    public function  resetpassAdmin(Request $request) {
+       
+        $tentk = Session::get('tk');
+        $mk = $request->mk ;
+        $rsmk = $request->rsmk;
+       if($rsmk == null || $mk == null)
+       {
+        Session::put('message', 'Đổi thất bại');
+            return view('admin.admin_content');
+       }
+        else if($mk == $rsmk)
+        {
+            DB::table('taikhoanuser')->where('TENTK',$tentk)->update(['MATKHAU'=>$mk]);
+            Session::put('message', 'Đổi thành công');
+            return view('admin.admin_content');
+        }
+        else
+        {
+            Session::put('message', 'Đổi thất bại');
+            return view('admin.admin_content');
+        }
     }
     public function checkforgotPassword() {
        
