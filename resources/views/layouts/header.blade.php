@@ -21,6 +21,9 @@
                                     if ($sogiohang) {
                                         echo $sogiohang;
                                     }
+                                    else{
+                                        echo 0;
+                                    }
                                     ?>
                                 </span></i>
                         </a>
@@ -53,7 +56,7 @@
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-user" aria-labelledby="userDropdown">
                                     <a class="dropdown-item" href="/profile">Tài khoản của tôi</a>
-                                    <a class="dropdown-item" href="#">Đơn mua</a>
+                                    <a class="dropdown-item" href="/donmua">Đơn mua</a>
                                     <a class="dropdown-item" href="/logoutUser">Đăng xuất</a>
                                 </div>
                             @endif

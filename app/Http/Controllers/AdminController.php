@@ -70,7 +70,11 @@ class AdminController extends Controller
                 }
                 Session::put('makh', $data->MAKH);
                     
+<<<<<<< HEAD
                 return Redirect::to('/') ;
+=======
+                return Redirect:: to('/') ;
+>>>>>>> NhutHaoo
             }
         }
         else

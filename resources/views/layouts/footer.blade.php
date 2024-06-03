@@ -15,13 +15,13 @@
                     <div class="single-contact">
                         <i class="fa fa-phone"></i>
                         <div class="content">
-                            Số điện thoại: 0123456789</a>
+                            Số điện thoại: 038853324</a>
                         </div>
                     </div>
                     <div class="single-contact">
                         <i class="fa fa-envelope"></i>
                         <div class="content">
-                            Email: mail@gmail.com</a>
+                            Email: vonhuthao11235@gmail.com</a>
                         </div>
                     </div>
                 </div>

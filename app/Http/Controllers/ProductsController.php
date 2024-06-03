@@ -257,7 +257,9 @@ class ProductsController extends Controller
                     $sogiohang = count($cart);
                     $diaChi = DB::select("SELECT * FROM DIACHI WHERE MAKH = ?", [$makh]);
                     $profile = DB::select("SELECT TENKH, SODIENTHOAI, DIACHI FROM KHACHHANG WHERE MAKH = ?", [$makh]);
-                    return view('hoadon.thanhtoan', compact('cart', 'sogiohang', 'profile', 'tongtien', 'tongtienSP', 'diaChi'));
+                    Session::put('sogiohang', $sogiohang);
+                    //return view('hoadon.thanhtoan', compact('cart', 'sogiohang', 'profile', 'tongtien', 'tongtienSP', 'diaChi'));
+                    return redirect()->route('hoadon.thanhtoan');
                } else {
                     $cart = DB::select("SELECT GIOHANG.MASP, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN, GIOHANG.SIZE
                         FROM GIOHANG 
@@ -275,10 +277,10 @@ class ProductsController extends Controller
 
                     $tienGiam = 0;
                     $sogiohang = count($cart);
-                    return view('cart.index', compact('cart', 'sogiohang', 'tongtienSP', 'tongtien', 'tienGiam'));
+                    Session::put('sogiohang', $sogiohang);
+                    return redirect()->route('cart.index');
+                    //return view('cart.index', compact('cart', 'sogiohang', 'tongtienSP', 'tongtien', 'tienGiam'));
                }
-          } else {
-               return back();
           }
      }
 }
