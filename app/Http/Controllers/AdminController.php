@@ -62,8 +62,14 @@ class AdminController extends Controller
                 ->first();
            
                 if( $data->TENKH == "")
+                {
                     Session::put('ten',"Chưa có tên") ;
-                Session::put('ten',$data->TENKH) ;
+                }
+                else {
+                    Session::put('ten',$data->TENTK) ;
+                }
+                Session::put('makh', $data->MAKH);
+                    
                 return Redirect:: to('/') ;
             }
         }

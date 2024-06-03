@@ -176,4 +176,18 @@ class HomeController extends Controller
             return response()->json(['success' => false, 'error' => $e->getMessage()]);
         }
     }
+    public function showDonMua()
+    {
+        $makh = Session::get('makh');
+
+       $donmua = DB::select("SELECT *, CHITIETHOADON.SOLUONG AS SL FROM CHITIETHOADON
+       INNER JOIN SANPHAM ON CHITIETHOADON.MASP = SANPHAM.MASANPHAM
+       INNER JOIN HOADON ON HOADON.MAHOADON = CHITIETHOADON.MAHOADON
+       WHERE MAKHACHHANG = ?", [$makh]);
+
+
+
+        $sodonmua = count($donmua);
+        return view('home.donmua', compact('donmua', 'sodonmua'));
+    }
 }

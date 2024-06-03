@@ -19,20 +19,24 @@
                                 <div class="cart-wrap" data-line="1" data-variant-id="1120468075">
                                     <div class="item-info">
                                         <input type="checkbox" name="selected_items[]"
-                                                value="{{ $item->MASP }}|{{ $item->SIZE }}" style="margin-right: 20px; width: 20px">
+                                            value="{{ $item->MASP }}|{{ $item->SIZE }}"
+                                            style="margin-right: 20px; width: 20px">
                                         <div class="item-img">
-                                            <a href="http://127.0.0.1:8000/products/{{ $item->MASP }}"><img src="{{ URL('images/' . $item->HINHANH) }}"
+                                            <a href="http://127.0.0.1:8000/products/{{ $item->MASP }}"><img
+                                                    src="{{ URL('images/' . $item->HINHANH) }}"
                                                     alt="{{ $item->TENSANPHAM }}"></a>
                                         </div>
                                         <div class="cart_content">
                                             <div class="item-title">
                                                 <div class="cart_des">
-                                                    <a href="http://127.0.0.1:8000/products/{{ $item->MASP }}">{{ $item->TENSANPHAM }}</a>
+                                                    <a
+                                                        href="http://127.0.0.1:8000/products/{{ $item->MASP }}">{{ $item->TENSANPHAM }}</a>
                                                 </div>
                                                 <div class="item-remove">
                                                     <span class="remove-wrap">
                                                         <a href="javascript:void(0)" class="remove-item"
-                                                            data-id="{{ $item->MASP }}" data-sizedel = "{{ $item->SIZE }}"><i
+                                                            data-id="{{ $item->MASP }}"
+                                                            data-sizedel = "{{ $item->SIZE }}"><i
                                                                 class="fa fa-times"></i></a>
                                                     </span>
 
@@ -63,9 +67,7 @@
                                                         <span class="item-option">
                                                             <span class="item-price">
                                                                 <span
-                                                                    class="money">{{ 
-                                                                    ($item->GIA  - ($item->GIA * (20 / 100))) * $item->SOLUONG 
-                                                                    }}₫</span>
+                                                                    class="money">{{ ($item->GIA - $item->GIA * (20 / 100)) * $item->SOLUONG }}₫</span>
                                                             </span>
                                                         </span>
                                                     </div>
@@ -110,7 +112,8 @@
                         </div>
                         <div class="order_action">
                             <form action="/hoadon/thanhtoan" method="GET">
-                                <button class="btncart-checkout text-center" type="submit">THANH TOÁN TẤT CẢ GIỎ HÀNG</button>
+                                <button class="btncart-checkout text-center" type="submit">THANH TOÁN TẤT CẢ GIỎ
+                                    HÀNG</button>
                             </form>
                             <p class="link-continue text-center">
                                 <a href="/">
@@ -254,31 +257,41 @@
                 console.log(size);
                 var $itemRow = $(this).closest(
                     '.item-row');
-
-                if (confirm('Bạn chắc chắn muốn xoá sản phẩm ra khỏi giỏ hàng?')) {
-                    $.ajax({
-                        url: '/delete-item',
-                        type: 'POST',
-                        data: {
-                            MASP: masanpham,
-                            SIZE: size,
-                            _token: '{{ csrf_token() }}'
-                        },
-                        success: function(response) {
-                            if (response.success) {
-                                $itemRow.remove();
-                                location.reload();
-                            } else {
+                Swal.fire({
+                    title: 'Bạn có chắc chắn?',
+                    text: "Bạn sẽ không thể hoàn tác hành động này!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Vâng, xóa nó!',
+                    cancelButtonText: 'Hủy bỏ'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/delete-item',
+                            type: 'POST',
+                            data: {
+                                MASP: masanpham,
+                                SIZE: size,
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(response) {
+                                if (response.success) {
+                                    $itemRow.remove();
+                                    location.reload();
+                                } else {
+                                    alert('Không thể xoá.');
+                                }
+                            },
+                            error: function(xhr) {
                                 alert('Không thể xoá.');
                             }
-                        },
-                        error: function(xhr) {
-                            alert('Không thể xoá.');
-                        }
-                    });
-                }
+                        });
+                    }
+                });
             });
         });
     </script>
-    
+    <script></script>
 @endsection

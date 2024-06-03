@@ -498,8 +498,17 @@ Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->nam
 Route::post('/update-cart-quantity', [CartController::class, 'updateCartQuantity'])->name('updateCartQuantity');
 Route::post('/process-selected-items', [CartController::class, 'processSelectedItems'])->name('processSelectedItems');
 Route::post('/delete-item', [CartController::class, 'deleteItem'])->name('delete.item');
+Route::get('/hoadon/thanhtoan', [CartController::class, 'showHoaDon'])->name('hoadon.thanhtoan');
+Route::get('/cart', [CartController::class, 'showCart'])->name('cart.index');
+
 
 // địa chỉ
-Route::post('/update-address', [MailController::class, 'sendEmail'])->name('update.address');
+Route::post('/updateaddress', [MailController::class, 'sendEmail'])->name('update.address');
 
+
+// đơn mua
+Route::get('/donmua', [
+    HomeController::class,
+    'showDonMua'
+]);
     

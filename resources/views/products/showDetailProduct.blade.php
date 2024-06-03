@@ -226,7 +226,6 @@
             document.querySelector('form').addEventListener('submit', function(event) {
                 if (!document.querySelector('input[name="size"]:checked')) {
                     event.preventDefault();
-                    alert('Vui lòng chọn kích thước');
                 }
             });
         });

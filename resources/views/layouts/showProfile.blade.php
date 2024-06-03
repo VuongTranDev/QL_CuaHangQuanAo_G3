@@ -21,7 +21,7 @@
                 <ul>
                     <li><a href="/profile">Tài khoản của tôi</a></li>
                     <li><a href="/address">Địa chỉ</a></li>
-                    <li><a href="#">Đơn mua</a></li>
+                    <li><a href="/donmua">Đơn mua</a></li>
                     <li><a href="#">Đổi mật khẩu</a></li>
                     <li><a href="#">Ngân hàng</a></li>
                     <li><a href="#">Cài đặt thông báo</a></li>
