@@ -199,6 +199,7 @@ img {
     justify-content: space-between;
 }
 .wrap-right{
+    padding: 10px;
     border-left: 1px solid #aeaeae;
 }
 .price-total{

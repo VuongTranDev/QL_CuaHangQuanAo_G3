@@ -78,7 +78,8 @@
                                 </div>
                             </div>
                         @endforeach
-                        <button style="" type="submit" class="btn btn-primary">Thanh toán sản phẩm đã chọn</button>
+                        <button id="btn-chon-thanh-toan" style="" type="submit" class="btn btn-primary">Thanh toán
+                            sản phẩm đã chọn</button>
                     </form>
                 </div>
 
@@ -225,28 +226,27 @@
     </script>
     <script>
         $(document).ready(function() {
-            $('.check-item').change(function() {
-                var checkedItems = $('.check-item:checked').map(function() {
-                    return this.value;
-                }).get();
+            var checkedItems = $('.check-item:checked').map(function() {
+                return this.value;
+            }).get();
 
-                $.ajax({
-                    url: '{{ route('processSelectedItems') }}',
-                    method: 'POST',
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        selectedItems: checkedItems
-                    },
-                    success: function(response) {
-                        console.log(response);
-                    },
-                    error: function(xhr) {
-                        console.log(xhr.responseText);
-                    }
-                });
+            $.ajax({
+                url: '{{ route('processSelectedItems') }}',
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    selectedItems: checkedItems
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(xhr) {
+                    console.log(xhr.responseText);
+                }
             });
         });
     </script>
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -293,5 +293,4 @@
             });
         });
     </script>
-    <script></script>
 @endsection

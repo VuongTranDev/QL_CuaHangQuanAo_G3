@@ -12,7 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
-
+    <link rel="shortcut icon" type="image/png" href="../../images/icon.png">
     {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
         integrity="sha384-n/1hej/l22Kj4S1LKAJaztMsUpGQpbg9DlzTfVbw78v3Vv0xHzfp2XuRLmwALC8k" crossorigin="anonymous"> --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -21,15 +21,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="../../css/thanhtoan.css" />
+
     <style>
         .error-message {
             color: red;
             display: block;
+            margin-top: 20px;
         }
 
         .error-message-two {
             color: red;
             display: none;
+        }
+
+        .slogan-group {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            height: 100vh;
         }
     </style>
 </head>
@@ -39,7 +48,9 @@
         <div class="row">
             <div class="col-md-7">
                 <div class="logo">
-                    <img src="../../images/icon.png" alt="logo" class="img-logo" />
+                    <a href="/">
+                        <img src="../../images/icon.png" alt="logo" class="img-logo" />
+                    </a>
                 </div>
 
                 <div class="group-link-page">
@@ -203,7 +214,7 @@
                 <p class="" style="text-align: center">Powered by HaiHuocStore</p>
             </div>
 
-            <div class="col-md-5 wrap-right">
+            <div class="col-md-5 wrap-right slogan-group">
                 <div class="list-cart" style="">
                     <h4>Số lượng sản phẩm: {{ $sogiohang }}</h4>
                     @foreach ($cart as $item)
@@ -288,10 +299,10 @@
 
             if (!selectedAddress) {
                 Swal.fire({
-                            title: 'Vui lòng thêm địa chỉ của bạn !!!',
-                            icon: 'error',
-                            timer: 3500,
-                        });
+                    title: 'Vui lòng thêm địa chỉ của bạn !!!',
+                    icon: 'error',
+                    timer: 3500,
+                });
             } else {
                 var data = "tongCongValue=" + tongCongValue + "&phiVanChuyen=" + phiVanChuyen + "&diaChi=" +
                     selectedAddress;

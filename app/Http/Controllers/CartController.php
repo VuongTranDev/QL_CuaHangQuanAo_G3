@@ -184,9 +184,9 @@ class CartController extends Controller
         }
         $selectedItems = $request->input('selected_items', []);
 
-        if (empty($selectedItems)) {
-            return response()->json(['message' => 'Bạn chưa chọn sản phẩm nào để thanh toán.'], 400);
-        }
+        // if (empty($selectedItems)) {
+        //     return response()->json(['success' => false]);
+        // }
 
         $cart = [];
         $chonthanhtoan = 0;
@@ -252,7 +252,7 @@ class CartController extends Controller
         $cart = DB::select("SELECT GIOHANG.MASP, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
         FROM GIOHANG 
         INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
-        WHERE MAKH = ? AND CHONTHANHTOAN = 1", [$makh]);
+        WHERE MAKH = ? AND CHONTHANHTOAN = 0", [$makh]);
 
         $tongtien = 0;
         $tongtienSP = 0;
