@@ -34,17 +34,19 @@
                 Session::put('message',null); 
               }
             ?>
-            <form id="loginForm" action="{{ URL::to("/admin_TK") }}" method="post">
+           <form action="{{ URL::to("/checkresetPassword") }}" method="post">
+
 				{{ csrf_field() }}
+                <input type="hidden" name="token" value="{{ $token }}">
                 <label>
                     <span>Nhập mật khẩu mới</span>
-                    <input type="username" id="username" name="mk"/>
+                    <input type="password" id="username" name="mk"/>    
                 </label>
                 <label>
                     <span>Xác nhận mật khẩu</span>
                     <input type="password" id="password" name="resetmk"/>
                 </label>
-                <a href="{{ URL::to ('checkforgotPassword') }}"> <p class="forgot-pass">Quên mật khẩu?</p></a>
+                
                 <button type="submit" class="submit" id="dangnhap" name="dangnhap">Xác nhận</button>
             </form>
         </div>

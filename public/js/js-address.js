@@ -263,57 +263,63 @@ $(document).ready(function() {
         console.log(wardName1);
     });
 
-});
-
-$(document).on('click', '.delete-address', function(e) {
-    e.preventDefault();
-    var addressId = $(this).data('id');
-
-    Swal.fire({
-        title: 'Bạn có chắc chắn?',
-        text: "Bạn sẽ không thể hoàn tác hành động này!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Vâng, xóa nó!',
-        cancelButtonText: 'Hủy bỏ'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: '/deleteAddress/' + addressId,
-                type: 'DELETE',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                },
-                success: function(response) {
-                    if (response.success) {
-                        Swal.fire(
-                            'Xóa thành công!',
-                            'Đã xoá địa chỉ thành công.',
-                            'success'
-                        ).then(() => {
-                            location.reload();
-                        });
-                    } else {
-                        Swal.fire(
-                            'Lỗi!',
-                            'Đã xảy ra lỗi khi xóa địa chỉ.',
-                            'error'
-                        );
-                    }
-                },
-                error: function(xhr) {
-                    Swal.fire(
-                        'Lỗi!',
-                        'Đã xảy ra lỗi khi xóa địa chỉ.',
-                        'error'
-                    );
+    $(document).ready(function() {
+        $(document).on('click', '.delete-address', function(e) {
+            e.preventDefault();
+            var addressId = $(this).data('id');
+    
+            Swal.fire({
+                title: 'Bạn có chắc chắn?',
+                text: "Bạn sẽ không thể hoàn tác hành động này!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Vâng, xóa nó!',
+                cancelButtonText: 'Hủy bỏ'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/deleteAddress/' + addressId,
+                        type: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            console.log('Response:', response);
+                            if (response.success) {
+                                Swal.fire(
+                                    'Xóa thành công!',
+                                    'Đã xoá địa chỉ thành công.',
+                                    'success'
+                                ).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Lỗi!',
+                                    'Đã xảy ra lỗi khi xóa địa chỉ.',
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function(xhr) {
+                            console.log('Error:', xhr);
+                            Swal.fire(
+                                'Lỗi!',
+                                'Đã xảy ra lỗi khi xóa địa chỉ.',
+                                'error'
+                            );
+                        }
+                    });
                 }
             });
-        }
+        });
     });
+    
+
 });
+
 
 
 function handleUpdateAddress() {

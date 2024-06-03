@@ -50,7 +50,7 @@ class DetailsProductController extends Controller
             Session::put('message', 'Thêm thành công!!!');
             return Redirect::to('addDetailProduct');
         } catch (\Exception $e) {
-            Session::put('message', 'Hãy xem lại mã loại hoặc tên sản phẩm!!!');
+            Session::put('message', 'Hãy xem lại thông tin sản phẩm!!!');
             return Redirect::to('addDetailProduct');
         }
     }
