@@ -7,7 +7,7 @@
                 <ul class="navbar-nav me-auto justify-content-end">
                     <li class="nav-item">
                         <div class="search-container">
-                            <input type="text" id="searchInput" class="form-control search" placeholder="Search">
+                            <input type="text" id="searchInput" class="form-control search" value="{{Session::get('search_query')}}" placeholder="Search">
                             <button class="border-0 ic-search" type="button" id="searchButton"><i
                                     class="fas fa-search"></i></button>
                         </div>
@@ -80,7 +80,7 @@
                         <a class="nav-link" href="/allProducts">ALL PRODUCTS</a>
                     </li>
                     <li class="nav-item flex-fill">
-                        <a class="nav-link" href="#">BEST SELLER</a>
+                        <a class="nav-link" href="/allProducts">BEST SELLER</a>
                     </li>
                     <li class="logo-nav">
                         <a class="nav-link" href="/"><img class="img-logo" src="../../images/icon.png"
@@ -188,7 +188,6 @@
                 search_query: searchQuery
             },
             success: function(response) {
-                // Xử lý dữ liệu trả về
                 var newUrl = "{{ route('products.search') }}" + '?search_query=' + encodeURIComponent(
                     searchQuery);
                 window.history.pushState({
@@ -197,7 +196,6 @@
                 window.location.reload();
             },
             error: function(xhr) {
-                // Xử lý lỗi
                 console.log(xhr.responseText);
             }
         });
@@ -231,7 +229,6 @@
                 search_query: searchQuery2
             },
             success: function(response) {
-                // Xử lý dữ liệu trả về
                 var newUrl = "{{ route('products.search') }}" + '?search_query=' + encodeURIComponent(
                     searchQuery2);
                 window.history.pushState({
@@ -240,7 +237,6 @@
                 window.location.reload();
             },
             error: function(xhr) {
-                // Xử lý lỗi
                 console.log(xhr.responseText);
             }
         });

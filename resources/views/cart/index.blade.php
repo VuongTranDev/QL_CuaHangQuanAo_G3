@@ -1,7 +1,7 @@
 @extends('layouts.cartapp')
 
 @section('main')
-    <div class="container-xl">
+    <div class="container-fluid ps-5 pe-5">
         <div class="row">
             <div class="col-md-8">
                 <div class="cart-title" style="background-color: #ebebeb;">

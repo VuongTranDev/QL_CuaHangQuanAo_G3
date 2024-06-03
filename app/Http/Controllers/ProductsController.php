@@ -141,38 +141,31 @@ class ProductsController extends Controller
                $search_query = request()->input('search_query');
           }
 
-          $search_product = DB::table('sanpham')
-               ->where('TENSANPHAM', 'LIKE', '%' . $search_query . '%')
-               ->get();
+          $query = DB::table('sanpham')
+               ->where('TENSANPHAM', 'LIKE', '%' . $search_query . '%');
 
-          $count_product = $search_product->count();
-
-          if (isset($_GET['sort_by'])) {
-               $sort_by = $_GET['sort_by'];
+          if (request()->has('sort_by')) {
+               $sort_by = request()->input('sort_by');
                if ($sort_by == 'giam_dan') {
-                    $search_product = DB::table('sanpham')
-                         ->where('TENSANPHAM', 'LIKE', '%' . $search_query . '%')
-                         ->orderBy('GIA', 'desc')
-                         ->get();
+                    $query->orderBy('GIA', 'desc');
                } else if ($sort_by == 'tang_dan') {
-                    $search_product = DB::table('sanpham')
-                         ->where('TENSANPHAM', 'LIKE', '%' . $search_query . '%')
-                         ->orderBy('GIA', 'asc')
-                         ->get();
+                    $query->orderBy('GIA', 'asc');
                } else if ($sort_by == 'kytu_za') {
-                    $search_product = DB::table('sanpham')
-                         ->where('TENSANPHAM', 'LIKE', '%' . $search_query . '%')
-                         ->orderBy("TENSANPHAM", 'desc')
-                         ->get();
-               } else {
-                    $search_product = DB::table('sanpham')
-                         ->where('TENSANPHAM', 'LIKE', '%' . $search_query . '%')
-                         ->orderBy("TENSANPHAM", 'asc')
-                         ->get();
+                    $query->orderBy("TENSANPHAM", 'desc');
+               } else if ($sort_by == 'kytu_az') {
+                    $query->orderBy("TENSANPHAM", 'asc');
                }
           }
+
+          Session::put('search_query', $search_query);
+
+          $search_product = $query->paginate(12);
+          $count_product = DB::table('sanpham')
+               ->where('TENSANPHAM', 'LIKE', '%' . $search_query . '%')->count();
+
           return view('products.search', compact('search_product', 'count_product', 'search_query'));
      }
+
      public function getNextMAGH()
      {
           $lastMAGH = DB::table('GIOHANG')->select('MAGH')

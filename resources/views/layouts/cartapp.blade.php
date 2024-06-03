@@ -31,7 +31,10 @@
 
     @include('layouts.footer')
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/node_modules/slick-carousel/slick/slick.min.js"></script>
+    <link rel="stylesheet" href="../../js/javascript.js">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         AOS.init();
     </script>
