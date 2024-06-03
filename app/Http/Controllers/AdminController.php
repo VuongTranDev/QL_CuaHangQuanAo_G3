@@ -66,16 +66,10 @@ class AdminController extends Controller
                 ->join('khachhang', 'taikhoanuser.MAUSER', '=', 'khachhang.MATKUSER')
                 ->where('khachhang.MATKUSER',$result->MAUSER)
                 ->first();
-           
-                if( $data->TENKH == "")
-                    Session::put('ten',"Chưa có tên") ;
-<<<<<<< HEAD
-=======
                 Session::put('ten',$data->TENKH) ;
                 if( $data->TENKH == "")
                 {
                     Session::put('ten',"Chưa có tên") ;
->>>>>>> HoanKien
                 }
                 else {
                     Session::put('ten',$data->TENTK) ;
@@ -84,10 +78,6 @@ class AdminController extends Controller
                     
                 return Redirect::to('/') ;
 
-<<<<<<< HEAD
-=======
-                return Redirect:: to('/') ;
->>>>>>> HoanKien
             }
         }
         else
