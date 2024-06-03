@@ -312,6 +312,7 @@ Route::delete('/deleteAddress/{id}', [
     HomeController::class,
     'deleteAddress'
 ])->name('home.deleteAddress');
+
 Route::post('/updateDetailProduct{ID}',
 [
     DetailsProductController::class,
