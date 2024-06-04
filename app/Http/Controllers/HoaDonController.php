@@ -20,9 +20,6 @@ class HoaDonController extends Controller
             Session::put('message', "Đăng nhập không thành công");
             return view('admin_login');
         }
-        
-
-        
 
         $cart = DB::select("SELECT GIOHANG.MASP, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
         FROM GIOHANG 

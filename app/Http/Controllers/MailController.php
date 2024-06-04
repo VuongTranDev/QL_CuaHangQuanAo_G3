@@ -69,16 +69,16 @@ class MailController extends Controller
         if(!$diaChi){
             return back();
         }
+
         $cart = DB::select("SELECT GIOHANG.MASP ,SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
         FROM GIOHANG 
         INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
-        WHERE MAKH = ?", [$makh]);
+        WHERE MAKH = ? AND CHONTHANHTOAN = 1", [$makh]);
 
 
-
-        foreach ($cart as $item) {
-            DB::update("UPDATE GIOHANG SET CHONTHANHTOAN = 1 WHERE MAKH = ? AND MASP = ? AND SIZE = ?", [$makh, $item->MASP, $item->SIZE]);
-        }
+        // foreach ($cart as $item) {
+        //     DB::update("UPDATE GIOHANG SET CHONTHANHTOAN = 1 WHERE MAKH = ? AND MASP = ? AND SIZE = ?", [$makh, $item->MASP, $item->SIZE]);
+        // }
 
         $cartUpdate = DB::select("SELECT GIOHANG.MASP, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
         FROM GIOHANG 
