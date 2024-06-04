@@ -266,28 +266,38 @@ $(document).ready(function() {
         var to_date = $('#datepicker2').val();
         
         $.ajax({
-            url: "{{url('/thongKeSanLuong')}}",
-            method: "POST",
-            dataType: "JSON",
-            data: {from_date: from_date, to_date: to_date, _token: _token},
-            success: function(data) {
-                console.log(data);
+    url: "{{url('/thongKeSanLuong')}}",
+    method: "POST",
+    dataType: "JSON",
+    data: {from_date: from_date, to_date: to_date, _token: _token},
+    success: function(data) {
+        console.log(data);
 
-                // Xóa biểu đồ cũ
-                $('#chart').empty();
+        // Xóa biểu đồ cũ
+        $('#chart').empty();
 
-                // Khởi tạo lại biểu đồ với dữ liệu mới
-                new Morris.Bar({
-                    element: 'chart',
-                    lineColors: ['#819C79', '#fc8710', '#FF6541'],
-                    parseTime: false,
-                    xkey: 'thoiGian',
-                    ykeys: ['soLuong', 'tongTien'],
-                    labels: ['Số Lượng', 'Tổng Tiền'],
-                    data: data
-                });
+        // Khởi tạo lại biểu đồ với dữ liệu mới
+        new Morris.Bar({
+            element: 'chart',
+            lineColors: ['#819C79', '#fc8710', '#FF6541'],
+            parseTime: false,
+            xkey: 'thoiGian',
+            ykeys: ['soLuong', 'tongTien'],
+            labels: ['Số Lượng', 'Tổng Tiền'],
+            data: data,
+            hoverCallback: function (index, options, content, row) {
+                return content;
             }
         });
+
+        // Thêm sự kiện di chuột ra ngoài để ẩn thông tin
+        $('#chart').on('mouseleave', function() {
+            // Tắt thông tin khi di chuột ra ngoài
+            $('.morris-hover').hide();
+        });
+    }
+}
+);
     });
 });
 

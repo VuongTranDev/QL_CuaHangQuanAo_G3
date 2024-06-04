@@ -238,15 +238,11 @@ class AdminController extends Controller
                 $data = $request->all();
                 $fromdate = $data['from_date'];
                 $todate = $data['to_date'];
-
-                // Lấy dữ liệu từ bảng 'hoadon'
                 $get = DB::table('hoadon')
                     ->whereBetween('NGAYDATHANG', [$fromdate, $todate])
                     ->orderBy('NGAYDATHANG', 'ASC')
                     ->get();
-
                 $charData = [];
-
                 foreach ($get as $key => $val) {
                     $charData[] = array(
                         'thoiGian' => $val->NGAYDATHANG,

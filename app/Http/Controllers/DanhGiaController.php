@@ -17,30 +17,42 @@ class DanhGiaController extends Controller
     }
 
     public function themDanhGia(Request $request)
-    {
-        if (Session::get('makh') == null) {
-            return Redirect('/admin_login');
+{
+    if (Session::get('makh') == null) {
+        return Redirect('/admin_login');
+    } else {
+        $maKH = Session::get('makh');
+        $maDG = $this->createMADANHGIA();
+        $maCTHD = $request->input('MACTHD');
+        $noiDung = $request->input('NOIDUNG');
+        $soSao = $request->input('SOSAO');
+        
+        if($maCTHD == null) {
+            $maCTHD = ""; 
         } else {
-            $maKH = Session::get('makh');
-            $maDG = $this->createMADANHGIA();
-            // $maCTHD = $request->input('MACTHD');
-            $noiDung = $request->input('NOIDUNG');
-            $soSao = $request->input('SOSAO');
-            if($soSao < 4)
-                $tinhtrang = 0;
-            else
-                $tinhtrang = 1 ;
-            DB::table('danhgia')->insert([
-                'MAKH' => $maKH,
-                'MADANHGIA' => $maDG,
-                // 'MACTHD' => $maCTHD,
-                'NOIDUNG' => $noiDung,
-                'SOSAO' => $soSao,
-                'TINHTRANG' => $tinhtrang,
-            ]);
-            return Redirect()->back();
+            // Kiểm tra nếu MACTHD có tồn tại trong bảng chitiethoadon
+            $exists = DB::table('chitiethoadon')->where('MACHITIETHOADON', $maCTHD)->first();
+            dd($exists) ;
+            if (!$exists) {
+                return Redirect()->back()->withErrors(['MACTHD không tồn tại trong bảng chitiethoadon']);
+            }
         }
+
+        $tinhtrang = ($soSao < 4) ? 0 : 1;
+      
+        DB::table('danhgia')->insert([
+            'MAKH' => $maKH,
+            'MADANHGIA' => $maDG,
+            'MACTHD' => $maCTHD,
+            'NOIDUNG' => $noiDung,
+            'SOSAO' => $soSao,
+            'TINHTRANG' => $tinhtrang,
+        ]);
+
+        return Redirect()->back();
     }
+}
+
 
     public function xoaDanhGia($id)
     {

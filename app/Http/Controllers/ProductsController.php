@@ -49,7 +49,6 @@ class ProductsController extends Controller
           $size = DB::table('size')->where('MASANPHAM', $masanpham)->get();
           $sanpham = DB::table('sanpham')->where('MASANPHAM', $masanpham)->get();
           $sanphamgoiy = DB::table('sanpham')->inRandomOrder()->limit(8)->get();
-
           $sanphamdaco = DB::table('sanpham')->where('MASANPHAM', $masanpham)->first();
           $tenloai = DB::table('sanpham')
                ->join('loaisanpham', 'sanpham.MALOAI', '=', 'loaisanpham.MALOAI')
