@@ -18,7 +18,7 @@ class MailController extends Controller
     public function __construct()
     {
     }
-    
+
     public function generateNextMaChiTietHoaDon()
     {
         $lastMaChiTietHoaDon = DB::table('CHITIETHOADON')->max('MACHITIETHOADON');
@@ -37,13 +37,16 @@ class MailController extends Controller
     }
     public function generateNextMaHoaDon()
     {
-        $lastMaHoaDon = DB::table('HOADON')->max('MAHOADON');
+        $makh = Session::get('makh');
+        $lastMaHoaDon = DB::table('HOADON')
+            ->where('MAKHACHHANG', $makh)
+            ->first();
 
-        if (!$lastMaHoaDon) {
-            return 'HD001';
+        if ($lastMaHoaDon) {
+            return $lastMaHoaDon[0]->MAHOADON;
         }
 
-        $numberPart = intval(substr($lastMaHoaDon, 2));
+        $numberPart = intval(substr($lastMaHoaDon[0]->MAHOADON, 2));
 
         $newNumberPart = $numberPart + 1;
 
@@ -52,7 +55,7 @@ class MailController extends Controller
         return $newMaHoaDon;
     }
 
-    
+
 
     public function sendEmail(Request $request)
     {
@@ -66,7 +69,7 @@ class MailController extends Controller
         $phiVanChuyen = $request->input('phiVanChuyen');
         $diaChi = $request->input('diaChi');
 
-        if(!$diaChi){
+        if (!$diaChi) {
             return back();
         }
 
@@ -98,13 +101,13 @@ class MailController extends Controller
                 'TINHTRANG' => 0,
             ]);
         }
-        $hoaDonUpdate = DB::table('HOADON')->where('MAKHACHHANG', $makh)->first();
+        $hoaDonUpdate = DB::select("SELECT * FROM HOADON WHERE MAKHACHHANG = ?", [$makh]);
         foreach ($cartUpdate as $item) {
             $newMaChiTietHoaDon = $this->generateNextMaChiTietHoaDon();
             $tinhtrang = 0;
             DB::table('CHITIETHOADON')->insert([
                 'MACHITIETHOADON' => $newMaChiTietHoaDon,
-                'MAHOADON' => $hoaDonUpdate->MAHOADON,
+                'MAHOADON' => $hoaDonUpdate[0]->MAHOADON,
                 'MASP' => $item->MASP,
                 'SIZE' => $item->SIZE,
                 'SOLUONG' => $item->SOLUONG,
@@ -126,16 +129,16 @@ class MailController extends Controller
                     'TONGTIEN' => $hoaDon->TONGTIEN + $item->THANHTIEN,
                     'TINHTRANG' => $tinhTrang,
                 ]);
-                DB::table('GIOHANG')
-                    ->where('MAKH', $makh)
-                    ->where('MASP', $item->MASP)
-                    ->where('SIZE', $item->SIZE)
-                    ->delete();
+            DB::table('GIOHANG')
+                ->where('MAKH', $makh)
+                ->where('MASP', $item->MASP)
+                ->where('SIZE', $item->SIZE)
+                ->delete();
         }
 
 
 
-        
+
         $tenKhachHang = DB::select("SELECT TENKH, EMAIL FROM KHACHHANG WHERE MAKH = ?", [$makh]);
         $ten = $tenKhachHang[0]->TENKH;
         $this->email = $tenKhachHang[0]->EMAIL;
@@ -147,7 +150,7 @@ class MailController extends Controller
             INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = CHITIETHOADON.MASP 
             INNER JOIN HOADON ON HOADON.MAHOADON = CHITIETHOADON.MAHOADON
             WHERE HOADON.MAKHACHHANG = ? AND CHITIETHOADON.TINHTRANG = 0", [$makh]);
-        
+
 
         $emailParams = new \stdClass();
         $emailParams->usersName = $ten;
@@ -160,10 +163,10 @@ class MailController extends Controller
 
         $tinhTrangCTHD = 1;
         DB::table('CHITIETHOADON')
-        ->where('MAHOADON', $hoaDon->MAHOADON)
-        ->update([
-            'TINHTRANG' => $tinhTrangCTHD,
-        ]);
+            ->where('MAHOADON', $hoaDon->MAHOADON)
+            ->update([
+                'TINHTRANG' => $tinhTrangCTHD,
+            ]);
         Mail::to($emailParams->usersEmail)->send(new XacNhanDonHang($emailParams));
     }
 

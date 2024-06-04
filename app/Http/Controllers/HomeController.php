@@ -50,6 +50,13 @@ class HomeController extends Controller
         if ($makh == null) {
             return redirect('/admin_login');
         }
+        $cart = DB::select("SELECT SANPHAM.MASANPHAM, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
+        FROM GIOHANG 
+        INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+        WHERE MAKH = ?", [$makh]);
+        $sogiohang = count($cart);
+
+        Session::put('sogiohang', $sogiohang);
         $profile = DB::table('khachhang')
             ->join('taikhoanuser', 'khachhang.MATKUSER', '=', 'taikhoanuser.MAUSER')
             ->where('khachhang.MAKH', $makh)
@@ -97,8 +104,16 @@ class HomeController extends Controller
 
     public function showAddress()
     {
+        
         $makh = Session::get('makh');
 
+        $cart = DB::select("SELECT SANPHAM.MASANPHAM, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
+        FROM GIOHANG 
+        INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+        WHERE MAKH = ?", [$makh]);
+        $sogiohang = count($cart);
+
+        Session::put('sogiohang', $sogiohang);
         $profile = DB::table('khachhang')
             ->join('diachi', 'khachhang.MAKH', '=', 'diachi.MAKH')
             ->where('khachhang.MAKH', $makh)
@@ -181,10 +196,18 @@ class HomeController extends Controller
     {
         $makh = Session::get('makh');
 
+        $cart = DB::select("SELECT SANPHAM.MASANPHAM, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
+        FROM GIOHANG 
+        INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+        WHERE MAKH = ?", [$makh]);
+        $sogiohang = count($cart);
+
+        Session::put('sogiohang', $sogiohang);
         $donmua = DB::select("SELECT *, CHITIETHOADON.SOLUONG AS SL FROM CHITIETHOADON
        INNER JOIN SANPHAM ON CHITIETHOADON.MASP = SANPHAM.MASANPHAM
        INNER JOIN HOADON ON HOADON.MAHOADON = CHITIETHOADON.MAHOADON
        WHERE MAKHACHHANG = ?", [$makh]);
+
 
 
 
