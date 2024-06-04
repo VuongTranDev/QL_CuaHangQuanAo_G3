@@ -184,6 +184,9 @@ class CartController extends Controller
 
         $selectedItems = $request->input('selected_items', []);
 
+        if(!$selectedItems){
+            return back();
+        }
         $cart = [];
         foreach ($selectedItems as $item) {
             list($masanpham, $size) = explode('|', $item);
