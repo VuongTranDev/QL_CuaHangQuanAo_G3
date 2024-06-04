@@ -55,6 +55,14 @@ class HomeController extends Controller
             ->where('khachhang.MAKH', $makh)
             ->get();
 
+        $cart = DB::select("SELECT SANPHAM.MASANPHAM, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
+        FROM GIOHANG 
+        INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+        WHERE MAKH = ?", [$makh]);
+        $sogiohang = count($cart);
+
+        Session::put('sogiohang', $sogiohang);
+
         return view('home.profile', compact('profile'));
     }
 
@@ -106,6 +114,14 @@ class HomeController extends Controller
 
         $locationController = new LocationController();
         $response = $locationController->getProvinces();
+
+        $cart = DB::select("SELECT SANPHAM.MASANPHAM, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
+        FROM GIOHANG 
+        INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+        WHERE MAKH = ?", [$makh]);
+        $sogiohang = count($cart);
+
+        Session::put('sogiohang', $sogiohang);
 
         if ($response->getStatusCode() == 200) {
             $provinces = json_decode($response->getContent());

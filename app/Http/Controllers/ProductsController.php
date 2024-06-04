@@ -43,6 +43,7 @@ class ProductsController extends Controller
 
      public function showDetailProduct($masanpham)
      {
+          $makh = Session::get('makh');
           session(['session_masp' => $masanpham]);
           $hinhanh = DB::table('hinhanh')->where('MASANPHAM', $masanpham)->get();
           $mota = DB::table('motasanpham')->where('MASANPHAM', $masanpham)->get();
@@ -68,19 +69,47 @@ class ProductsController extends Controller
 
           $linkDanhMuc = $this->productsByType($tenloai);
 
+          if ($makh == null) {
+               return back();
+          } else {
+               $MACTHD = DB::select(
+                    "
+                    SELECT MAX(CHITIETHOADON.MACHITIETHOADON) AS max_macthd
+                    FROM CHITIETHOADON
+                    INNER JOIN SANPHAM ON CHITIETHOADON.MASP = SANPHAM.MASANPHAM
+                    INNER JOIN HOADON ON HOADON.MAHOADON = CHITIETHOADON.MAHOADON
+                    WHERE HOADON.MAKHACHHANG = ? AND SANPHAM.MASANPHAM = ?",
+                    [$makh, $masanpham]
+                );
+                
+                if (!empty($MACTHD) && isset($MACTHD[0]->max_macthd)) {
+                    Session::put('macthd', $MACTHD[0]->max_macthd);
+                } else {
+                    // Handle the case where no rows are returned or max_macthd is not set
+                    Session::put('macthd', null);
+                }
+                
+          }
+
+
+
+
           $danhgia = DB::table('danhgia')
                ->join('khachhang', 'danhgia.MAKH', '=', 'khachhang.MAKH')
-               ->select('khachhang.TENKH', 'danhgia.SOSAO', 'danhgia.NOIDUNG', 'danhgia.MAKH', 'danhgia.ID')
+               ->join('chitiethoadon', 'danhgia.MACTHD', '=', 'chitiethoadon.MACHITIETHOADON')
+               ->select('khachhang.TENKH', 'danhgia.SOSAO', 'danhgia.NOIDUNG', 'danhgia.MAKH', 'danhgia.ID', 'chitiethoadon.MASP')
                ->orderBy('MADANHGIA', 'desc')
+               ->where('danhgia.TINHTRANG', 1)
+               ->where('chitiethoadon.MASP', $masanpham)
                ->limit(5)
                ->get();
 
           $countDanhGia = $danhgia->count();
-          $countDanhGia5s = DB::table('danhgia')->where('SOSAO', 5)->count();
-          $countDanhGia4s = DB::table('danhgia')->where('SOSAO', 4)->count();
-          $countDanhGia3s = DB::table('danhgia')->where('SOSAO', 3)->count();
-          $countDanhGia2s = DB::table('danhgia')->where('SOSAO', 2)->count();
-          $countDanhGia1s = DB::table('danhgia')->where('SOSAO', 1)->count();
+          $countDanhGia5s = DB::table('danhgia')->where('SOSAO', 5)->where('TINHTRANG', 1)->count();
+          $countDanhGia4s = DB::table('danhgia')->where('SOSAO', 4)->where('TINHTRANG', 1)->count();
+          $countDanhGia3s = DB::table('danhgia')->where('SOSAO', 3)->where('TINHTRANG', 1)->count();
+          $countDanhGia2s = DB::table('danhgia')->where('SOSAO', 2)->where('TINHTRANG', 1)->count();
+          $countDanhGia1s = DB::table('danhgia')->where('SOSAO', 1)->where('TINHTRANG', 1)->count();
 
           $totalStar = DB::table('danhgia')->sum('SOSAO');
           $totalReviews = DB::table('danhgia')->count();
