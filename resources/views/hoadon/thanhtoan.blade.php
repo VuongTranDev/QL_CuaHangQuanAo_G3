@@ -86,9 +86,9 @@
                             </span>
                             <input type="text" class="form-control" placeholder="Địa chỉ" aria-label="address"
                                 aria-describedby="addon-wrapping" value="{{ $item->DIACHI }}" readonly>
-                            <div class="input-group-text">
-                                <input class="form-check-input mt-0" type="radio" value="{{ $item->DIACHI }}"
-                                    aria-label="Checkbox for following text input" name="dia-chi-user-click">
+                            <div class="input-group-text" id="{{ $item->DIACHI }}">
+                                <input id="{{ $item->DIACHI }}" class="form-check-input mt-0" type="radio" value="{{ $item->DIACHI }}" 
+                                     aria-label="Checkbox for following text input" name="dia-chi-user-click">
                             </div>
                         </div>
                     @endforeach

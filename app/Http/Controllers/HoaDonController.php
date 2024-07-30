@@ -25,6 +25,9 @@ class HoaDonController extends Controller
         FROM GIOHANG 
         INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
         WHERE MAKH = ?", [$makh]);
+        foreach ($cart as $item) {
+            DB::update("UPDATE GIOHANG SET CHONTHANHTOAN = 1 WHERE MAKH = ? AND MASP = ? AND SIZE = ?", [$makh, $item->MASP, $item->SIZE]);
+        }
         $profile = DB::select("SELECT TENKH, SODIENTHOAI, DIACHI FROM KHACHHANG WHERE MAKH = ?", [$makh]);
 
         $sogiohang = count($cart);

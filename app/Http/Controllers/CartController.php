@@ -267,6 +267,13 @@ class CartController extends Controller
             WHERE MAKH = ? AND CHONTHANHTOAN = 1", [$makh]);
         }
 
+        foreach($cart as $item){
+            DB::table('GIOHANG')
+                ->where('MAKH', $makh)
+                ->where('MASP', $item->MASP)
+                ->where('SIZE', $item->SIZE)
+                ->update(['CHONTHANHTOAN' => 1]);
+        }
 
         $tongtien = 0;
         $tongtienSP = 0;
