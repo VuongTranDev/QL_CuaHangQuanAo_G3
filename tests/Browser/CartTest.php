@@ -24,6 +24,7 @@ class CartTest extends DuskTestCase
                     ->click('#dangnhap');
         });
         
+        // Thêm vào giỏ hàng
         $this->browse(function (Browser $browser) {
             $browser
             ->waitFor('#A001', 4) 
@@ -37,6 +38,7 @@ class CartTest extends DuskTestCase
         Sleep::for(5)->seconds();
 
 
+        // Thanh toán giỏ hàng
         $this->browse(function (Browser $browser) {
             $browser->visit('/cart/index')
             ->waitFor('#thanh-toan-tat-ca', 10) 
