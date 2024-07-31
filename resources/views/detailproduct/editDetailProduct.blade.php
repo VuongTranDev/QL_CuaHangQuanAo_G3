@@ -18,7 +18,7 @@
                 @foreach($editSP as $key)
                 <div class="position-center">
                  
-                    <form role="form" action="{{ URL::to('/updateDetailProduct'.$key->ID) }}" method="post" >
+                    <form role="form" action="{{ URL::to('/updateDetailProduct'.$key->ID) }}" method="post" enctype="multipart/form-data" >
                         {{ csrf_field() }}              
                         <div class="form-group">
                           <label for="exampleInputPassword1">Mã sản phẩm</label>
@@ -28,23 +28,7 @@
                             <label for="exampleInputEmail1">Tên sản phẩm</label>
                             <input style="width:" type="text" name="tenSP" value="{{ $key->TENSANPHAM }}" class="form-control" id="exampleInputEmail1">
                         </div>
-                        {{-- <div class="form-group">
-                            <i class="fa fa-plus-square plus-icon"></i>
-                            <label for="exampleInputEmail1">Mô tả</label>
-                            <div class="input-group-append">
-                            </div>
-                            @foreach($mota as $index => $pr) 
-                                <div class="input-group mb-3">
-                                    <input style="margin-top: 10px" type="text" name="mota[]" value="{{ $pr->MOTA }}" class="form-control" id="exampleInputEmail1">
-                                    
-                                    <input type="hidden" name="mota_id[]" value="{{ $pr->ID }}">
-                                </div>
-                            @endforeach
-                            <div class="hidden-inputs" style="display:none">
-                                <!-- Input mới sẽ được thêm vào đây -->
-                            </div>
-                        </div> --}}
-                        
+                       
                         <div class="form-group">
                             <label for="exampleInputEmail1">Giá </label>
                             <input style="width:" type="text" name="giaSP" value="{{ $key->GIA }}" class="form-control" id="exampleInputEmail1">
@@ -55,7 +39,7 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputFile">Hình ảnh</label>
-                            <img src="{{ URL('images/' . $key->HINHANH) }}" alt="Hình ảnh sản phẩm" style="max-width: 100px; max-height: 100px;">
+                            <img src="{{ URL('images/'. $key->HINHANH) }}" alt="Hình ảnh sản phẩm" style="max-width: 100px; max-height: 100px;">
                             <input name="hinhanh"  type="file" id="exampleInputFile">
                             <p class="help-block">Hình ảnh của sản phẩm.</p>
                         </div>

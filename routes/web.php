@@ -182,7 +182,7 @@ Route::get('/quanLyKH',
 Route::post('/updateTTKH{ID}',
 [
     AdminController::class,
-    "   "
+    "updateTTKH"
 ]);
 
 Route::get('/editTTKH/{ID}',
@@ -407,7 +407,7 @@ Route::get('/danhgias/showDanhGia', [
 Route::get('/admin_login',[
     AdminController::class,
     "index"
-]) ;
+]) ->name('admin_login');
 Route::get('/admin_content',[
     AdminController::class,
     "adminlayout"
@@ -487,7 +487,7 @@ Route::get('/deleteBrand/{ID}', [
 ]);
 
 // DetailPRoduc -- ADMIN
-Route::get('/addDetailProduct',
+Route::post('/addDetailProduct',
 [
     DetailsProductController::class,
     "addDetailProduct"
@@ -502,7 +502,7 @@ Route::get('/allDetailProduct',
 [
     DetailsProductController::class,
     "allDetailProDuct"
-]);
+])->name('allDetailProduct');
 
 Route::get('/editDetailProduct/{ID}',
 [

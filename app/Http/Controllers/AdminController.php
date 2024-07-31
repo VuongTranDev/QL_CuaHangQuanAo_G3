@@ -38,7 +38,6 @@ class AdminController extends Controller
     public function login(Request $request)
     {
         Session::put('previous_url', url()->previous());
-        
         $login_TK = $request->login_tenTK;
         $login_MK = ($request->login_mk);
         $result = DB::table('taikhoanuser')->where('TENTK', $login_TK)->where('MATKHAU', $login_MK)->first();
@@ -82,9 +81,10 @@ class AdminController extends Controller
         else
         {
             Session::put('message',"Đăng nhập không thành công") ;
-            return view('admin_login');
+            return Redirect::to('admin_login');
         }
-    }
+        
+        }
 
     public function register(Request $request)
     {

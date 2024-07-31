@@ -67,10 +67,6 @@
                 <h2>Create your Account</h2>
 				<form action="{{ URL::to("/DangKiTK") }}" method="post">
 					{!! csrf_field() !!}
-                {{-- <label>
-                    <span>Họ và tên</span>
-                    <input type="text" id="nameregis" name = "name" />
-                </label> --}}
                 <label>
                     <span>Tài khoản</span>
                     <input type="text" id="usernameregis"  name = "TenTK" />

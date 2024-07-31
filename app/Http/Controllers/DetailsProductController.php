@@ -34,7 +34,6 @@ class DetailsProductController extends Controller
             $data['MANH'] = $request->tenNH;
             $data['MALOAI'] = $request->tenLSP;
             $file = $request->file('hinhanh');
-   
             // Kiểm tra xem có tệp hình ảnh được gửi không
             $filename = null;
             if ($file )
@@ -48,7 +47,7 @@ class DetailsProductController extends Controller
            
             DB::table('sanpham')->insert($data);
             Session::put('message', 'Thêm thành công!!!');
-            return Redirect::to('addDetailProduct');
+            return Redirect::to('detailproDuct.allDetailProDuct');
         } catch (\Exception $e) {
             Session::put('message', 'Hãy xem lại thông tin sản phẩm!!!');
             return Redirect::to('addDetailProduct');
@@ -59,7 +58,6 @@ class DetailsProductController extends Controller
         $this->AuthLogin();
         $product = DB::table('loaisanpham')->get();
         $brand = DB::table('nhanhieu')->get();
-        
         return view('detailproduct.addDetailProduct', compact('product', 'brand'));
     }
     public function allDetailProDuct()
@@ -97,35 +95,28 @@ class DetailsProductController extends Controller
             $data['CHATLIEU'] = $request->chatlieuSP;
             $data['MANH'] = $request->tenNH;
             $data['MALOAI'] = $request->tenLSP;
-            $file = $request->file('hinhanh');
-   
+            $file = $request->hinhanh;
+           
             // Kiểm tra xem có tệp hình ảnh được gửi không
             $filename = null;
-            if ($file )
+            if ($file)
              {  
                 // upload file
-                $filename = rand(0.99).'.'. $file->getClientOriginalName();
+                $filename = mt_rand(0,99). $file->getClientOriginalName();
+              
                 // Di chuyển tệp hình ảnh vào thư mục public/images với tên gốcss
-                $file->move('public/images', $filename);
+                $file->move(public_path('images'), $filename);
+                $data['HINHANH'] = $filename;
             }
-            $data['HINHANH'] = $request->hinhanh;
+            else
+            {
+                $data['HINHANH'] = $request->hinhanh; // Sử dụng tên hình ảnh cũ nếu không có hình ảnh mới
+            }
+        
             // Cập nhật bảng sanpham
             DB::table('sanpham')->where('ID', $ID)->update($data);
             // Lấy ID của sản phẩm
-            $sanphamID = DB::table('sanpham')->where('ID', $ID)->value('MASANPHAM');
-            if ($request->has('mota')) 
-            {
-                foreach ($request->mota as $index => $mota)
-                 {
-                    $motaData = [
-                        'MOTA' => $mota
-                    ];
-                    dd($motaData) ;
-                    $motaID = $request->mota_id[$index]; 
-                   
-                    DB::table('motasanpham')->where('ID', $motaID)->update($motaData);
-                }
-            }
+           
             Session::put('message', 'Cập nhật thành công!!!');
             return Redirect::to('allDetailProduct');
         } catch (\Exception $e) {

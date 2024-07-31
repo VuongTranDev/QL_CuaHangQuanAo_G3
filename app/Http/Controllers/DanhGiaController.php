@@ -30,14 +30,6 @@ class DanhGiaController extends Controller
         if($maCTHD == null) {
             $maCTHD = ""; 
         } else {
-<<<<<<< HEAD
-            // Kiểm tra nếu MACTHD có tồn tại trong bảng chitiethoadon
-            $exists = DB::table('chitiethoadon')->where('MACHITIETHOADON', $maCTHD)->first();
-            dd($exists) ;
-            if (!$exists) {
-                return Redirect()->back()->withErrors(['MACTHD không tồn tại trong bảng chitiethoadon']);
-            }
-=======
             $maKH = Session::get('makh');
             $maDG = $this->createMADANHGIA();
             $maCTHD = $request->input('MACTHD');
@@ -56,7 +48,6 @@ class DanhGiaController extends Controller
                 'TINHTRANG' => $tinhtrang,
             ]);
             return Redirect()->back();
->>>>>>> origin
         }
 
         $tinhtrang = ($soSao < 4) ? 0 : 1;
