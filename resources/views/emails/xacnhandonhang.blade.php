@@ -191,18 +191,19 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        var prices = document.querySelectorAll(".price, .thanh-tien, .tong-tien, .phi-van-chuyen");
+            var prices = document.querySelectorAll(".price, .thanh-tien, .phi-van-chuyen, .tong-tien");
 
-        prices.forEach(function(price) {
-            var number = parseFloat(price.innerHTML);
+            prices.forEach(function(price) {
+                var number = parseFloat(price.innerHTML);
 
-            var formattedPrice = number.toLocaleString();
+                var formattedPrice = number.toLocaleString();
 
 
-            price.innerHTML = formattedPrice + "₫";
-            console.log(formattedPrice);
+                price.innerHTML = formattedPrice + "₫";
+                console.log(formattedPrice);
+            });
         });
-    });
+
 </script>
 
 </html>
