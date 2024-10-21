@@ -24,9 +24,9 @@ class HomeController extends Controller
 
         $makh = Session::get('makh');
 
-        $cart = DB::select("SELECT SANPHAM.MASANPHAM, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
-        FROM GIOHANG 
-        INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+        $cart = DB::select("SELECT sanpham.MASANPHAM, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN , giohang.SIZE
+        FROM giohang 
+        INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP 
         WHERE MAKH = ?", [$makh]);
         $sogiohang = count($cart);
 
@@ -50,9 +50,9 @@ class HomeController extends Controller
         if ($makh == null) {
             return redirect('/admin_login');
         }
-        $cart = DB::select("SELECT SANPHAM.MASANPHAM, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
-        FROM GIOHANG 
-        INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+        $cart = DB::select("SELECT sanpham.MASANPHAM, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN , giohang.SIZE
+        FROM giohang 
+        INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP 
         WHERE MAKH = ?", [$makh]);
         $sogiohang = count($cart);
 
@@ -62,9 +62,9 @@ class HomeController extends Controller
             ->where('khachhang.MAKH', $makh)
             ->get();
 
-        $cart = DB::select("SELECT SANPHAM.MASANPHAM, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
-        FROM GIOHANG 
-        INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+        $cart = DB::select("SELECT sanpham.MASANPHAM, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN , giohang.SIZE
+        FROM giohang 
+        INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP 
         WHERE MAKH = ?", [$makh]);
         $sogiohang = count($cart);
 
@@ -115,9 +115,9 @@ class HomeController extends Controller
         
         $makh = Session::get('makh');
 
-        $cart = DB::select("SELECT SANPHAM.MASANPHAM, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
-        FROM GIOHANG 
-        INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+        $cart = DB::select("SELECT sanpham.MASANPHAM, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN , giohang.SIZE
+        FROM giohang 
+        INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP 
         WHERE MAKH = ?", [$makh]);
         $sogiohang = count($cart);
 
@@ -130,9 +130,9 @@ class HomeController extends Controller
         $locationController = new LocationController();
         $response = $locationController->getProvinces();
 
-        $cart = DB::select("SELECT SANPHAM.MASANPHAM, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
-        FROM GIOHANG 
-        INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+        $cart = DB::select("SELECT sanpham.MASANPHAM, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN , giohang.SIZE
+        FROM giohang 
+        INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP 
         WHERE MAKH = ?", [$makh]);
         $sogiohang = count($cart);
 
@@ -212,16 +212,16 @@ class HomeController extends Controller
     {
         $makh = Session::get('makh');
 
-        $cart = DB::select("SELECT SANPHAM.MASANPHAM, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
-        FROM GIOHANG 
-        INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+        $cart = DB::select("SELECT sanpham.MASANPHAM, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
+        FROM giohang 
+        INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP 
         WHERE MAKH = ?", [$makh]);
         $sogiohang = count($cart);
 
         Session::put('sogiohang', $sogiohang);
-        $donmua = DB::select("SELECT *, CHITIETHOADON.SOLUONG AS SL FROM CHITIETHOADON
-       INNER JOIN SANPHAM ON CHITIETHOADON.MASP = SANPHAM.MASANPHAM
-       INNER JOIN HOADON ON HOADON.MAHOADON = CHITIETHOADON.MAHOADON
+        $donmua = DB::select("SELECT *, chitiethoadon.SOLUONG AS SL FROM chitiethoadon
+       INNER JOIN sanpham ON chitiethoadon.MASP = sanpham.MASANPHAM
+       INNER JOIN hoadon ON hoadon.MAHOADON = chitiethoadon.MAHOADON
        WHERE MAKHACHHANG = ?", [$makh]);
 
 

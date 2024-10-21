@@ -113,7 +113,7 @@ class MailController extends Controller
         FROM giohang 
         INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP 
         WHERE MAKH = ? AND CHONTHANHTOAN = 1", [$makh]);
-        $hoaDon = DB::table('HOADON')->where('MAKHACHHANG', $makh)->first();
+        $hoaDon = DB::table('hoadon')->where('MAKHACHHANG', $makh)->first();
         if (!$hoaDon) {
             $newMaHoaDon = $this->generateNextMaHoaDon();
             DB::table('hoadon')->insert([
@@ -169,11 +169,11 @@ class MailController extends Controller
 
 
 
-        $CTHD = DB::select("SELECT CHITIETHOADON.MASP, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, CHITIETHOADON.SOLUONG, CHITIETHOADON.THANHTIEN, CHITIETHOADON.SIZE
-            FROM CHITIETHOADON 
-            INNER JOIN sanpham ON sanpham.MASANPHAM = CHITIETHOADON.MASP 
-            INNER JOIN HOADON ON HOADON.MAHOADON = CHITIETHOADON.MAHOADON
-            WHERE HOADON.MAKHACHHANG = ? AND CHITIETHOADON.TINHTRANG = 0", [$makh]);
+        $CTHD = DB::select("SELECT chitiethoadon.MASP, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, chitiethoadon.SOLUONG, chitiethoadon.THANHTIEN, chitiethoadon.SIZE
+            FROM chitiethoadon 
+            INNER JOIN sanpham ON sanpham.MASANPHAM = chitiethoadon.MASP 
+            INNER JOIN hoadon ON hoadon.MAHOADON = chitiethoadon.MAHOADON
+            WHERE hoadon.MAKHACHHANG = ? AND chitiethoadon.TINHTRANG = 0", [$makh]);
 
         $emailParams = new \stdClass();
         $emailParams->usersName = $ten;
