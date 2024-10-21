@@ -21,7 +21,7 @@ class MailController extends Controller
 
     public function generateNextMaChiTietHoaDon()
     {
-        $lastMaChiTietHoaDon = DB::table('CHITIETHOADON')->max('MACHITIETHOADON');
+        $lastMaChiTietHoaDon = DB::table('chitiethoadon')->max('MACHITIETHOADON');
 
         if (!$lastMaChiTietHoaDon) {
             return 'CTHD001';
@@ -58,7 +58,7 @@ class MailController extends Controller
     {
         $makh = Session::get('makh');
 
-        $existingMaHoaDon = DB::table('HOADON')
+        $existingMaHoaDon = DB::table('hoadon')
             ->where('MAKHACHHANG', $makh)
             ->first();
 
@@ -66,7 +66,7 @@ class MailController extends Controller
             return $existingMaHoaDon->MAHOADON;
         }
 
-        $lastGlobalMaHoaDon = DB::table('HOADON')
+        $lastGlobalMaHoaDon = DB::table('hoadon')
             ->orderBy('MAHOADON', 'desc')
             ->first();
 
@@ -101,22 +101,22 @@ class MailController extends Controller
             return back();
         }
 
-        $cart = DB::select("SELECT GIOHANG.MASP ,SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
-        FROM GIOHANG 
-        INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+        $cart = DB::select("SELECT giohang.MASP ,sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN , giohang.SIZE
+        FROM giohang 
+        INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP 
         WHERE MAKH = ? AND CHONTHANHTOAN = 1", [$makh]);
 
         // foreach ($cart as $item) {
-        //     DB::update("UPDATE GIOHANG SET CHONTHANHTOAN = 1 WHERE MAKH = ? AND MASP = ? AND SIZE = ?", [$makh, $item->MASP, $item->SIZE]);
+        //     DB::update("UPDATE giohang SET CHONTHANHTOAN = 1 WHERE MAKH = ? AND MASP = ? AND SIZE = ?", [$makh, $item->MASP, $item->SIZE]);
         // }
-        $cartUpdate = DB::select("SELECT GIOHANG.MASP, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
-        FROM GIOHANG 
-        INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+        $cartUpdate = DB::select("SELECT giohang.MASP, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN , giohang.SIZE
+        FROM giohang 
+        INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP 
         WHERE MAKH = ? AND CHONTHANHTOAN = 1", [$makh]);
         $hoaDon = DB::table('HOADON')->where('MAKHACHHANG', $makh)->first();
         if (!$hoaDon) {
             $newMaHoaDon = $this->generateNextMaHoaDon();
-            DB::table('HOADON')->insert([
+            DB::table('hoadon')->insert([
                 'MAHOADON' => $newMaHoaDon,
                 'MAKHACHHANG' => $makh,
                 'NGAYDATHANG' => Carbon::now('Asia/Ho_Chi_Minh'),
@@ -125,12 +125,12 @@ class MailController extends Controller
                 'TINHTRANG' => 0,
             ]);
         }
-        $hoaDonUpdate = DB::select("SELECT * FROM HOADON WHERE MAKHACHHANG = ?", [$makh]);
+        $hoaDonUpdate = DB::select("SELECT * FROM hoadon WHERE MAKHACHHANG = ?", [$makh]);
             foreach ($cartUpdate as $item) {
                 $newMaChiTietHoaDon = $this->generateNextMaChiTietHoaDon();
                 $tinhtrang = 0;
         
-                DB::table('CHITIETHOADON')->insert([
+                DB::table('chitiethoadon')->insert([
                     'MACHITIETHOADON' => $newMaChiTietHoaDon,
                     'MAHOADON' => $hoaDonUpdate[0]->MAHOADON,
                     'MASP' => $item->MASP,
@@ -141,11 +141,11 @@ class MailController extends Controller
                 ]);
             }
         
-        $chiTietHoaDon = DB::select("SELECT * FROM CHITIETHOADON WHERE MAHOADON = ?", [$hoaDon->MAHOADON]);
+        $chiTietHoaDon = DB::select("SELECT * FROM chitiethoadon WHERE MAHOADON = ?", [$hoaDon->MAHOADON]);
         $ngayHienTai = Carbon::now('Asia/Ho_Chi_Minh');
         foreach ($chiTietHoaDon as $item) {
             $tinhTrang = 1;
-            DB::table('HOADON')
+            DB::table('hoadon')
                 ->where('MAKHACHHANG', $makh)
                 ->update([
                     'MAHOADON' => $hoaDon->MAHOADON,
@@ -154,7 +154,7 @@ class MailController extends Controller
                     'TONGTIEN' => $hoaDon->TONGTIEN + $item->THANHTIEN,
                     'TINHTRANG' => $tinhTrang,
                 ]);
-            DB::table('GIOHANG')
+            DB::table('giohang')
                 ->where('MAKH', $makh)
                 ->where('MASP', $item->MASP)
                 ->where('SIZE', $item->SIZE)
@@ -163,15 +163,15 @@ class MailController extends Controller
 
 
 
-        $tenKhachHang = DB::select("SELECT TENKH, EMAIL FROM KHACHHANG WHERE MAKH = ?", [$makh]);
+        $tenKhachHang = DB::select("SELECT TENKH, EMAIL FROM khachhang WHERE MAKH = ?", [$makh]);
         $ten = $tenKhachHang[0]->TENKH;
         $this->email = $tenKhachHang[0]->EMAIL;
 
 
 
-        $CTHD = DB::select("SELECT CHITIETHOADON.MASP, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, CHITIETHOADON.SOLUONG, CHITIETHOADON.THANHTIEN, CHITIETHOADON.SIZE
+        $CTHD = DB::select("SELECT CHITIETHOADON.MASP, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, CHITIETHOADON.SOLUONG, CHITIETHOADON.THANHTIEN, CHITIETHOADON.SIZE
             FROM CHITIETHOADON 
-            INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = CHITIETHOADON.MASP 
+            INNER JOIN sanpham ON sanpham.MASANPHAM = CHITIETHOADON.MASP 
             INNER JOIN HOADON ON HOADON.MAHOADON = CHITIETHOADON.MAHOADON
             WHERE HOADON.MAKHACHHANG = ? AND CHITIETHOADON.TINHTRANG = 0", [$makh]);
 
@@ -185,7 +185,7 @@ class MailController extends Controller
         $emailParams->subject = "Xác nhận đơn hàng";
 
         $tinhTrangCTHD = 1;
-        DB::table('CHITIETHOADON')
+        DB::table('chitiethoadon')
             ->where('MAHOADON', $hoaDon->MAHOADON)
             ->update([
                 'TINHTRANG' => $tinhTrangCTHD,
