@@ -69,9 +69,7 @@ class ProductsController extends Controller
 
           $linkDanhMuc = $this->productsByType($tenloai);
 
-          if ($makh == null) {
-               return back();
-          } else {
+          
                $MACTHD = DB::select(
                     "
                     SELECT MAX(CHITIETHOADON.MACHITIETHOADON) AS max_macthd
@@ -88,8 +86,7 @@ class ProductsController extends Controller
                     // Handle the case where no rows are returned or max_macthd is not set
                     Session::put('macthd', null);
                 }
-                
-          }
+          
 
 
 
