@@ -9,7 +9,7 @@
         <form id="profile-form" action="{{ route('profile.updateProfile') }}" method="POST">
             @csrf
             @method('PUT')
-            <input type="text" name="ID" value="{{ $item->ID }}" hidden>
+            <input type="text" name="MAKH" value="{{ $item->MAKH }}" hidden>
 
             <table class="tbl-profile">
                 <tr class="w-100">

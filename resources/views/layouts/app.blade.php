@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Wonder Vista</title>
-    <link rel="shortcut icon" type="image/png" href="../../images/icon.png">
-    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('images/icon.png') }}">
+    <link rel="stylesheet" href="{{ asset('node_modules/bootstrap/dist/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="/node_modules/slick-carousel/slick/slick.css">
@@ -15,10 +15,12 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <link href="{{ asset('../css/font-awesome.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/font-awesome.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
 
-    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 </head>
 
 <body>
@@ -61,12 +63,13 @@
     @include('layouts.footer')
 </body>
 
-
-<script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Include Toastr JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="{{ asset('node_modules/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script src="/node_modules/slick-carousel/slick/slick.min.js"></script>
-<link rel="stylesheet" href="../../js/javascript.js">
+<script src="{{ asset('node_modules/slick-carousel/slick/slick.min.js') }}"></script>
+<link rel="stylesheet" href="{{ asset('js/javascript.js') }}">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     AOS.init();
@@ -89,7 +92,23 @@
         });
     });
 </script>
+<script>
+    $(document).ready(function() {
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                toastr.error("{{ $error }}")
+            @endforeach
+        @endif
 
+        @if (session('error'))
+            toastr.error("{{ session('error') }}");
+        @endif
+
+        @if (session('success'))
+            toastr.success("{{ session('success') }}");
+        @endif
+    });
+</script>
 
 
 </html>

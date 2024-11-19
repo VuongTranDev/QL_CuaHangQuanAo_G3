@@ -2,7 +2,7 @@
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
             <div class="collapse navbar-collapse d-flex nav-header-local">
-                <img src="../../images/icon.png" class="me-1" alt="" width="30px" height="25px">
+                <img src="{{ asset('images/icon.png') }}" class="me-1" alt="" width="30px" height="25px">
                 <a class="navbar-brand" href="/">Wonder Vista Fashion</a>
                 <ul class="navbar-nav me-auto justify-content-end">
                     <li class="nav-item">

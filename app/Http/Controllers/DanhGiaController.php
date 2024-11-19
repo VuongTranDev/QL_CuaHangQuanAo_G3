@@ -12,7 +12,7 @@ class DanhGiaController extends Controller
 {
     public function showDanhGia()
     {
-        $danhgia = DB::table('danhgia')->where('TINHTRANG',1)->get();
+        $danhgia = DB::table('danhgia')->where('TINHTRANG', 1)->get();
         return view('danhgias.showDanhGia', compact('danhgia'));
     }
 
@@ -26,10 +26,21 @@ class DanhGiaController extends Controller
             $maCTHD = $request->input('MACTHD');
             $noiDung = $request->input('NOIDUNG');
             $soSao = $request->input('SOSAO');
-            if($soSao < 4)
+
+            $daMuaSanPham = DB::table('chitiethoadon')
+                ->join('hoadon', 'chitiethoadon.MAHOADON', '=', 'hoadon.MAHOADON')
+                ->where('hoadon.MAKHACHHANG', $maKH)
+                ->where('chitiethoadon.MACHITIETHOADON', $maCTHD)
+                ->exists();
+
+            if (!$daMuaSanPham) {
+                return Redirect()->back()->with('error', 'Bạn chưa mua sản phẩm này nên không thể đánh giá.');
+            }
+
+            if ($soSao < 4)
                 $tinhtrang = 0;
             else
-                $tinhtrang = 1 ;
+                $tinhtrang = 1;
             DB::table('danhgia')->insert([
                 'MAKH' => $maKH,
                 'MADANHGIA' => $maDG,
@@ -38,7 +49,7 @@ class DanhGiaController extends Controller
                 'SOSAO' => $soSao,
                 'TINHTRANG' => $tinhtrang,
             ]);
-            return Redirect()->back();
+            return Redirect()->back()->with('success', 'Đánh giá của bạn đã được ghi nhận.');
         }
     }
 
@@ -71,15 +82,15 @@ class DanhGiaController extends Controller
         $danhgia = DB::table('danhgia')
             ->join('khachhang', 'danhgia.MAKH', '=', 'khachhang.MAKH')
             ->select('khachhang.TENKH', 'danhgia.SOSAO', 'danhgia.NOIDUNG', 'danhgia.MAKH', 'danhgia.ID')
-            ->where('TINHTRANG',1)
+            ->where('TINHTRANG', 1)
             ->paginate(10);
 
         $countDanhGia = $danhgia->total();
-        $countDanhGia5s = DB::table('danhgia')->where('SOSAO', 5)->where('TINHTRANG',1)->count();
-        $countDanhGia4s = DB::table('danhgia')->where('SOSAO', 4)->where('TINHTRANG',1)->count();
-        $countDanhGia3s = DB::table('danhgia')->where('SOSAO', 3)->where('TINHTRANG',1)->count();
-        $countDanhGia2s = DB::table('danhgia')->where('SOSAO', 2)->where('TINHTRANG',1)->count();
-        $countDanhGia1s = DB::table('danhgia')->where('SOSAO', 1)->where('TINHTRANG',1)->count();
+        $countDanhGia5s = DB::table('danhgia')->where('SOSAO', 5)->where('TINHTRANG', 1)->count();
+        $countDanhGia4s = DB::table('danhgia')->where('SOSAO', 4)->where('TINHTRANG', 1)->count();
+        $countDanhGia3s = DB::table('danhgia')->where('SOSAO', 3)->where('TINHTRANG', 1)->count();
+        $countDanhGia2s = DB::table('danhgia')->where('SOSAO', 2)->where('TINHTRANG', 1)->count();
+        $countDanhGia1s = DB::table('danhgia')->where('SOSAO', 1)->where('TINHTRANG', 1)->count();
 
         $totalStar = DB::table('danhgia')->sum('SOSAO');
         $totalReviews = DB::table('danhgia')->count();
@@ -114,16 +125,16 @@ class DanhGiaController extends Controller
                 ->join('khachhang', 'danhgia.MAKH', '=', 'khachhang.MAKH')
                 ->select('khachhang.TENKH', 'danhgia.SOSAO', 'danhgia.NOIDUNG')
                 ->where('danhgia.SOSAO', 5)
-                ->where('TINHTRANG',1)
+                ->where('TINHTRANG', 1)
                 ->limit(5)
                 ->get();
 
             $countDanhGia = $danhgia->count();
-            $countDanhGia5s = DB::table('danhgia')->where('SOSAO', 5)->where('TINHTRANG',1)->count();
-            $countDanhGia4s = DB::table('danhgia')->where('SOSAO', 4)->where('TINHTRANG',1)->count();
-            $countDanhGia3s = DB::table('danhgia')->where('SOSAO', 3)->where('TINHTRANG',1)->count();
-            $countDanhGia2s = DB::table('danhgia')->where('SOSAO', 2)->where('TINHTRANG',1)->count();
-            $countDanhGia1s = DB::table('danhgia')->where('SOSAO', 1)->where('TINHTRANG',1)->count();
+            $countDanhGia5s = DB::table('danhgia')->where('SOSAO', 5)->where('TINHTRANG', 1)->count();
+            $countDanhGia4s = DB::table('danhgia')->where('SOSAO', 4)->where('TINHTRANG', 1)->count();
+            $countDanhGia3s = DB::table('danhgia')->where('SOSAO', 3)->where('TINHTRANG', 1)->count();
+            $countDanhGia2s = DB::table('danhgia')->where('SOSAO', 2)->where('TINHTRANG', 1)->count();
+            $countDanhGia1s = DB::table('danhgia')->where('SOSAO', 1)->where('TINHTRANG', 1)->count();
 
             $totalStar = DB::table('danhgia')->sum('SOSAO');
             $totalReviews = DB::table('danhgia')->count();
@@ -149,16 +160,16 @@ class DanhGiaController extends Controller
                 ->join('khachhang', 'danhgia.MAKH', '=', 'khachhang.MAKH')
                 ->select('khachhang.TENKH', 'danhgia.SOSAO', 'danhgia.NOIDUNG')
                 ->where('danhgia.SOSAO', $rating)
-                ->where('TINHTRANG',1)
+                ->where('TINHTRANG', 1)
                 ->limit(5)
                 ->get();
 
             $countDanhGia = $danhgia->count();
-            $countDanhGia5s = DB::table('danhgia')->where('SOSAO', 5)->where('TINHTRANG',1)->count();
-            $countDanhGia4s = DB::table('danhgia')->where('SOSAO', 4)->where('TINHTRANG',1)->count();
-            $countDanhGia3s = DB::table('danhgia')->where('SOSAO', 3)->where('TINHTRANG',1)->count();
-            $countDanhGia2s = DB::table('danhgia')->where('SOSAO', 2)->where('TINHTRANG',1)->count();
-            $countDanhGia1s = DB::table('danhgia')->where('SOSAO', 1)->where('TINHTRANG',1)->count();
+            $countDanhGia5s = DB::table('danhgia')->where('SOSAO', 5)->where('TINHTRANG', 1)->count();
+            $countDanhGia4s = DB::table('danhgia')->where('SOSAO', 4)->where('TINHTRANG', 1)->count();
+            $countDanhGia3s = DB::table('danhgia')->where('SOSAO', 3)->where('TINHTRANG', 1)->count();
+            $countDanhGia2s = DB::table('danhgia')->where('SOSAO', 2)->where('TINHTRANG', 1)->count();
+            $countDanhGia1s = DB::table('danhgia')->where('SOSAO', 1)->where('TINHTRANG', 1)->count();
 
             $totalStar = DB::table('danhgia')->sum('SOSAO');
             $totalReviews = DB::table('danhgia')->count();

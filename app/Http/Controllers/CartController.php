@@ -20,13 +20,13 @@ class CartController extends Controller
         }
 
         $cart = DB::select("SELECT giohang.MASP, sanpham.MASANPHAM, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN, giohang.SIZE
-          FROM giohang 
-          INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP 
+          FROM giohang
+          INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP
           WHERE MAKH = ?", [$makh]);
         $sogiohang = count($cart);
         $cartUpdate = DB::select("SELECT giohang.MASP, sanpham.MASANPHAM, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN, giohang.SIZE
-          FROM giohang 
-          INNER JOIN SANPHAM ON sanpham.MASANPHAM = giohang.MASP 
+          FROM giohang
+          INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP
           WHERE MAKH = ? AND CHONTHANHTOAN = 1", [$makh]);
 
 
@@ -109,12 +109,12 @@ class CartController extends Controller
             ->update(['THANHTIEN' => $thanhTien]);
 
         $cart = DB::select("SELECT giohang.MASP, sanpham.MASANPHAM, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN, giohang.SIZE
-            FROM giohang 
-            INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP 
+            FROM giohang
+            INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP
             WHERE MAKH = ? AND CHONTHANHTOAN = 0", [$makh]);
         $cartUpdatePrice = DB::select("SELECT giohang.MASP, sanpham.MASANPHAM, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN, giohang.SIZE
-        FROM giohang 
-        INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP 
+        FROM giohang
+        INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP
         WHERE MAKH = ? AND CHONTHANHTOAN = 0 AND giohang.MASP = ? AND giohang.SIZE = ?", [$makh], [$masanpham], [$size]);
 
         $tongTienSPUpdate = 0;
@@ -192,8 +192,8 @@ class CartController extends Controller
             list($masanpham, $size) = explode('|', $item);
 
             $cartItems = DB::table('giohang')
-                ->join('SANPHAM', 'SANPHAM.MASANPHAM', '=', 'giohang.MASP')
-                ->select('giohang.MASP', 'SANPHAM.MASANPHAM', 'SANPHAM.TENSANPHAM', 'SANPHAM.GIA', 'SANPHAM.CHATLIEU', 'SANPHAM.HINHANH', 'giohang.SOLUONG', 'giohang.THANHTIEN', 'giohang.SIZE')
+                ->join('sanpham', 'sanpham.MASANPHAM', '=', 'giohang.MASP')
+                ->select('giohang.MASP', 'sanpham.MASANPHAM', 'sanpham.TENSANPHAM', 'sanpham.GIA', 'sanpham.CHATLIEU', 'sanpham.HINHANH', 'giohang.SOLUONG', 'giohang.THANHTIEN', 'giohang.SIZE')
                 ->where('giohang.MAKH', $makh)
                 ->where('giohang.MASP', $masanpham)
                 ->where('giohang.SIZE', $size)
@@ -208,8 +208,8 @@ class CartController extends Controller
                 ->update(['CHONTHANHTOAN' => 1]);
         }
         $cart2 = DB::select("SELECT giohang.MASP, sanpham.MASANPHAM, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN, giohang.SIZE
-        FROM giohang 
-        INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP 
+        FROM giohang
+        INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP
         WHERE MAKH = ? AND CHONTHANHTOAN = 1", [$makh]);
 
         $cart = $cart2;
@@ -257,13 +257,13 @@ class CartController extends Controller
         $makh = Session::get('makh');
         if ($request->has('checkout_btn')) {
             $cart = DB::select("SELECT giohang.MASP, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN , giohang.SIZE
-        FROM giohang 
-        INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP 
+        FROM giohang
+        INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP
         WHERE MAKH = ? AND CHONTHANHTOAN = 0", [$makh]);
         } else {
-            $cart = DB::select("SELECT giohang.MASP, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, giohang.SOLUONG, giohang.THANHTIEN , giohang.SIZE
-            FROM giohang 
-            INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP 
+            $cart = DB::select("SELECT giohang.MASP, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN , giohang.SIZE
+            FROM giohang
+            INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP
             WHERE MAKH = ? AND CHONTHANHTOAN = 1", [$makh]);
         }
 
@@ -296,8 +296,8 @@ class CartController extends Controller
     {
         $makh = Session::get('makh');
         $cart = DB::select("SELECT giohang.MASP, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN, giohang.SIZE
-            FROM giohang 
-            INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP 
+            FROM giohang
+            INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP
             WHERE MAKH = ? AND CHONTHANHTOAN = 0", [$makh]);
 
         $tongtien = 0;

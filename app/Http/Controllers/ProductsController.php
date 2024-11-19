@@ -69,7 +69,7 @@ class ProductsController extends Controller
 
           $linkDanhMuc = $this->productsByType($tenloai);
 
-          
+
                $MACTHD = DB::select(
                     "
                     SELECT MAX(chitiethoadon.MACHITIETHOADON) AS max_macthd
@@ -79,14 +79,14 @@ class ProductsController extends Controller
                     WHERE hoadon.MAKHACHHANG = ? AND sanpham.MASANPHAM = ?",
                     [$makh, $masanpham]
                 );
-                
+
                 if (!empty($MACTHD) && isset($MACTHD[0]->max_macthd)) {
                     Session::put('macthd', $MACTHD[0]->max_macthd);
                 } else {
                     // Handle the case where no rows are returned or max_macthd is not set
                     Session::put('macthd', null);
                 }
-          
+
 
 
 
@@ -232,7 +232,7 @@ class ProductsController extends Controller
 
           $totalPrice = $discout * $quantity;
 
-          $existingProduct = DB::table('GIOHANG')
+          $existingProduct = DB::table('giohang')
                ->where('MAKH', $makh)
                ->where('MASP', $masanpham)
                ->where('SIZE', $size)
@@ -242,7 +242,7 @@ class ProductsController extends Controller
                $newQuantity = $existingProduct->SOLUONG + $quantity;
                $newTotalPrice = $newQuantity * $discout;
 
-               DB::table('GIOHANG')
+               DB::table('giohang')
                     ->where('MAGH', $existingProduct->MAGH)
                     ->update([
                          'SOLUONG' => $newQuantity,
@@ -267,8 +267,8 @@ class ProductsController extends Controller
 
                     DB::update("UPDATE giohang SET CHONTHANHTOAN = 1 WHERE MAKH = ? AND MASP = ? AND SIZE = ?", [$makh, $masanpham, $size]);
                     $cart = DB::select("SELECT giohang.MASP, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN , giohang.SIZE
-                    FROM giohang 
-                    INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP 
+                    FROM giohang
+                    INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP
                     WHERE MAKH = ? AND CHONTHANHTOAN = 1", [$makh]);
                     $tongtien = 0;
                     $tongtienSP = 0;
@@ -281,15 +281,15 @@ class ProductsController extends Controller
 
                     $tienGiam = 0;
                     $sogiohang = count($cart);
-                    $diaChi = DB::select("SELECT * FROM DIACHI WHERE MAKH = ?", [$makh]);
-                    $profile = DB::select("SELECT TENKH, SODIENTHOAI, DIACHI FROM KHACHHANG WHERE MAKH = ?", [$makh]);
+                    $diaChi = DB::select("SELECT * FROM diachi WHERE MAKH = ?", [$makh]);
+                    $profile = DB::select("SELECT TENKH, SODIENTHOAI, DIACHI FROM khachhang WHERE MAKH = ?", [$makh]);
                     Session::put('sogiohang', $sogiohang);
                     //return view('hoadon.thanhtoan', compact('cart', 'sogiohang', 'profile', 'tongtien', 'tongtienSP', 'diaChi'));
                     return redirect()->route('hoadon.thanhtoan');
                } else {
                     $cart = DB::select("SELECT giohang.MASP, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN, giohang.SIZE
-                        FROM giohang 
-                        INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP 
+                        FROM giohang
+                        INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP
                         WHERE MAKH = ? AND CHONTHANHTOAN = 0", [$makh]);
 
                     $tongtien = 0;

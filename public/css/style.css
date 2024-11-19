@@ -98,7 +98,7 @@ body {
 .show1 {
     display: block;
     animation: flyDown 0.3s ease-out forwards;
-} 
+}
 
 
 /* header */
@@ -605,6 +605,7 @@ section::after {
 .product-link {
     text-decoration: none;
     color: #585858;
+    background-color: #fff;
 }
 
 .name-product {
@@ -618,17 +619,20 @@ section::after {
 }
 
 .product-detail {
-    border: 1px solid #cccccc;
-    padding: 10px;
+    border-radius: 8px;
     width: 100%;
     position: relative;
+    box-shadow: 0 3px 10px rgba(200, 200, 200, .3), 0 3px 18px rgba(200, 200, 200, .3);
+    padding-bottom: 15px;
+    padding: 10px;
 }
 
 .img-product {
     width: 100%;
     height: 310px;
     display: block;
-    padding: 5px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
 }
 
 .carousel-detail-product {
