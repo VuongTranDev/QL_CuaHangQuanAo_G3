@@ -145,6 +145,7 @@ Route::get('/logoutUser', [
     AdminController::class,
     "logoutUser"
 ]);
+
 Route::get('/checkforgotPassword', [
     AdminController::class,
     "checkforgotPassword"
@@ -164,6 +165,9 @@ Route::post('/checkresetPassword', [
     AdminController::class,
     "checkresetPassword"
 ]);
+
+
+
 Route::get('/thongKeDS', [
     AdminController::class,
     "thongKeDS"
@@ -296,12 +300,12 @@ Route::post(
 
 
 Route::get('/api/provinces', [
-    LocationController::class, 
+    LocationController::class,
     'getProvinces'
 ]);
 
 Route::get('/api/districts/{provinceId}', [
-    LocationController::class, 
+    LocationController::class,
     'getDistricts'
 ]);
 
@@ -310,7 +314,7 @@ Route::get('/api/wards/{districtId}', [
 ]);
 
 Route::post('/update-address', [
-    HomeController::class, 
+    HomeController::class,
     'updateAddress'
 ])->name('home.updateAddress');
 
@@ -323,12 +327,12 @@ Route::post('/updateDetailProduct{ID}',
 [
     DetailsProductController::class,
     "updateDetailProduct"
-]); 
+]);
 Route::get('/deleteDetailProduct/{ID}',
 [
     DetailsProductController::class,
     "deleteDetailProDuct"
-]); 
+]);
 Route::get('/phanHoiKH',
 [
     DetailsProductController::class,
@@ -375,13 +379,13 @@ Route::post('/sendEmail', [MailController::class, 'sendEmail'])->name('sendEmail
 
 
 Route::get('/products/{masanpham}', [
-    ProductsController::class, 
+    ProductsController::class,
     'showDetailProduct'
 ])->name('product.showDetailProduct');
 
 Route::get('/products/productsByType/{tenloai}', [
-    ProductsController::class, 
-    'productsByType' 
+    ProductsController::class,
+    'productsByType'
 ])->name('products.productsByType');
 
 Route::post('/danhgias/themDanhGia', [
@@ -400,7 +404,7 @@ Route::get('/danhgias/filterByRating', [
 ]);
 
 Route::get('/danhgias/showDanhGia', [
-    DanhGiaController::class, 
+    DanhGiaController::class,
     'showDanhGia'
 ]);
 
@@ -537,4 +541,4 @@ Route::get('/donmua', [
     HomeController::class,
     'showDonMua'
 ]);
-    
+

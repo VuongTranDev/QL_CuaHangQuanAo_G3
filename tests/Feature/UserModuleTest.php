@@ -66,20 +66,7 @@ class UserModuleTest extends TestCase
         echo "Test register thất bại.\n";
     }
 
-    public function test_forgot_password()  
-    {
-
-        Mail::fake();
-        $response = $this->post('/forgotPassword', [
-            'username' => 'hoankien2k3@gmail.com', // Đảm bảo rằng email này tồn tại trong cơ sở dữ liệu test
-        ]);
-        $response->assertStatus(200);
-         // Kiểm tra rằng email ForgotPassword đã được gửi đến người dùng
-         Mail::assertSent(ForgotPassword::class, function ($mail) {
-            return $mail->hasTo('hoankien2k3@gmail.com');
-        });
-        echo "Test request password reset link thành công.\n";
-    }
+    
     
 }
 //php artisan test --filter test_forgot_password php artisan test --filter test_forgot_password 

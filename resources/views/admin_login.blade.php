@@ -16,7 +16,7 @@
         integrity="sha384-n/1hej/l22Kj4S1LKAJaztMsUpGQpbg9DlzTfVbw78v3Vv0xHzfp2XuRLmwALC8k" crossorigin="anonymous"> --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../css/stylelogin.css" />
+    <link rel="stylesheet" href="{{ asset('css/styleLogin.css') }}">
 </head>
 
 <body>
@@ -82,12 +82,7 @@
         
     </div>
 
-    <script>
-        document.querySelector('.img__btn').addEventListener('click', function() {
-            document.querySelector('.cont').classList.toggle('s--signup');
-        });
-    </script>
-   
+    
 </body>
 
 </html>
