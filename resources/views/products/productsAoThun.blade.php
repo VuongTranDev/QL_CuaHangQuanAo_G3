@@ -10,7 +10,7 @@
             <div class="col-6 col-sm-3 col-md-3 d-flex product-list">
                 <div class="product-detail" align="center" data-aos="fade-up" data-aos-duration="800">
                     <a href="{{ route('product.showDetailProduct', ['masanpham' => $item->MASANPHAM]) }}"
-                        class="product-link">
+                        class="product-link" id="{{ $item->MASANPHAM }}">
                         <img src="{{ URL('images/' . $item->HINHANH) }}" alt="{{ $item->TENSANPHAM }}"
                             class="img-product">
                         <p class="name-product">{{ $item->TENSANPHAM }}</p>

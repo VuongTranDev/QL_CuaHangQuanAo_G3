@@ -18,10 +18,10 @@ class MailController extends Controller
     public function __construct()
     {
     }
-    
+
     public function generateNextMaChiTietHoaDon()
     {
-        $lastMaChiTietHoaDon = DB::table('CHITIETHOADON')->max('MACHITIETHOADON');
+        $lastMaChiTietHoaDon = DB::table('chitiethoadon')->max('MACHITIETHOADON');
 
         if (!$lastMaChiTietHoaDon) {
             return 'CTHD001';
@@ -35,15 +35,46 @@ class MailController extends Controller
 
         return $newMaChiTietHoaDon;
     }
+    // public function generateNextMaHoaDon()
+    // {
+    //     $makh = Session::get('makh');
+    //     $lastMaHoaDon = DB::table('HOADON')
+    //         ->where('MAKHACHHANG', $makh)
+    //         ->first();
+    //     if ($lastMaHoaDon) {
+    //         return $lastMaHoaDon[0]->MAHOADON;
+    //     }
+
+    //     $numberPart = intval(substr($lastMaHoaDon[0]->MAHOADON, 2));
+
+    //     $newNumberPart = $numberPart + 1;
+
+    //     $newMaHoaDon = 'HD' . str_pad($newNumberPart, 3, '0', STR_PAD_LEFT);
+
+    //     return $newMaHoaDon;
+    // }
+
     public function generateNextMaHoaDon()
     {
-        $lastMaHoaDon = DB::table('HOADON')->max('MAHOADON');
+        $makh = Session::get('makh');
 
-        if (!$lastMaHoaDon) {
-            return 'HD001';
+        $existingMaHoaDon = DB::table('hoadon')
+            ->where('MAKHACHHANG', $makh)
+            ->first();
+
+        if ($existingMaHoaDon) {
+            return $existingMaHoaDon->MAHOADON;
         }
 
-        $numberPart = intval(substr($lastMaHoaDon, 2));
+        $lastGlobalMaHoaDon = DB::table('hoadon')
+            ->orderBy('MAHOADON', 'desc')
+            ->first();
+
+        if ($lastGlobalMaHoaDon) {
+            $numberPart = intval(substr($lastGlobalMaHoaDon->MAHOADON, 2));
+        } else {
+            $numberPart = 0;
+        }
 
         $newNumberPart = $numberPart + 1;
 
@@ -52,11 +83,11 @@ class MailController extends Controller
         return $newMaHoaDon;
     }
 
-    
+
+
 
     public function sendEmail(Request $request)
     {
-
         $makh = Session::get('makh');
         if (!$makh) {
             Session::put('message', "Đăng nhập không thành công");
@@ -66,30 +97,26 @@ class MailController extends Controller
         $phiVanChuyen = $request->input('phiVanChuyen');
         $diaChi = $request->input('diaChi');
 
-        if(!$diaChi){
+        if (!$diaChi) {
             return back();
         }
 
-        $cart = DB::select("SELECT GIOHANG.MASP ,SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
-        FROM GIOHANG 
-        INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+        $cart = DB::select("SELECT giohang.MASP ,sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN , giohang.SIZE
+        FROM giohang 
+        INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP 
         WHERE MAKH = ? AND CHONTHANHTOAN = 1", [$makh]);
-
 
         // foreach ($cart as $item) {
-        //     DB::update("UPDATE GIOHANG SET CHONTHANHTOAN = 1 WHERE MAKH = ? AND MASP = ? AND SIZE = ?", [$makh, $item->MASP, $item->SIZE]);
+        //     DB::update("UPDATE giohang SET CHONTHANHTOAN = 1 WHERE MAKH = ? AND MASP = ? AND SIZE = ?", [$makh, $item->MASP, $item->SIZE]);
         // }
-
-        $cartUpdate = DB::select("SELECT GIOHANG.MASP, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
-        FROM GIOHANG 
-        INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+        $cartUpdate = DB::select("SELECT giohang.MASP, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN , giohang.SIZE
+        FROM giohang 
+        INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP 
         WHERE MAKH = ? AND CHONTHANHTOAN = 1", [$makh]);
-
-        $hoaDon = DB::table('HOADON')->where('MAKHACHHANG', $makh)->first();
-
+        $hoaDon = DB::table('hoadon')->where('MAKHACHHANG', $makh)->first();
         if (!$hoaDon) {
             $newMaHoaDon = $this->generateNextMaHoaDon();
-            DB::table('HOADON')->insert([
+            DB::table('hoadon')->insert([
                 'MAHOADON' => $newMaHoaDon,
                 'MAKHACHHANG' => $makh,
                 'NGAYDATHANG' => Carbon::now('Asia/Ho_Chi_Minh'),
@@ -98,26 +125,27 @@ class MailController extends Controller
                 'TINHTRANG' => 0,
             ]);
         }
-        $hoaDonUpdate = DB::table('HOADON')->where('MAKHACHHANG', $makh)->first();
-        foreach ($cartUpdate as $item) {
-            $newMaChiTietHoaDon = $this->generateNextMaChiTietHoaDon();
-            $tinhtrang = 0;
-            DB::table('CHITIETHOADON')->insert([
-                'MACHITIETHOADON' => $newMaChiTietHoaDon,
-                'MAHOADON' => $hoaDonUpdate->MAHOADON,
-                'MASP' => $item->MASP,
-                'SIZE' => $item->SIZE,
-                'SOLUONG' => $item->SOLUONG,
-                'THANHTIEN' => $item->THANHTIEN,
-                'TINHTRANG' => $tinhtrang,
-            ]);
-        }
-
-        $chiTietHoaDon = DB::select("SELECT * FROM CHITIETHOADON WHERE MAHOADON = ?", [$hoaDon->MAHOADON]);
+        $hoaDonUpdate = DB::select("SELECT * FROM hoadon WHERE MAKHACHHANG = ?", [$makh]);
+            foreach ($cartUpdate as $item) {
+                $newMaChiTietHoaDon = $this->generateNextMaChiTietHoaDon();
+                $tinhtrang = 0;
+        
+                DB::table('chitiethoadon')->insert([
+                    'MACHITIETHOADON' => $newMaChiTietHoaDon,
+                    'MAHOADON' => $hoaDonUpdate[0]->MAHOADON,
+                    'MASP' => $item->MASP,
+                    'SIZE' => $item->SIZE,
+                    'SOLUONG' => $item->SOLUONG,
+                    'THANHTIEN' => $item->THANHTIEN,
+                    'TINHTRANG' => $tinhtrang,
+                ]);
+            }
+        
+        $chiTietHoaDon = DB::select("SELECT * FROM chitiethoadon WHERE MAHOADON = ?", [$hoaDon->MAHOADON]);
         $ngayHienTai = Carbon::now('Asia/Ho_Chi_Minh');
         foreach ($chiTietHoaDon as $item) {
             $tinhTrang = 1;
-            DB::table('HOADON')
+            DB::table('hoadon')
                 ->where('MAKHACHHANG', $makh)
                 ->update([
                     'MAHOADON' => $hoaDon->MAHOADON,
@@ -126,28 +154,26 @@ class MailController extends Controller
                     'TONGTIEN' => $hoaDon->TONGTIEN + $item->THANHTIEN,
                     'TINHTRANG' => $tinhTrang,
                 ]);
-                DB::table('GIOHANG')
-                    ->where('MAKH', $makh)
-                    ->where('MASP', $item->MASP)
-                    ->where('SIZE', $item->SIZE)
-                    ->delete();
+            DB::table('giohang')
+                ->where('MAKH', $makh)
+                ->where('MASP', $item->MASP)
+                ->where('SIZE', $item->SIZE)
+                ->delete();
         }
 
 
 
-        
-        $tenKhachHang = DB::select("SELECT TENKH, EMAIL FROM KHACHHANG WHERE MAKH = ?", [$makh]);
+        $tenKhachHang = DB::select("SELECT TENKH, EMAIL FROM khachhang WHERE MAKH = ?", [$makh]);
         $ten = $tenKhachHang[0]->TENKH;
         $this->email = $tenKhachHang[0]->EMAIL;
 
 
 
-        $CTHD = DB::select("SELECT CHITIETHOADON.MASP, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, CHITIETHOADON.SOLUONG, CHITIETHOADON.THANHTIEN, CHITIETHOADON.SIZE
-            FROM CHITIETHOADON 
-            INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = CHITIETHOADON.MASP 
-            INNER JOIN HOADON ON HOADON.MAHOADON = CHITIETHOADON.MAHOADON
-            WHERE HOADON.MAKHACHHANG = ? AND CHITIETHOADON.TINHTRANG = 0", [$makh]);
-        
+        $CTHD = DB::select("SELECT chitiethoadon.MASP, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, chitiethoadon.SOLUONG, chitiethoadon.THANHTIEN, chitiethoadon.SIZE
+            FROM chitiethoadon 
+            INNER JOIN sanpham ON sanpham.MASANPHAM = chitiethoadon.MASP 
+            INNER JOIN hoadon ON hoadon.MAHOADON = chitiethoadon.MAHOADON
+            WHERE hoadon.MAKHACHHANG = ? AND chitiethoadon.TINHTRANG = 0", [$makh]);
 
         $emailParams = new \stdClass();
         $emailParams->usersName = $ten;
@@ -159,11 +185,17 @@ class MailController extends Controller
         $emailParams->subject = "Xác nhận đơn hàng";
 
         $tinhTrangCTHD = 1;
-        DB::table('CHITIETHOADON')
-        ->where('MAHOADON', $hoaDon->MAHOADON)
-        ->update([
-            'TINHTRANG' => $tinhTrangCTHD,
-        ]);
+        DB::table('chitiethoadon')
+            ->where('MAHOADON', $hoaDon->MAHOADON)
+            ->update([
+                'TINHTRANG' => $tinhTrangCTHD,
+            ]);
+        // foreach ($emailParams->cart as $item) {
+        //     $item->GIA = number_format($item->GIA * 1000, 0, ',', '.') . ' ₫';
+        //     $item->THANHTIEN = number_format($item->THANHTIEN * 1000, 0, ',', '.') . ' ₫';
+        // }
+        // $emailParams->tongtien = number_format($emailParams->tongtien, 0, ',', '.');
+        // $emailParams->phiVanChuyen = number_format($emailParams->phiVanChuyen, 0, ',', '.');
         Mail::to($emailParams->usersEmail)->send(new XacNhanDonHang($emailParams));
     }
 

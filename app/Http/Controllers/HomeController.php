@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\LocationController;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
@@ -24,9 +25,9 @@ class HomeController extends Controller
 
         $makh = Session::get('makh');
 
-        $cart = DB::select("SELECT SANPHAM.MASANPHAM, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
-        FROM GIOHANG 
-        INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+        $cart = DB::select("SELECT sanpham.MASANPHAM, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN , giohang.SIZE
+        FROM giohang
+        INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP
         WHERE MAKH = ?", [$makh]);
         $sogiohang = count($cart);
 
@@ -50,14 +51,22 @@ class HomeController extends Controller
         if ($makh == null) {
             return redirect('/admin_login');
         }
+        $cart = DB::select("SELECT sanpham.MASANPHAM, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN , giohang.SIZE
+        FROM giohang
+        INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP
+        WHERE MAKH = ?", [$makh]);
+        $sogiohang = count($cart);
+
+        Session::put('sogiohang', $sogiohang);
         $profile = DB::table('khachhang')
             ->join('taikhoanuser', 'khachhang.MATKUSER', '=', 'taikhoanuser.MAUSER')
             ->where('khachhang.MAKH', $makh)
+            ->select('khachhang.*', 'taikhoanuser.*')
             ->get();
 
-        $cart = DB::select("SELECT SANPHAM.MASANPHAM, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
-        FROM GIOHANG 
-        INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+        $cart = DB::select("SELECT sanpham.MASANPHAM, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN , giohang.SIZE
+        FROM giohang
+        INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP
         WHERE MAKH = ?", [$makh]);
         $sogiohang = count($cart);
 
@@ -69,7 +78,7 @@ class HomeController extends Controller
     public function updateProfile(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'ID' => 'required|string|max:255',
+            'MAKH' => 'required|string|max:255',
             'TENKH' => 'required|string|max:255',
             'EMAIL' => 'required|email|max:255',
             'SODIENTHOAI' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10|max:15',
@@ -90,14 +99,15 @@ class HomeController extends Controller
         }
 
         $validatedData = $validator->validated();
-
+        Log::info('Validated Data:', $validatedData);
         DB::table('khachhang')
-            ->where('ID', $validatedData['ID'])
+            ->where('MAKH', $validatedData['MAKH'])
             ->update([
                 'TENKH' => $validatedData['TENKH'],
                 'EMAIL' => $validatedData['EMAIL'],
                 'SODIENTHOAI' => $validatedData['SODIENTHOAI']
             ]);
+
         return redirect('profile');
     }
 
@@ -105,8 +115,16 @@ class HomeController extends Controller
 
     public function showAddress()
     {
+
         $makh = Session::get('makh');
 
+        $cart = DB::select("SELECT sanpham.MASANPHAM, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN , giohang.SIZE
+        FROM giohang
+        INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP
+        WHERE MAKH = ?", [$makh]);
+        $sogiohang = count($cart);
+
+        Session::put('sogiohang', $sogiohang);
         $profile = DB::table('khachhang')
             ->join('diachi', 'khachhang.MAKH', '=', 'diachi.MAKH')
             ->where('khachhang.MAKH', $makh)
@@ -115,9 +133,9 @@ class HomeController extends Controller
         $locationController = new LocationController();
         $response = $locationController->getProvinces();
 
-        $cart = DB::select("SELECT SANPHAM.MASANPHAM, SANPHAM.TENSANPHAM, SANPHAM.GIA, SANPHAM.CHATLIEU, SANPHAM.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
-        FROM GIOHANG 
-        INNER JOIN SANPHAM ON SANPHAM.MASANPHAM = GIOHANG.MASP 
+        $cart = DB::select("SELECT sanpham.MASANPHAM, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN , giohang.SIZE
+        FROM giohang
+        INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP
         WHERE MAKH = ?", [$makh]);
         $sogiohang = count($cart);
 
@@ -197,10 +215,18 @@ class HomeController extends Controller
     {
         $makh = Session::get('makh');
 
-        $donmua = DB::select("SELECT *, CHITIETHOADON.SOLUONG AS SL FROM CHITIETHOADON
-       INNER JOIN SANPHAM ON CHITIETHOADON.MASP = SANPHAM.MASANPHAM
-       INNER JOIN HOADON ON HOADON.MAHOADON = CHITIETHOADON.MAHOADON
+        $cart = DB::select("SELECT sanpham.MASANPHAM, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
+        FROM giohang
+        INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP
+        WHERE MAKH = ?", [$makh]);
+        $sogiohang = count($cart);
+
+        Session::put('sogiohang', $sogiohang);
+        $donmua = DB::select("SELECT *, chitiethoadon.SOLUONG AS SL FROM chitiethoadon
+       INNER JOIN sanpham ON chitiethoadon.MASP = sanpham.MASANPHAM
+       INNER JOIN hoadon ON hoadon.MAHOADON = chitiethoadon.MAHOADON
        WHERE MAKHACHHANG = ?", [$makh]);
+
 
 
 

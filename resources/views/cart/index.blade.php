@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="cart-title" style="background-color: #ebebeb;">
-                    <h2>Giỏ hàng:</h2>
+                    <h2>Giỏ hàng</h2>
                     <span class="cart-count">
                         <span class="cart-counter">{{ $sogiohang }}</span>
                         <span class="cart-item-title">Sản phẩm</span>
@@ -53,14 +53,14 @@
                                                 </div>
                                                 <div class="qty_pri-content">
                                                     <div class="quantity-area">
-                                                        <input type="button" name="giamsoluong" value="–"
+                                                        <input type="button" name="giamsoluong" value="–" id="giamsoluong"
                                                             class="qty-btn btn-left-quantity">
-                                                        <input type="text" readonly name="soluong"
+                                                        <input type="text" readonly name="soluong" id="soluong"
                                                             value="{{ $item->SOLUONG }}" min="1"
                                                             class="quantity-selector quantity-mini"
                                                             data-masp="{{ $item->MASP }}"
                                                             data-size="{{ $item->SIZE }}">
-                                                        <input type="button" name="tangsoluong" value="+"
+                                                        <input type="button" name="tangsoluong" value="+" id="tangsoluong"
                                                             class="qty-btn btn-right-quantity">
                                                     </div>
                                                     <div class="group-item-option">
@@ -113,7 +113,8 @@
                         </div>
                         <div class="order_action">
                             <form action="/hoadon/thanhtoan" method="GET">
-                                <button name="checkout_btn" class="btncart-checkout text-center" type="submit">THANH TOÁN
+                                <button id="thanh-toan-tat-ca" name="checkout_btn" class="btncart-checkout text-center"
+                                    type="submit">THANH TOÁN
                                     TẤT CẢ GIỎ
                                     HÀNG</button>
                             </form>

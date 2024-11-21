@@ -89,7 +89,7 @@
 
                         <div>
                             @foreach ($size as $item)
-                                <label class="size-btn">
+                                <label class="size-btn" id="{{ $item->SIZESP }}">
                                     <input type="radio" name="size" value="{{ $item->SIZESP }}"
                                         onclick="checkSelectedSize(this)">
                                     {{ $item->SIZESP }}
@@ -106,13 +106,13 @@
                             </div>
 
                             <div class="button_actions mb-0 w-100">
-                                <button name="themvaogiohang" type="submit"
+                                <button id="themvaogiohang" name="themvaogiohang" type="submit"
                                     class="btn btn_add_cart btn-cart add_to_cart product-combo is-full">Thêm vào giỏ
                                     hàng</button>
                             </div>
                         </div>
                         <div class="button_actions">
-                            <button name="muangay" type="submit" class="btn btn-buynow">Mua ngay</button>
+                            <button id="muangay" name="muangay" type="submit" class="btn btn-buynow">Mua ngay</button>
                         </div>
                     </div>
                 </form>

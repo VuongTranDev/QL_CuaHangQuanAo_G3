@@ -55,7 +55,7 @@
                                 <option value="">Chọn quận/huyện</option>
                             </select>
                         </div>
-                    </div>                  
+                    </div>
                     <div class="form-group address-container d-flex align-items-center row">
                         <p for="" class="col-3 pt-2">Xã/Phường</p>
                         <div class="col-9">
@@ -140,6 +140,6 @@
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="../../js/js-address.js"></script>
-    
+    <script src="{{ asset('js/js-address.js') }}"></script>
+
 @endsection
