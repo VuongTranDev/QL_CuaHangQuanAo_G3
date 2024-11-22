@@ -13,10 +13,10 @@
 <div class="row">
     <p class="title_thongke">Thống kê đơn hàng theo doanh số</p>
     <form autocomplete="off">
-        @csrf    
+        @csrf
         <div class="col-md-2">
             <p>Từ ngày : <input type="text" id ="datepicker" class="form-control"></p>
-            <input type="button" id ="btn" class="btn btn-primary btn-sm" value="Lọc kết quả">
+            <input type="button" id ="btn" class="btn btn-primary btn-sm" style="margin-top: 10px;" value="Lọc kết quả">
         </div>
         <div class="col-md-2">
             <p>Đến ngày<input type="text" id ="datepicker2" class="form-control"></p>

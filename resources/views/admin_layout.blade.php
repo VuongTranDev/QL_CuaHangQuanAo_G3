@@ -16,7 +16,7 @@
 <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
 <!-- font-awesome icons -->
 <link rel="stylesheet" href="{{ asset('../css/font.css')}}" type="text/css"/>
-<link href="{{ asset('../css/font-awesome.css')}}" rel="stylesheet"> 
+<link href="{{ asset('../css/font-awesome.css')}}" rel="stylesheet">
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
 <!-- calendar -->
 <link rel="stylesheet" href="{{ asset('../css/monthly.css')}}">
@@ -33,7 +33,7 @@
 <header class="header fixed-top clearfix">
 <!--logo start-->
 <div class="brand">
-    <a href="index.html" class="logo">
+    <a href="{{ URL::to('/admin_content') }}" class="logo">
         ADMIN
     </a>
     <div class="sidebar-toggle-box">
@@ -46,19 +46,19 @@
     <ul class="nav pull-right top-menu">
         <li>
             {{-- <input type="text" class="form-control search" placeholder=" Search"> --}}
-            
+
         </li>
         <!-- user login dropdown start-->
         <li class="dropdown">
             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
              {{-- <img alt="" src="{{ asset('../images/2.png') }}"> --}}
-             
+
                 <span class="username">
-					<?php 
-						$name = Session::get('ten') ;		
+					<?php
+						$name = Session::get('ten') ;
 						if($name)
-						{	
-						echo $name ;}	
+						{
+						echo $name ;}
 					?>
 				</span>
                 <b class="caret"></b>
@@ -83,12 +83,12 @@
         <div class="leftside-navigation">
             <ul class="sidebar-menu" id="nav-accordion">
                 <li>
-                    <a class="active" href="{{ URL::to('/admin_layout') }}">
+                    <a class="active" href="{{ URL::to('/admin_content') }}">
                         <i class="fa fa-dashboard"></i>
                         <span>Tổng quan</span>
                     </a>
                 </li>
-                
+
                 <li class="sub-menu">
                     <a href="javascript:;">
                         <i class="fa fa-book"></i>
@@ -110,24 +110,24 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="{{ URL::to('/quanLyKH') }}">	
+                    <a href="{{ URL::to('/quanLyKH') }}">
                         <i class="fa  fa-users"></i>
                         <span>Quản lý Khách Hàng</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ URL::to('/phanHoiKH') }}">	
+                    <a href="{{ URL::to('/phanHoiKH') }}">
                         <i class="fa  fa-comments-o"></i>
                         <span>Phản Hồi Khách Hàng</span>
                     </a>
                 </li>
 				<li>
-                    <a href="{{ URL::to('/thongKeDS') }}">	
+                    <a href="{{ URL::to('/thongKeDS') }}">
                         <i class="fa fa-bar-chart"></i>
                         <span>Thống kê doanh thu</span>
                     </a>
                 </li>
-            </ul>           
+            </ul>
 		 </div>
         <!-- sidebar menu end-->
     </div>
@@ -136,7 +136,7 @@
 <!--main content start-->
 <section id="main-content">
 	<section class="wrapper">
-		@yield('admin_content')	
+		@yield('admin_content')
 	</section>
 </section>
 <script src="{{ asset('../js/bootstrap.js')}}"></script>
@@ -148,7 +148,7 @@
     ript" src="{{ asset('../js/flot-chart/excanvas.min.js')}}"></script><![endif]-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{{ asset('../js/jquery.scrollTo.js')}}"></script>
-<!-- morris JavaScript -->	
+<!-- morris JavaScript -->
 
 <script type="text/javascript">
 
@@ -173,14 +173,14 @@ $(document).ready(function() {
                 } else {
                     alert("Cập nhật tình trạng thất bại!");
                 }
-            
+
             },
             error: function(xhr, status, error) {
                 console.error('Đã xảy ra lỗi: ' + error);
             }
         });
     });
-   
+
 });
 
 
@@ -192,7 +192,7 @@ $(document).ready(function() {
         var comment = $('.reply_comment').val();
         var commentMDG = $(this).data('madg');
         var button = $(this);
-     
+
         $.ajax({
             url: '{{ url("/replyComment") }}',
             method: 'POST',
@@ -204,8 +204,8 @@ $(document).ready(function() {
             success: function(response) {
                 if (response.success) {
                     alert("Đã trả lời thành công!");
-                    location.reload(); 
-                   
+                    location.reload();
+
                 }
             },
             error: function(xhr, status, error) {
@@ -243,7 +243,7 @@ $(document).ready(function() {
 		  jQuery(this).closest('.small-graph-box').fadeOut(200);
 		  return false;
 	   });
-	   
+
 	</script>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
@@ -264,7 +264,7 @@ $(document).ready(function() {
         var _token = $('input[name="_token"]').val();
         var from_date = $('#datepicker').val();
         var to_date = $('#datepicker2').val();
-        
+
         $.ajax({
             url: "{{url('/thongKeSanLuong')}}",
             method: "POST",
@@ -312,7 +312,7 @@ $(document).ready(function() {
   </script>
 
 
- 
+
 <script>
     $(document).ready(function(){
         var count = 0; // Biến đếm số lượng input đã hiển thị

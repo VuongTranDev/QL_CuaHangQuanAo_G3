@@ -20,7 +20,7 @@
 .profile-avatar img {
     width: 700px;
     height: 500px;
-    
+
 }
 
 .profile-info {
@@ -48,40 +48,21 @@
     <div class="profile-container">
         <h1 style="margin:10px 0px 10px 400px">Profile Admin</h1>
         <div class="profile-header">
-            <div class="profile-avatar">
+            {{-- <div class="profile-avatar">
                 <img src="{{ asset('../images/QC1.png') }}" alt="Ảnh đại diện">
-            </div>
-            
-          
-        </div>
-        <div class="profile-info">
-            <h2 class="username"> Tên tài khoản :
-                <?php 
-                    $name = Session::get('tk') ;		
-                    if($name)
-                    {	
-                    echo $name ;}	
-                ?>
-            </h2>
-            <h2 >    Mật khẩu :
-                <?php 
-            
-                    $mk = Session::get('mk') ;		
-                    if($mk)
-                    {	
-                    echo $mk ;}	
-                ?>
-            </h2>
+            </div> --}}
+
 
         </div>
-        
-        <div class="profile-body" style=" width: 300px; margin-left: 400px;">
-            <?php 
+
+
+        <div class="profile-body">
+            <?php
             $message = Session::get('message') ;
             if($message)
               {
                 echo "<span style='color: red;margin-left:30px; font-weight: bold;margin-left:170px'>$message</span>";
-                Session::put('message',null); 
+                Session::put('message',null);
               }
             ?>
             <ul class="nav nav-tabs" role="tablist">
@@ -94,25 +75,25 @@
                     <form>
                         <div class="form-group">
                             <label for="name">Họ và tên:</label>
-                            <input type="text" style="width:200px" class="form-control" id="name" value="<?php 
-            
-                            $ten = Session::get('ten') ;		
+                            <input type="text" style="width:200px" class="form-control" id="name" value="<?php
+
+                            $ten = Session::get('ten') ;
                             if($ten)
-                            {	
-                            echo $ten ;}	
+                            {
+                            echo $ten ;}
                         ?>">
                         </div>
                         <div class="form-group">
                             <label for="email">Số điện thoại:</label>
-                            <input type="email" class="form-control" style="width:200px" id="email" value="<?php 
-            
-                            $sdt = Session::get('sdt') ;		
+                            <input type="email" class="form-control" style="width:200px" id="email" value="<?php
+
+                            $sdt = Session::get('sdt') ;
                             if($sdt)
-                            {	
-                            echo $sdt ;}	
+                            {
+                            echo $sdt ;}
                         ?>">
                         </div>
-                        
+
                     </form>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="settings">
