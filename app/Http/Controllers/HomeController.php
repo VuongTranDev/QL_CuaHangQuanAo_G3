@@ -215,7 +215,7 @@ class HomeController extends Controller
     {
         $makh = Session::get('makh');
 
-        $cart = DB::select("SELECT sanpham.MASANPHAM, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, GIOHANG.SOLUONG, GIOHANG.THANHTIEN , GIOHANG.SIZE
+        $cart = DB::select("SELECT sanpham.MASANPHAM, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN , giohang.SIZE
         FROM giohang
         INNER JOIN sanpham ON sanpham.MASANPHAM = giohang.MASP
         WHERE MAKH = ?", [$makh]);
