@@ -10,11 +10,6 @@
             @endforeach
             <form class="form-comment" role="comment" action="{{ route('danhgias.themDanhGia') }}" method="POST">
                 @csrf
-                @php
-                    $MACTHD = Session::get('macthd');
-                    if(Session::get('macthd'))
-                        echo $MACTHD;
-                @endphp
                 <input type="hidden" name="MACTHD" value="{{$MACTHD}}">
                 <div class="avaliacou" align="center">
                     <label for="star1" class="star-icon" data-avaliacao="1">
