@@ -56,7 +56,7 @@ class AdminController extends Controller
                     Session::put('ten', $data->TENKH);
                     Session::put('sdt', $data->SODIENTHOAI);
                     Session::put('admin_id', $data->ID);
-                    Log::info("Đăng nhập thành công " .$data);
+                    // Log::info("Đăng nhập thành công " .$data);
                     return Redirect::to('admin_content');
                 }
             } else if ($result->PHANQUYEN == "Khách Hàng") {
