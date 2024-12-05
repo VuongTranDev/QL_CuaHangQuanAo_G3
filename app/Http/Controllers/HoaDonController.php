@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ProductsController;
 use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\XacNhanDonHang;
@@ -22,8 +23,8 @@ class HoaDonController extends Controller
         }
 
         $cart = DB::select("SELECT giohang.MASP, sanpham.TENSANPHAM, sanpham.GIA, sanpham.CHATLIEU, sanpham.HINHANH, giohang.SOLUONG, giohang.THANHTIEN , giohang.SIZE
-        FROM giohang 
-        INNER JOIN sanpham ON sanpham.sanpham = giohang.MASP 
+        FROM giohang
+        INNER JOIN sanpham ON sanpham.sanpham = giohang.MASP
         WHERE MAKH = ?", [$makh]);
         foreach ($cart as $item) {
             DB::update("UPDATE giohang SET CHONTHANHTOAN = 1 WHERE MAKH = ? AND MASP = ? AND SIZE = ?", [$makh, $item->MASP, $item->SIZE]);
@@ -36,15 +37,15 @@ class HoaDonController extends Controller
         foreach ($cart as $item) {
             $tongtienSP += $item->THANHTIEN * $item->SOLUONG;
             $tongtien += $tongtienSP;
-       }
-       $diaChi = DB::select("SELECT * FROM diachi WHERE MAKH = ?", [$makh]);
+        }
+        $diaChi = DB::select("SELECT * FROM diachi WHERE MAKH = ?", [$makh]);
 
 
         $profile = DB::select("SELECT TENKH, SODIENTHOAI, DIACHI FROM khachhang WHERE MAKH = ?", [$makh]);
 
         return view('hoadon.thanhtoan', compact('cart', 'sogiohang', 'profile', 'tongtien', 'tongtienSP', 'diaChi'));
     }
-    
+
     public function hoanTatDonHang(Request $request)
     {
         $tenKhachHang = Session::get('ten');

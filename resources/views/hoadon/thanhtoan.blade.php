@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="../../css/thanhtoan.css" />
@@ -87,8 +88,9 @@
                             <input type="text" class="form-control" placeholder="Địa chỉ" aria-label="address"
                                 aria-describedby="addon-wrapping" value="{{ $item->DIACHI }}" readonly>
                             <div class="input-group-text" id="{{ $item->DIACHI }}">
-                                <input id="{{ $item->DIACHI }}" class="form-check-input mt-0" type="radio" value="{{ $item->DIACHI }}" 
-                                     aria-label="Checkbox for following text input" name="dia-chi-user-click">
+                                <input id="{{ $item->DIACHI }}" class="form-check-input mt-0" type="radio"
+                                    value="{{ $item->DIACHI }}" aria-label="Checkbox for following text input"
+                                    name="dia-chi-user-click">
                             </div>
                         </div>
                     @endforeach
@@ -193,6 +195,19 @@
                             </div>
 
                         </div>
+                        <div class="col-md-12 item-phuong-thuc-thanh-toan no-border-top">
+                            <input class="form-check-input me-1" type="radio" name="listGroupRadio" value="vnpay"
+                                id="secondRadio">
+                            <label class="form-check-label label-check" for="secondRadio"><img class="img-label"
+                                    src="../../images/chuyenkhoan.png" alt="" />Thanh toán qua ngân hàng</label>
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <img src="{{ asset('images/vnpay-logo-vinadesign-25-12-57-55.jpg') }}" alt="">
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
                 <p class="error-message-thanh-toan" id="error-message-thanh-toan" style="display: none; color: red;">
@@ -291,11 +306,63 @@
         });
     </script>
     <script>
-        document.getElementById("btn-hoan-tat").addEventListener("click", function(event) {
+        // document.getElementById("btn-hoan-tat").addEventListener("click", function(event) {
+        //     event.preventDefault();
+        //     var tongCongValue = parseInt(document.getElementById("tong-cong").textContent);
+        //     var phiVanChuyen = parseInt(document.getElementById("phi-van-chuyen").textContent);
+        //     var selectedAddress = $('input[name="dia-chi-user-click"]:checked').val();
+
+        //     if (!selectedAddress) {
+        //         Swal.fire({
+        //             title: 'Vui lòng thêm địa chỉ của bạn !!!',
+        //             icon: 'error',
+        //             timer: 3500,
+        //         });
+        //     } else {
+        //         var data = "tongCongValue=" + tongCongValue + "&phiVanChuyen=" + phiVanChuyen + "&diaChi=" +
+        //             selectedAddress;
+
+        //         var xhttp = new XMLHttpRequest();
+        //         xhttp.onreadystatechange = function() {
+        //             if (this.readyState == 4 && this.status == 200) {
+        //                 console.log("Đã gửi yêu cầu thành công!");
+        //                 Swal.fire({
+        //                     title: 'Đặt hàng thành công!',
+        //                     text: 'Đơn hàng đang được xác nhận ! \n Vui lòng kiểm tra email về thông tin sản phẩm',
+        //                     icon: 'success',
+        //                     timer: 3500,
+        //                 }).then(() => {
+        //                     window.location.href = "/";
+        //                 });
+        //             }
+        //         };
+        //         console.log(data);
+        //         xhttp.open("POST", "/sendEmail", true);
+        //         xhttp.setRequestHeader("X-CSRF-TOKEN", document.querySelector('meta[name="csrf-token"]')
+        //             .getAttribute(
+        //                 'content'));
+        //         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        //         xhttp.send(data);
+
+        //     }
+
+
+
+
+        var tongCongValue = $('#tong-cong').text();
+        console.log( 'tổng cộng',   tongCongValue);
+
+
+        // });
+        $('#btn-hoan-tat').on('click', function(event) {
             event.preventDefault();
-            var tongCongValue = parseInt(document.getElementById("tong-cong").textContent);
-            var phiVanChuyen = parseInt(document.getElementById("phi-van-chuyen").textContent);
+            var phiVanChuyen = parseInt($('#phi-van-chuyen').text());
             var selectedAddress = $('input[name="dia-chi-user-click"]:checked').val();
+            var payment_method = $('input[name="listGroupRadio"]:checked').val();
+            $('input[name="listGroupRadio"]').on('change', function() {
+                payment_method = $('input[name="listGroupRadio"]:checked').val();
+                console.log('Phương thức thanh toán sau khi thay đổi: ' + payment_method);
+            });
 
             if (!selectedAddress) {
                 Swal.fire({
@@ -304,34 +371,55 @@
                     timer: 3500,
                 });
             } else {
-                var data = "tongCongValue=" + tongCongValue + "&phiVanChuyen=" + phiVanChuyen + "&diaChi=" +
-                    selectedAddress;
-
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function() {
-                    if (this.readyState == 4 && this.status == 200) {
-                        console.log("Đã gửi yêu cầu thành công!");
-                        Swal.fire({
-                            title: 'Đặt hàng thành công!',
-                            text: 'Đơn hàng đang được xác nhận ! \n Vui lòng kiểm tra email về thông tin sản phẩm',
-                            icon: 'success',
-                            timer: 3500,
-                        }).then(() => {
-                            window.location.href = "/";
-                        });
-                    }
+                var data = {
+                    tongCongValue: tongCongValue,
+                    phiVanChuyen: phiVanChuyen,
+                    diaChi: selectedAddress,
+                    payment_method: payment_method,
+                    _token: '{{ csrf_token() }}',
                 };
-                console.log(data);
-                xhttp.open("POST", "/sendEmail", true);
-                xhttp.setRequestHeader("X-CSRF-TOKEN", document.querySelector('meta[name="csrf-token"]')
-                    .getAttribute(
-                        'content'));
-                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xhttp.send(data);
+                if (payment_method == 'vnpay') {
+                    $.ajax({
+                        url: '{{ route('payWithVNPAY') }}',
+                        type: 'POST',
+                        data: data,
+                        success: function(response) {
+                            if (response.status === 'success') {
+
+                                window.location.href = response.redirect;
+                            }
+
+                        },
+                        error: function(xhr, status, error) {
+                            console.log(xhr.responseText);
+                        }
+
+                    });
+                } else {
+                    $.ajax({
+                        url: '/sendEmail',
+                        type: 'POST',
+                        data: data,
+                        beforeSend: function(xhr) {
+                            xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name="csrf-token"]').attr(
+                                'content'));
+                        },
+                        success: function(response) {
+                            console.log("Đã gửi yêu cầu thành công!");
+                            Swal.fire({
+                                title: 'Đặt hàng thành công!',
+                                text: 'Đơn hàng đang được xác nhận ! \n Vui lòng kiểm tra email về thông tin sản phẩm',
+                                icon: 'success',
+                                timer: 3500,
+                            }).then(() => {
+                                window.location.href = "/";
+                            });
+                        }
+                    });
+                }
+
 
             }
-
-
         });
     </script>
 

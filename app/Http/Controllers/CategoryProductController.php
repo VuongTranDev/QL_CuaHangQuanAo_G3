@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session ;
 use Illuminate\Support\Facades\Redirect ;
 use Illuminate\Http\Request;
-session_start() ;
 class CategoryProductController extends Controller
 {
     public function AuthLogin()
@@ -23,17 +22,17 @@ class CategoryProductController extends Controller
     {
         $this->AuthLogin();
         $allsp = DB::table('loaisanpham')->get();
-        
+
         foreach ($allsp as $sp) {
             $tongSL = DB::table('sanpham')
                 ->where('sanpham.MALOAI', $sp->MALOAI)
                 ->count();
-            $sp->SOLUONG = $tongSL; 
+            $sp->SOLUONG = $tongSL;
         }
 
         return view('admin.addProduct', compact('allsp'));
     }
-   
+
 
     public function saveCategoryProduct(Request $request)
     {
@@ -41,13 +40,13 @@ class CategoryProductController extends Controller
             $data = array();
             $data['MALOAI'] = $request->maLoai;
             $data['TENLOAI'] = $request->loaiSP;
-            
+
             DB::table('loaisanpham')->insert($data);
 
             Session::put('message','Thêm thành công!!!');
             return Redirect::to('addCategoryProduct') ;
         } catch (\Exception $e) {
-            
+
             Session::put('message','Hãy xem lại mã loại hoặc tên sản phẩm!!!');
             return Redirect::to('addCategoryProduct');
         }
@@ -68,18 +67,18 @@ class CategoryProductController extends Controller
         try {
             $data = array();
             $data['MALOAI'] = $request->maLoai;
-            $data['TENLOAI'] = $request->loaiSP;       
+            $data['TENLOAI'] = $request->loaiSP;
             DB::table('loaisanpham')->where('ID',$ID)->update($data) ;
             Session::put('message','Cập nhật thành công!!!');
             return Redirect::to('addCategoryProduct') ;
         } catch (\Exception $e) {
-            
+
             Session::put('message','Hãy xem lại mã loại hoặc tên sản phẩm!!!');
             return Redirect::to('addCategoryProduct');
         }
     }
     public function deleteCategoryProduct($ID)
-    { 
+    {
         $this->AuthLogin();
 
         DB::table('loaisanpham')->where('ID', $ID)->delete();

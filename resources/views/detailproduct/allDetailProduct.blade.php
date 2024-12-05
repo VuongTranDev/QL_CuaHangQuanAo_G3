@@ -8,25 +8,25 @@
 </style>
 <div class="row">
     <div class="col-lg-12">
-      
+
         <section class="panel">
             <header class="panel-heading">
-              <?php 
+              <?php
               $message = Session::get('message') ;
               if($message)
                 {
                   echo "<span style='color: red;margin-left:30px; font-weight: bold;'>$message</span>";
-                  Session::put('message',null); 
+                  Session::put('message',null);
                 }
               ?>
                Thông tin nhãn hàng
             </header>
-            
+
             <div class="table-responsive">
                 <table class="table table-striped b-t b-light">
                   <thead>
                     <tr>
-                      
+
                       <th>Mã sản phẩm</th>
                       <th>Tên sản phẩm</th>
                       <th>Hình ảnh </th>
@@ -34,9 +34,9 @@
                       <th style="width:30px;"></th>
                     </tr>
                   </thead>
-                  <tbody>   
+                  <tbody>
                     @foreach ($allsp as $sp)
-                    <tr>    
+                    <tr>
                       <td>{{ $sp->MASANPHAM }} </td>
                       <td>{{ $sp->TENSANPHAM  }}</td>
                       <td><img style="width : 100px;height : 100px" src="{{ URL('images/' . $sp->HINHANH) }}"></td>
@@ -46,11 +46,11 @@
                         <a onclick="return confirm('Bạn chắc chắn xoá nó chứ ?')" href="{{ URL::to('deleteDetailProduct/'.$sp->ID) }}" ui-toggle-class=""><i class="fa fa-times text-danger text"></i></a>
                       </td>
                     </tr>
-                  @endforeach 
+                  @endforeach
                   </tbody>
                 </table>
               </div>
-            
+
               <div class="btn-container" >
                 <nav aria-label="Page navigation example">
                     <ul class="pagination">

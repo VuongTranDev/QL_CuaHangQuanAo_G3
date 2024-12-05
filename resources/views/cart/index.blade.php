@@ -22,9 +22,9 @@
                                             value="{{ $item->MASP }}|{{ $item->SIZE }}"
                                             style="margin-right: 20px; width: 20px">
                                         <div class="item-img">
-                                            <a href="http://127.0.0.1:8000/products/{{ $item->MASP }}"><img
-                                                    src="{{ URL('images/' . $item->HINHANH) }}"
-                                                    alt="{{ $item->TENSANPHAM }}"></a>
+                                            <a href="{{ URL('products/' . $item->MASP) }}">
+                                                <img src="{{ URL('images/' . $item->HINHANH) }}" alt="{{ $item->TENSANPHAM }}">
+                                            </a>
                                         </div>
                                         <div class="cart_content">
                                             <div class="item-title">
@@ -294,6 +294,9 @@
                     }
                 });
             });
+
+
+
         });
     </script>
 @endsection
